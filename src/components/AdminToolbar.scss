@@ -1,0 +1,75 @@
+@import "~@nti/style-common";
+
+.administrator-toolbar {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+
+	.controls {
+		display: flex;
+
+		.admin-nav {
+			width: 40px;
+			background-color: #555;
+			height: 40px;
+			border-radius: 30px;
+			margin-right: 10px;
+			font-size: 26px;
+			padding: 4px 4px 4px 7px;
+			color: white;
+			cursor: pointer;
+			box-sizing: border-box;
+			position: relative;
+
+			&::after {
+				content: '';
+				overflow: hidden;
+				top: 11px;
+				left: 11px;
+				right: auto;
+				// background-image: url(../images/sprite.png?t=20180808192524);
+				background-position: -281px -439px;
+				width: 18px;
+				height: 20px;
+				position: absolute;
+			}
+		}
+
+		.admin-create-button {
+			height: 40px;
+			width: 115px;
+			background-color: #3fb3f6;
+			border-radius: 30px;
+			color: white;
+			padding: 4px 4px 4px 7px;
+			display: flex;
+			cursor: pointer;
+			box-sizing: border-box;
+			position: relative;
+			line-height: normal;
+			font-weight: 400;
+
+			.add-container {
+				background-color: white;
+				box-sizing: border-box;
+				border-radius: 12px;
+				width: 24px;
+				height: 24px;
+				color: #3fb3f6;
+				padding: 1px 0 0 3px;
+				margin: 4px 10px 0 3px;
+				font-size: 18px;
+
+				.icon-add::before {
+					content: "\E902";
+				}
+			}
+
+			.create-label {
+				margin-top: 4px;
+				box-sizing: border-box;
+				font-size: 16px;
+			}
+		}
+	}
+}

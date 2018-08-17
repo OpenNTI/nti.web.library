@@ -1,0 +1,12 @@
+.button.library-add {
+	color: #3fb3f6;
+	cursor: pointer;
+	font: normal 600 0.875em/2em "Open Sans", sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+
+	&::before {
+		content: '+';
+		margin-right: 0.1em;
+	}
+}
