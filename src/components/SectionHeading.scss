@@ -1,3 +1,5 @@
+@import "~@nti/style-common";
+
 .library-section-heading {
 	display: flex;
 	align-items: baseline;
@@ -15,5 +17,11 @@
 			font-size: 14px;
 			line-height: 28px;
 		}
+	}
+}
+
+@include respond-to(handhelds) {
+	.library-section-heading {
+		padding: 0 10px;
 	}
 }

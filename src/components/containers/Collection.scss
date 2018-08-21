@@ -1,3 +1,5 @@
+@import "~@nti/style-common";
+
 .library-collection {
 	margin-bottom: 40px;
 }
@@ -17,4 +19,30 @@
 	margin: 7px 9px;
 	cursor: pointer;
 	position: relative;
+}
+
+@include respond-to(handhelds) {
+	.library-collection {
+		margin-bottom: 5px;
+	}
+
+	.library-collection ul {
+		display: block;
+		white-space: nowrap;
+		width: calc(100vw);
+		margin: 0;
+		padding: 0.625rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+
+		li {
+			display: inline-block;
+			vertical-align: top;
+		}
+	}
+
+	.library-collection .library-item {
+		width: 185px;
+		margin: 0 5px;
+	}
 }
