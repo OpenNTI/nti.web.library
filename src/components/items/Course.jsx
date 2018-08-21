@@ -15,7 +15,7 @@ export default class Course extends React.Component  {
 		const {props: {item}} = this;
 
 		return (
-			<Card course={item.CatalogEntry} />
+			<Card course={item} />
 		);
 	}
 }

@@ -1,4 +1,19 @@
 .library-section-heading {
 	display: flex;
 	align-items: baseline;
+
+	.course-section-heading {
+		width: 100%;
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+
+		.see-all {
+			color: white;
+			cursor: pointer;
+			font: normal 300 0.875em/2em "Open Sans", sans-serif;
+			font-size: 14px;
+			line-height: 28px;
+		}
+	}
 }

@@ -19,10 +19,12 @@ export default class Bundle extends React.Component {
 
 		return (
 			<div className="book-card">
-				<img src={defaultImage} />
+				<div className="bundle-card-image">
+					<img src={defaultImage} />
+				</div>
 				<label>
 					<h3 className="book-title">{title}</h3>
-					<address className="book-author">{byline || author}</address>
+					<address className="book-author">By {byline || author}</address>
 				</label>
 			</div>
 		);
