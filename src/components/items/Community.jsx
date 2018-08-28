@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {User} from '@nti/web-profiles';
 
-import unresolvedGroupImage from '../../resources/images/unresolved-group.png';
+const {CommunityCard} = User;
 
 export default class CommunityItem extends React.Component  {
 	static handles (item) {
@@ -14,15 +15,9 @@ export default class CommunityItem extends React.Component  {
 
 	render () {
 		let {item} = this.props;
-		//href={'/community/' + item.Username}
 
 		return (
-			<div className="community-item">
-				<img className="avatar" src={item.avatarURL || unresolvedGroupImage} />
-				<div className="title-container" >
-					{item.alias || item.Username}
-				</div>
-			</div>
+			<CommunityCard community={item} />
 		);
 	}
 }
