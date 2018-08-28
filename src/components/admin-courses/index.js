@@ -1,0 +1,1 @@
+export AdminCourses from './View';

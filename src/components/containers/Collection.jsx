@@ -33,7 +33,7 @@ export default class LibraryCollection extends React.Component {
 						let catalogEntry = item.CatalogEntry || {};
 
 						return Item && (
-							<li className="library-item" key={item.NTIID || item.href || catalogEntry.NTIID || catalogEntry.href} >
+							<li className="library-object" key={item.NTIID || item.href || catalogEntry.NTIID || catalogEntry.href} >
 								<Item item={item} />
 							</li>
 						);

@@ -5,7 +5,7 @@ const WIDGETS = req.keys().map(m => req(m).default); //require/invoke all
 export default function getItem (item) {
 
 	for (let widget of WIDGETS) {
-		if (widget.handles(item)) {
+		if (widget.handles && widget.handles(item)) {
 			return widget;
 		}
 	}

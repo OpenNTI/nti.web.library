@@ -6,7 +6,7 @@ import Heading from '../SectionHeading';
 
 import Collection from './Collection';
 
-export default function Container ({section, items}) {
+export default function Container ({section, items, date}) {
 	return !items || items.length === 0 ?
 		(
 			<div className="library-collection">
@@ -15,12 +15,13 @@ export default function Container ({section, items}) {
 			</div>
 		) : (
 			<Collection className={section} list={items} >
-				<Heading section={section}/>
+				<Heading section={section} date={date} />
 			</Collection>
 		);
 }
 
 Container.propTypes = {
 	section: PropTypes.string,
-	items: PropTypes.array
+	items: PropTypes.array,
+	date: PropTypes.string
 };

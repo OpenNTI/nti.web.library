@@ -9,6 +9,7 @@
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
+		margin-left: 0.8em;
 
 		.see-all {
 			color: white;
@@ -16,7 +17,15 @@
 			font: normal 300 0.875em/2em "Open Sans", sans-serif;
 			font-size: 14px;
 			line-height: 28px;
+			text-decoration: none;
 		}
+	}
+
+	.course-section-heading-date {
+		color: rgba(255, 255, 255, 0.3);
+		margin-left: 0.5em;
+		font-size: 18px;
+		line-height: 18px;
 	}
 }
 

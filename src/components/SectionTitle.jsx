@@ -5,6 +5,9 @@ import {scoped} from '@nti/lib-locale';
 const t = scoped('library.sections', {
 	admin: 'Administered Courses',
 	courses: 'Courses',
+	upcomingcourses: 'Upcoming Courses',
+	currentcourses: 'Current Courses',
+	archivedcourses: 'Archived Courses',
 	communities: 'Communities',
 	books: 'Books'
 });
