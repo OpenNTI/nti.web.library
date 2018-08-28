@@ -99,14 +99,26 @@ export default class CourseStore extends Stores.BoundStore {
 	}
 
 	async loadArchivedCourses () {
-		let service = await getService();
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+		this.set({
+			loading: true
+		});
 
-		const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
+		try {
+			let service = await getService();
+			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
 
-		this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
+			const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
 
-		this.emitChange();
+			this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
+
+			this.emitChange();
+		} catch (e) {
+			this.set('error', e);
+			this.emitChange('error');
+		} finally {
+			this.set('loading', false);
+			this.emitChange('loading');
+		}
 	}
 
 	async searchCourses (searchTerm) {
