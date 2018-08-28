@@ -7,7 +7,7 @@ import CoursesContainer from '../containers/CoursesContainer';
 import Store from './AdminCourseStore';
 
 
-@Store.connect({upcomingCourses: 'upcomingAdminCourses', currentCourses: 'currentAdminCourses', archivedCourses: 'archivedAdminCourses', loading: 'loading', error: 'error'})
+@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', error: 'error'})
 export default class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -16,6 +16,10 @@ export default class AdminCourses extends React.Component {
 		currentCourses: PropTypes.array,
 		archivedCourses: PropTypes.array,
 		children: PropTypes.node
+	}
+
+	loadArchived = () => {
+		this.props.store.loadArchivedCourses();
 	}
 
 	render () {
@@ -33,13 +37,13 @@ export default class AdminCourses extends React.Component {
 				</div>
 
 				{upcomingCourses && upcomingCourses.length > 0 &&
-					<CoursesContainer items={upcomingCourses} itemsType="upcoming" admin />
+					<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
 				}
 				{currentCourses && currentCourses.length > 0 &&
-					<CoursesContainer items={currentCourses} itemsType="current" admin />
+					<CoursesContainer items={currentCourses} itemsType="current" />
 				}
 				{archivedCourses && archivedCourses.length > 0 &&
-					<CoursesContainer items={archivedCourses} itemsType="archived" admin />
+					<CoursesContainer items={archivedCourses} itemsType="archived" />
 				}
 				{!archivedCourses && !loading &&
 					<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>

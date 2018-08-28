@@ -12,9 +12,9 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		this.set({
 			loading: false,
 			error: null,
-			upcomingAdminCourses: null,
-			currentAdminCourses: null,
-			archivedAdminCourses: null
+			upcomingCourses: null,
+			currentCourses: null,
+			archivedCourses: null
 		});
 	}
 
@@ -22,9 +22,9 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		this.set({
 			loading: true,
 			error: null,
-			upcomingAdminCourses: null,
-			currentAdminCourses: null,
-			archivedAdminCourses: null
+			upcomingCourses: null,
+			currentCourses: null,
+			archivedCourses: null
 		});
 
 		this.emitChange('loading');
@@ -80,10 +80,9 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		let service = await getService();
 
 		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-
 		const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
 
-		this.set('upcomingAdminCourses', upcomingAdminCourses.Items);
+		this.set('upcomingCourses', upcomingAdminCourses.Items);
 
 
 		this.emitChange();
@@ -96,22 +95,32 @@ export default class AdminCourseStore extends Stores.BoundStore {
 
 		const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
 
-		this.set('currentAdminCourses', currentAdminCourses.Items);
+		this.set('currentCourses', currentAdminCourses.Items);
 
 
 		this.emitChange();
 	}
 
 	async loadArchivedCourses () {
-		let service = await getService();
+		this.set({
+			loading: true
+		});
 
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+		try {
+			let service = await getService();
 
-		const archivedAdminCourses = await service.getBatch(adminCollection.getLink('Archived'));
+			const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
 
-		this.set('archivedAdminCourses', this.splitItemsBySemester(archivedAdminCourses.Items));
+			const archivedAdminCourses = await service.getBatch(adminCollection.getLink('Archived'));
 
-		this.emitChange();
+			this.set('archivedCourses', this.splitItemsBySemester(archivedAdminCourses.Items));
+		} catch (e) {
+			this.set('error', e);
+			this.emitChange('error');
+		} finally {
+			this.set('loading', false);
+			this.emitChange('loading');
+		}
 	}
 
 	async searchCourses (searchTerm) {
