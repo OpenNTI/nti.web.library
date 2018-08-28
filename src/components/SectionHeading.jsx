@@ -16,9 +16,11 @@ export default function SectionHeading ({section, date}) {
 			<SectionTitle section={section} />
 			{(section === 'courses' || section === 'admin') && (
 				<div className="course-section-heading">
-					{section === 'courses' &&
+					{section === 'courses' ? (
 						<AddButton />
-					}
+					) : (
+						<div />
+					)}
 
 					<LinkTo.Name name={section === 'admin' ? ('library-admin-courses') : ('library-courses')} className="see-all">
 						See All
