@@ -27,8 +27,6 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			archivedCourses: null
 		});
 
-		this.emitChange('loading');
-
 		if (this.searchTerm) {
 			this.loadSearchTerm();
 		} else {
@@ -37,10 +35,8 @@ export default class AdminCourseStore extends Stores.BoundStore {
 				this.loadCurrentCourses();
 			} catch (e) {
 				this.set('error', e);
-				this.emitChange('error');
 			} finally {
 				this.set('loading', false);
-				this.emitChange('loading');
 			}
 		}
 	}
@@ -54,10 +50,8 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			this.searchCourses(searchTerm);
 		} catch (e) {
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
@@ -83,9 +77,6 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
 
 		this.set('upcomingCourses', upcomingAdminCourses.Items);
-
-
-		this.emitChange();
 	}
 
 	async loadCurrentCourses () {
@@ -96,9 +87,6 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
 
 		this.set('currentCourses', currentAdminCourses.Items);
-
-
-		this.emitChange();
 	}
 
 	async loadArchivedCourses () {
@@ -116,10 +104,8 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			this.set('archivedCourses', this.splitItemsBySemester(archivedAdminCourses.Items));
 		} catch (e) {
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
@@ -142,7 +128,5 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		this.set('currentCourses', currentCourses);
 		this.set('archivedCourses', this.splitItemsBySemester(archivedCourses));
 		this.set('upcomingCourses', upcomingCourses);
-
-		this.emitChange();
 	}
 }

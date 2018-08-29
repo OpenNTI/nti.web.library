@@ -27,8 +27,6 @@ export default class HomePageStore extends Stores.BoundStore {
 			communities: null
 		});
 
-		this.emitChange('loading');
-
 		if (this.searchTerm) {
 			this.loadSearchTerm();
 		} else {
@@ -39,10 +37,8 @@ export default class HomePageStore extends Stores.BoundStore {
 				this.checkAdmin();
 			} catch (e) {
 				this.set('error', e);
-				this.emitChange('error');
 			} finally {
 				this.set('loading', false);
-				this.emitChange('loading');
 			}
 		}
 	}
@@ -58,10 +54,8 @@ export default class HomePageStore extends Stores.BoundStore {
 			this.searchCommunities(searchTerm);
 		} catch (e) {
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
@@ -69,9 +63,6 @@ export default class HomePageStore extends Stores.BoundStore {
 		let service = await getService();
 		const admin = service.getWorkspace('SiteAdmin') ? true : false;
 		this.set('admin', admin);
-
-
-		this.emitChange();
 	}
 
 	async searchCourses (searchTerm) {
@@ -83,8 +74,6 @@ export default class HomePageStore extends Stores.BoundStore {
 		const administeredCourses = await service.getBatch(adminCollection.href + '?filter=' + searchTerm);
 		this.set('courses', courses.Items);
 		this.set('administeredCourses', administeredCourses.Items);
-
-		this.emitChange();
 	}
 
 	async searchBooks (searchTerm) {
@@ -94,9 +83,6 @@ export default class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 		this.set('books', booksParsed);
-
-
-		this.emitChange();
 	}
 
 	async searchCommunities (searchTerm) {
@@ -109,9 +95,6 @@ export default class HomePageStore extends Stores.BoundStore {
 		}
 
 		this.set('communities', communities.filter(communityFilter));
-
-
-		this.emitChange();
 	}
 
 	async loadFavorites () {
@@ -123,8 +106,6 @@ export default class HomePageStore extends Stores.BoundStore {
 		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
 		this.set('courses', courses.Items);
 		this.set('administeredCourses', administeredCourses.Items);
-
-		this.emitChange();
 	}
 
 	async loadBooks () {
@@ -134,17 +115,11 @@ export default class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 		this.set('books', booksParsed);
-
-
-		this.emitChange();
 	}
 
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
 		this.set('communities', await communities.fetch());
-
-
-		this.emitChange();
 	}
 }

@@ -27,8 +27,6 @@ export default class CourseStore extends Stores.BoundStore {
 			archivedCourses: null
 		});
 
-		this.emitChange('loading');
-
 		if (this.searchTerm) {
 			this.loadSearchTerm();
 		} else {
@@ -37,10 +35,8 @@ export default class CourseStore extends Stores.BoundStore {
 				this.loadCurrentCourses();
 			} catch (e) {
 				this.set('error', e);
-				this.emitChange('error');
 			} finally {
 				this.set('loading', false);
-				this.emitChange('loading');
 			}
 		}
 	}
@@ -54,10 +50,8 @@ export default class CourseStore extends Stores.BoundStore {
 			this.searchCourses(searchTerm);
 		} catch (e) {
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
@@ -83,8 +77,6 @@ export default class CourseStore extends Stores.BoundStore {
 		const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
 
 		this.set('upcomingCourses', upcomingCourses.Items);
-
-		this.emitChange();
 	}
 
 	async loadCurrentCourses () {
@@ -94,8 +86,6 @@ export default class CourseStore extends Stores.BoundStore {
 		const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
 
 		this.set('currentCourses', currentCourses.Items);
-
-		this.emitChange();
 	}
 
 	async loadArchivedCourses () {
@@ -110,14 +100,10 @@ export default class CourseStore extends Stores.BoundStore {
 			const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
 
 			this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
-
-			this.emitChange();
 		} catch (e) {
 			this.set('error', e);
-			this.emitChange('error');
 		} finally {
 			this.set('loading', false);
-			this.emitChange('loading');
 		}
 	}
 
@@ -140,7 +126,5 @@ export default class CourseStore extends Stores.BoundStore {
 		this.set('currentCourses', currentCourses);
 		this.set('archivedCourses', this.splitItemsBySemester(archivedCourses));
 		this.set('upcomingCourses', upcomingCourses);
-
-		this.emitChange();
 	}
 }
