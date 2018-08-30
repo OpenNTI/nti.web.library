@@ -25,9 +25,10 @@
 	.bundle-card-image-background::before {
 		content: ' ';
 		display: block;
-		position: absolute;
-		width: 100%;
-		height: 170px;
+		padding-top: 73.2758621%;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
 		background-image: url(../../resources/images/default-card-image.png);
 	}
 
