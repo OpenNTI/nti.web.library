@@ -10,7 +10,8 @@ export default class CourseStore extends Stores.BoundStore {
 		super();
 
 		this.set({
-			loading: false,
+			loading: true,
+			loadArchived: false,
 			error: null,
 			upcomingCourses: null,
 			currentCourses: null,
@@ -21,6 +22,7 @@ export default class CourseStore extends Stores.BoundStore {
 	async load () {
 		this.set({
 			loading: true,
+			loadArchived: false,
 			error: null,
 			upcomingCourses: null,
 			currentCourses: null,
@@ -31,8 +33,12 @@ export default class CourseStore extends Stores.BoundStore {
 			this.loadSearchTerm();
 		} else {
 			try {
-				this.loadUpcomingCourses();
-				this.loadCurrentCourses();
+				const libraryPromises = [
+					this.loadUpcomingCourses(),
+					this.loadCurrentCourses()
+				];
+
+				await Promise.all(libraryPromises);
 			} catch (e) {
 				this.set('error', e);
 			} finally {
@@ -41,13 +47,13 @@ export default class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	loadSearchTerm () {
+	async loadSearchTerm () {
 		const searchTerm = this.searchTerm;
 
 		try {
 			if (searchTerm !== this.searchTerm) { return; }
 
-			this.searchCourses(searchTerm);
+			await this.searchCourses(searchTerm);
 		} catch (e) {
 			this.set('error', e);
 		} finally {
@@ -90,7 +96,7 @@ export default class CourseStore extends Stores.BoundStore {
 
 	async loadArchivedCourses () {
 		this.set({
-			loading: true
+			loadArchived: true
 		});
 
 		try {
@@ -103,7 +109,7 @@ export default class CourseStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set('error', e);
 		} finally {
-			this.set('loading', false);
+			this.set('loadArchived', false);
 		}
 	}
 

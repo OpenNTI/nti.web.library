@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Loading} from '@nti/web-commons';
 import {LinkTo} from '@nti/web-routing';
 
 import CoursesContainer from '../containers/CoursesContainer';
@@ -7,10 +8,11 @@ import CoursesContainer from '../containers/CoursesContainer';
 import Store from './AdminCourseStore';
 
 
-@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', error: 'error'})
+@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', error: 'error'})
 export default class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
+		loadArchived: PropTypes.bool,
 		store: PropTypes.object,
 		upcomingCourses: PropTypes.array,
 		currentCourses: PropTypes.array,
@@ -23,7 +25,7 @@ export default class AdminCourses extends React.Component {
 	}
 
 	render () {
-		let {upcomingCourses, currentCourses, archivedCourses, loading} = this.props;
+		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived} = this.props;
 
 		return (
 			<div className="courses-view">
@@ -36,18 +38,30 @@ export default class AdminCourses extends React.Component {
 					</div>
 				</div>
 
-				{upcomingCourses && upcomingCourses.length > 0 &&
-					<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
-				}
-				{currentCourses && currentCourses.length > 0 &&
-					<CoursesContainer items={currentCourses} itemsType="current" />
-				}
-				{archivedCourses && archivedCourses.length > 0 &&
-					<CoursesContainer items={archivedCourses} itemsType="archived" />
-				}
-				{!archivedCourses && !loading &&
-					<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
-				}
+				{loading ? (
+					<Loading.Mask/>
+				) : (
+					<div>
+						{upcomingCourses && upcomingCourses.length > 0 &&
+							<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
+						}
+						{currentCourses && currentCourses.length > 0 &&
+							<CoursesContainer items={currentCourses} itemsType="current" />
+						}
+						{archivedCourses && archivedCourses.length > 0 &&
+							<CoursesContainer items={archivedCourses} itemsType="archived" />
+						}
+						{!archivedCourses && (
+							<div>
+								{loadArchived ? (
+									<Loading.Spinner/>
+								) : (
+									<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
+								)}
+							</div>
+						)}
+					</div>
+				)}
 			</div>
 		);
 	}

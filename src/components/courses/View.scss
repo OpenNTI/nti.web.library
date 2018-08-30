@@ -102,6 +102,72 @@
 		}
 	}
 
+	@keyframes loadingSpinnerDash {
+		0% {
+			stroke-dasharray: 1, 200;
+			stroke-dashoffset: 0;
+		}
+
+		50% {
+			stroke-dasharray: 89, 200;
+			stroke-dashoffset: -35px;
+		}
+
+		100% {
+			stroke-dasharray: 89, 200;
+			stroke-dashoffset: -124px;
+		}
+	}
+
+	.loading-spinner {
+		position: relative;
+		margin: 0 auto; //XXX: This may cause everyone who uses this to define margin to override... we may want to remove this and let those who want to center the loader center it themselves
+
+		&::before {
+			content: '';
+			display: block;
+			padding-top: 100%;
+		}
+
+		.circular {
+			animation: rotation 2s linear infinite;
+			height: 100%;
+			width: 100%;
+			transform-origin: center center;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+		}
+
+		.path {
+			stroke-dasharray: 1, 200;
+			stroke-dashoffset: 0;
+			stroke-linecap: round;
+			animation: loadingSpinnerDash 1.5s ease-in-out infinite;
+		}
+
+		&.blue {
+			.path {
+				stroke: $primary-blue;
+			}
+		}
+
+		&.white {
+			.path {
+				stroke: white;
+			}
+		}
+
+		&.grey {
+			.path {
+				stroke: $tertiary-grey;
+			}
+		}
+	}
+
 	.load-archived-button {
 		background-color: #3fb3f6;
 		color: white;

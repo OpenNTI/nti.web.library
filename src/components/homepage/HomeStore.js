@@ -47,15 +47,20 @@ export default class HomePageStore extends Stores.BoundStore {
 		}
 	}
 
-	loadSearchTerm () {
+	async loadSearchTerm () {
 		const searchTerm = this.searchTerm;
 
 		try {
 			if (searchTerm !== this.searchTerm) { return; }
 
-			this.searchCourses(searchTerm);
-			this.searchBooks(searchTerm);
-			this.searchCommunities(searchTerm);
+			const librarySearchPromises = [
+				this.searchCourses(searchTerm),
+				this.searchBooks(searchTerm),
+				this.searchCommunities(searchTerm),
+				this.checkAdmin()
+			];
+
+			await Promise.all(librarySearchPromises);
 		} catch (e) {
 			this.set('error', e);
 		} finally {
