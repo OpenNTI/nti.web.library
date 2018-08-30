@@ -131,8 +131,10 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		let archivedCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() < today));
 		let upcomingCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() > today));
 
-		this.set('currentCourses', currentCourses);
-		this.set('archivedCourses', this.splitItemsBySemester(archivedCourses));
-		this.set('upcomingCourses', upcomingCourses);
+		this.set({
+			'currentCourses': currentCourses,
+			'archivedCourses': this.splitItemsBySemester(archivedCourses),
+			'upcomingCourses': upcomingCourses
+		});
 	}
 }

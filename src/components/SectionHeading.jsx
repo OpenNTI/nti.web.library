@@ -7,10 +7,11 @@ import AddButton from './AddButton';
 
 SectionHeading.propTypes = {
 	section: PropTypes.string.isRequired,
-	date: PropTypes.string
+	date: PropTypes.string,
+	empty: PropTypes.bool
 };
 
-export default function SectionHeading ({section, date}) {
+export default function SectionHeading ({section, date, empty}) {
 	return (
 		<div className="library-section-heading">
 			<SectionTitle section={section} />
@@ -22,9 +23,11 @@ export default function SectionHeading ({section, date}) {
 						<div />
 					)}
 
-					<LinkTo.Name name={section === 'admin' ? ('library-admin-courses') : ('library-courses')} className="see-all">
-						See All
-					</LinkTo.Name>
+					{!empty && (
+						<LinkTo.Name name={section === 'admin' ? ('library-admin-courses') : ('library-courses')} className="see-all">
+							See All
+						</LinkTo.Name>
+					)}
 				</div>
 			)}
 			{section === 'archivedcourses' && (

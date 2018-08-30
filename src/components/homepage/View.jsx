@@ -9,7 +9,7 @@ import Books from '../containers/BooksContainer';
 
 import HomePageStore from './HomeStore';
 
-@HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', error: 'error'})
+@HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', searchTerm: 'searchTerm', error: 'error'})
 export default class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -19,11 +19,12 @@ export default class Home extends React.Component {
 		books: PropTypes.array,
 		communities: PropTypes.array,
 		children: PropTypes.node,
-		admin: PropTypes.bool
+		admin: PropTypes.bool,
+		searchTerm: PropTypes.bool
 	}
 
 	render () {
-		let {admin, courses, administeredCourses, books, communities, loading} = this.props;
+		let {admin, courses, administeredCourses, books, communities, searchTerm, loading} = this.props;
 
 		return (
 			<div className="library-view">
@@ -39,7 +40,7 @@ export default class Home extends React.Component {
 							<Communities items={communities} />
 						}
 
-						{courses &&
+						{((courses && !searchTerm) || (courses && courses.length > 0)) &&
 							<Courses items={courses} />
 						}
 

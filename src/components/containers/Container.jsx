@@ -10,7 +10,7 @@ export default function Container ({section, items, date}) {
 	return !items || items.length === 0 ?
 		(
 			<div className="library-collection">
-				<Heading section={section}/>
+				<Heading section={section} empty/>
 				<EmptyList type={`library-${section}`}/>
 			</div>
 		) : (

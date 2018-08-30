@@ -13,7 +13,8 @@ export default class HomePageStore extends Stores.BoundStore {
 			courses: null,
 			administeredCourses: null,
 			books: null,
-			communities: null
+			communities: null,
+			searchTerm: false
 		});
 	}
 
@@ -24,10 +25,12 @@ export default class HomePageStore extends Stores.BoundStore {
 			courses: null,
 			administeredCourses: null,
 			books: null,
-			communities: null
+			communities: null,
+			searchTerm: false
 		});
 
 		if (this.searchTerm) {
+			this.set('searchTerm', true);
 			this.loadSearchTerm();
 		} else {
 			try {
@@ -81,8 +84,10 @@ export default class HomePageStore extends Stores.BoundStore {
 
 		const courses = await service.getBatch(enrolledCollection.href + '?filter=' + searchTerm);
 		const administeredCourses = await service.getBatch(adminCollection.href + '?filter=' + searchTerm);
-		this.set('courses', courses.Items);
-		this.set('administeredCourses', administeredCourses.Items);
+		this.set({
+			'courses': courses.Items,
+			'administeredCourses': administeredCourses.Items
+		});
 	}
 
 	async searchBooks (searchTerm) {
@@ -113,8 +118,10 @@ export default class HomePageStore extends Stores.BoundStore {
 
 		const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
 		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
-		this.set('courses', courses.Items);
-		this.set('administeredCourses', administeredCourses.Items);
+		this.set({
+			'courses': courses.Items,
+			'administeredCourses': administeredCourses.Items
+		});
 	}
 
 	async loadBooks () {
