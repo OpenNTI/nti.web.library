@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Loading} from '@nti/web-commons';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
@@ -22,29 +23,35 @@ export default class Home extends React.Component {
 	}
 
 	render () {
-		let {admin, courses, administeredCourses, books, communities} = this.props;
+		let {admin, courses, administeredCourses, books, communities, loading} = this.props;
 
 		return (
 			<div className="library-view">
-				{admin &&
-					<AdminToolbar />
-				}
+				{loading ? (
+					<Loading.Mask/>
+				) : (
+					<div>
+						{admin &&
+							<AdminToolbar />
+						}
 
-				{communities && communities.length > 0 &&
-					<Communities items={communities} />
-				}
+						{communities && communities.length > 0 &&
+							<Communities items={communities} />
+						}
 
-				{courses &&
-					<Courses items={courses} />
-				}
+						{courses &&
+							<Courses items={courses} />
+						}
 
-				{administeredCourses && administeredCourses.length > 0 &&
-					<Courses admin items={administeredCourses} />
-				}
+						{administeredCourses && administeredCourses.length > 0 &&
+							<Courses admin items={administeredCourses} />
+						}
 
-				{books && books.length > 0 &&
-					<Books items={books} />
-				}
+						{books && books.length > 0 &&
+							<Books items={books} />
+						}
+					</div>
+				)}
 			</div>
 		);
 	}

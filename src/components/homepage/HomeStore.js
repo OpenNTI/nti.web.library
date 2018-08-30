@@ -8,7 +8,7 @@ export default class HomePageStore extends Stores.BoundStore {
 		super();
 
 		this.set({
-			loading: false,
+			loading: true,
 			error: null,
 			courses: null,
 			administeredCourses: null,
@@ -31,10 +31,14 @@ export default class HomePageStore extends Stores.BoundStore {
 			this.loadSearchTerm();
 		} else {
 			try {
-				this.loadFavorites();
-				this.loadBooks();
-				this.loadCommunities();
-				this.checkAdmin();
+				const libraryPromises = [
+					this.loadFavorites(),
+					this.loadBooks(),
+					this.loadCommunities(),
+					this.checkAdmin()
+				];
+
+				await Promise.all(libraryPromises);
 			} catch (e) {
 				this.set('error', e);
 			} finally {
