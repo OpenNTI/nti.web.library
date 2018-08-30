@@ -66,9 +66,9 @@ export default class Courses extends React.Component {
 									<CoursesContainer items={archivedCourses} itemsType="archived" />
 								}
 								{!archivedCourses && (
-									<div>
+									<div className="loading-archived">
 										{loadArchived ? (
-											<Loading.Spinner/>
+											<Loading.Spinner />
 										) : (
 											<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
 										)}

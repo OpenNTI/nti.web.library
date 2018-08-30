@@ -126,9 +126,13 @@
 		}
 	}
 
+	.loading-archived {
+		margin-bottom: 40px;
+	}
+
 	.loading-spinner {
 		position: relative;
-		margin: 0 auto; //XXX: This may cause everyone who uses this to define margin to override... we may want to remove this and let those who want to center the loader center it themselves
+		margin: 0 auto;
 
 		&::before {
 			content: '';
@@ -202,7 +206,7 @@
 		}
 
 		.load-archived-button {
-			margin: 0 15px;
+			margin: 0 15px 40px;
 		}
 	}
 }
