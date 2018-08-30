@@ -15,7 +15,8 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			error: null,
 			upcomingCourses: null,
 			currentCourses: null,
-			archivedCourses: null
+			archivedCourses: null,
+			searchTerm: false
 		});
 	}
 
@@ -26,10 +27,12 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			error: null,
 			upcomingCourses: null,
 			currentCourses: null,
-			archivedCourses: null
+			archivedCourses: null,
+			searchTerm: false
 		});
 
 		if (this.searchTerm) {
+			this.set('searchTerm', true);
 			this.loadSearchTerm();
 		} else {
 			try {

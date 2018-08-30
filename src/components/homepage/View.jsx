@@ -26,6 +26,12 @@ export default class Home extends React.Component {
 	render () {
 		let {admin, courses, administeredCourses, books, communities, searchTerm, loading} = this.props;
 
+		const noCommunities = communities && communities.length === 0;
+		const noCourses = courses && courses.length === 0;
+		const noAdminCourses = administeredCourses && administeredCourses.length === 0;
+		const noBooks = books && books.length === 0;
+		const emptySearch = searchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
+
 		return (
 			<div className="library-view">
 				{loading ? (
@@ -36,21 +42,27 @@ export default class Home extends React.Component {
 							<AdminToolbar />
 						}
 
-						{communities && communities.length > 0 &&
-							<Communities items={communities} />
-						}
+						{emptySearch ? (
+							<div className="no-results">No results found.</div>
+						) : (
+							<div>
+								{!noCommunities &&
+									<Communities items={communities} />
+								}
 
-						{((courses && !searchTerm) || (courses && courses.length > 0)) &&
-							<Courses items={courses} />
-						}
+								{((courses && !searchTerm) || !noCourses) &&
+									<Courses items={courses} />
+								}
 
-						{administeredCourses && administeredCourses.length > 0 &&
-							<Courses admin items={administeredCourses} />
-						}
+								{!noAdminCourses &&
+									<Courses admin items={administeredCourses} />
+								}
 
-						{books && books.length > 0 &&
-							<Books items={books} />
-						}
+								{!noBooks &&
+									<Books items={books} />
+								}
+							</div>
+						)}
 					</div>
 				)}
 			</div>

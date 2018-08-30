@@ -8,6 +8,13 @@
 	font: normal 300 1.25em/2em "Open Sans", sans-serif;
 	font-size: 20px;
 
+	.no-results {
+		text-align: center;
+		color: #b8b8b8;
+		font-size: 3rem;
+		margin-top: 40px;
+	}
+
 	.breadcrumb {
 		display: flex;
 		align-items: baseline;

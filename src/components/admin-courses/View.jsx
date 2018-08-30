@@ -8,7 +8,7 @@ import CoursesContainer from '../containers/CoursesContainer';
 import Store from './AdminCourseStore';
 
 
-@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', error: 'error'})
+@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', searchTerm: 'searchTerm', error: 'error'})
 export default class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -17,6 +17,7 @@ export default class AdminCourses extends React.Component {
 		upcomingCourses: PropTypes.array,
 		currentCourses: PropTypes.array,
 		archivedCourses: PropTypes.array,
+		searchTerm: PropTypes.bool,
 		children: PropTypes.node
 	}
 
@@ -25,7 +26,12 @@ export default class AdminCourses extends React.Component {
 	}
 
 	render () {
-		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived} = this.props;
+		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived, searchTerm} = this.props;
+
+		const noUpcoming = upcomingCourses && upcomingCourses.length === 0;
+		const noCurrent = currentCourses && currentCourses.length === 0;
+		const noArchived = archivedCourses && archivedCourses.length === 0;
+		const emptySearch = searchTerm && noUpcoming && noCurrent && noArchived;
 
 		return (
 			<div className="courses-view">
@@ -42,21 +48,27 @@ export default class AdminCourses extends React.Component {
 					<Loading.Mask/>
 				) : (
 					<div>
-						{upcomingCourses && upcomingCourses.length > 0 &&
-							<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
-						}
-						{currentCourses && currentCourses.length > 0 &&
-							<CoursesContainer items={currentCourses} itemsType="current" />
-						}
-						{archivedCourses && archivedCourses.length > 0 &&
-							<CoursesContainer items={archivedCourses} itemsType="archived" />
-						}
-						{!archivedCourses && (
+						{emptySearch ? (
+							<div className="no-results">No administered courses found.</div>
+						) : (
 							<div>
-								{loadArchived ? (
-									<Loading.Spinner/>
-								) : (
-									<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
+								{upcomingCourses && upcomingCourses.length > 0 &&
+									<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
+								}
+								{currentCourses && currentCourses.length > 0 &&
+									<CoursesContainer items={currentCourses} itemsType="current" />
+								}
+								{archivedCourses && archivedCourses.length > 0 &&
+									<CoursesContainer items={archivedCourses} itemsType="archived" />
+								}
+								{!archivedCourses && (
+									<div>
+										{loadArchived ? (
+											<Loading.Spinner/>
+										) : (
+											<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
+										)}
+									</div>
 								)}
 							</div>
 						)}
