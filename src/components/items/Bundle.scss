@@ -14,7 +14,7 @@
 		overflow: hidden;
 	}
 
-	img {
+	.bundle-card-image-background {
 		display: block;
 		width: auto;
 		height: 100%;
@@ -22,7 +22,7 @@
 		transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
 	}
 
-	img::before {
+	.bundle-card-image-background::before {
 		content: ' ';
 		display: block;
 		position: absolute;
@@ -32,7 +32,7 @@
 	}
 
 	.no-touch &:hover {
-		img {
+		.bundle-card-image-background {
 			opacity: 0.7;
 			transform: scale(1.05, 1.05);
 		}
@@ -85,7 +85,7 @@
 			height: 150px;
 		}
 
-		img::before {
+		.bundle-card-image-background::before {
 			height: 150px;
 		}
 	}
