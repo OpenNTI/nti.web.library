@@ -2,8 +2,9 @@ import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
 import {mixin} from '@nti/lib-decorators';
 
+export default
 @mixin(Mixins.Searchable)
-export default class HomePageStore extends Stores.BoundStore {
+class HomePageStore extends Stores.BoundStore {
 	constructor () {
 		super();
 

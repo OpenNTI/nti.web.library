@@ -10,9 +10,10 @@ import Store from './CourseStore';
 
 const {Responsive} = Layouts;
 
+export default
 @searchable()
 @Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', hasSearchTerm: 'hasSearchTerm', error: 'error'})
-export default class Courses extends React.Component {
+class Courses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		loadArchived: PropTypes.bool,

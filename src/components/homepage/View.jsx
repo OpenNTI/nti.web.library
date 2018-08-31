@@ -12,9 +12,10 @@ import HomePageStore from './HomeStore';
 
 const {Responsive} = Layouts;
 
+export default
 @searchable()
 @HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
-export default class Home extends React.Component {
+class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		store: PropTypes.object,

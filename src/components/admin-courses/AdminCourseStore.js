@@ -4,8 +4,9 @@ import {mixin} from '@nti/lib-decorators';
 
 import {getSemesterText} from '../../utils/Semester';
 
+export default
 @mixin(Mixins.Searchable)
-export default class AdminCourseStore extends Stores.BoundStore {
+class AdminCourseStore extends Stores.BoundStore {
 	constructor () {
 		super();
 

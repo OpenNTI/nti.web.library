@@ -10,9 +10,10 @@ import Store from './AdminCourseStore';
 
 const {Responsive} = Layouts;
 
+export default
 @searchable()
 @Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', hasSearchTerm: 'hasSearchTerm', error: 'error'})
-export default class AdminCourses extends React.Component {
+class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		loadArchived: PropTypes.bool,
