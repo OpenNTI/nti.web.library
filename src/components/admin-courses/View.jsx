@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from '@nti/web-commons';
+import {Loading, Layouts} from '@nti/web-commons';
+import {Input, searchable} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
 
 import CoursesContainer from '../containers/CoursesContainer';
 
 import Store from './AdminCourseStore';
 
+const {Responsive} = Layouts;
 
-@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', searchTerm: 'searchTerm', error: 'error'})
+@searchable()
+@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 export default class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -17,8 +20,17 @@ export default class AdminCourses extends React.Component {
 		upcomingCourses: PropTypes.array,
 		currentCourses: PropTypes.array,
 		archivedCourses: PropTypes.array,
-		searchTerm: PropTypes.bool,
+		hasSearchTerm: PropTypes.bool,
 		children: PropTypes.node
+	}
+
+	renderSearchBar () {
+		return (
+			<div className="search-container">
+				<Input />
+				<i className="icon-search" />
+			</div>
+		);
 	}
 
 	loadArchived = () => {
@@ -26,12 +38,12 @@ export default class AdminCourses extends React.Component {
 	}
 
 	render () {
-		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived, searchTerm} = this.props;
+		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived, hasSearchTerm} = this.props;
 
 		const noUpcoming = upcomingCourses && upcomingCourses.length === 0;
 		const noCurrent = currentCourses && currentCourses.length === 0;
 		const noArchived = archivedCourses && archivedCourses.length === 0;
-		const emptySearch = searchTerm && noUpcoming && noCurrent && noArchived;
+		const emptySearch = hasSearchTerm && noUpcoming && noCurrent && noArchived;
 
 		return (
 			<div className="courses-view">
@@ -48,6 +60,8 @@ export default class AdminCourses extends React.Component {
 					<Loading.Mask/>
 				) : (
 					<div>
+						<Responsive.Item query={Responsive.isMobileContext} render={this.renderSearchBar} />
+
 						{emptySearch ? (
 							<div className="no-results">No administered courses found.</div>
 						) : (

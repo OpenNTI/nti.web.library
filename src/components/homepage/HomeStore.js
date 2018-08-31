@@ -14,7 +14,7 @@ export default class HomePageStore extends Stores.BoundStore {
 			administeredCourses: null,
 			books: null,
 			communities: null,
-			searchTerm: false
+			hasSearchTerm: false
 		});
 	}
 
@@ -26,11 +26,11 @@ export default class HomePageStore extends Stores.BoundStore {
 			administeredCourses: null,
 			books: null,
 			communities: null,
-			searchTerm: false
+			hasSearchTerm: false
 		});
 
 		if (this.searchTerm) {
-			this.set('searchTerm', true);
+			this.set('hasSearchTerm', true);
 			this.loadSearchTerm();
 		} else {
 			try {

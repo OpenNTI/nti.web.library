@@ -8,6 +8,29 @@
 	font: normal 300 1.25em/2em "Open Sans", sans-serif;
 	font-size: 20px;
 
+	.search-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 15px 5%;
+
+		.nti-text-input {
+			background-color: #494949;
+			color: white;
+			border: none;
+			padding: 7px;
+			padding-right: 0;
+			font: 11pt "Open Sans", sans-serif;
+			width: 100%;
+			border-radius: 2px;
+		}
+
+		.icon-search {
+			padding: 7px;
+			background-color: #595959;
+		}
+	}
+
 	.no-results {
 		text-align: center;
 		color: #b8b8b8;
@@ -193,6 +216,10 @@
 
 		.load-archived-button {
 			margin: 0 15px 40px;
+		}
+
+		.no-results {
+			font-size: 2rem;
 		}
 	}
 }

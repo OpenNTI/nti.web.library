@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading} from '@nti/web-commons';
+import {Loading, Layouts} from '@nti/web-commons';
+import {Input, searchable} from '@nti/web-search';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
@@ -9,7 +10,10 @@ import Books from '../containers/BooksContainer';
 
 import HomePageStore from './HomeStore';
 
-@HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', searchTerm: 'searchTerm', error: 'error'})
+const {Responsive} = Layouts;
+
+@searchable()
+@HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 export default class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -20,20 +24,31 @@ export default class Home extends React.Component {
 		communities: PropTypes.array,
 		children: PropTypes.node,
 		admin: PropTypes.bool,
-		searchTerm: PropTypes.bool
+		hasSearchTerm: PropTypes.bool
+	}
+
+	renderSearchBar () {
+		return (
+			<div className="search-container">
+				<Input />
+				<i className="icon-search" />
+			</div>
+		);
 	}
 
 	render () {
-		let {admin, courses, administeredCourses, books, communities, searchTerm, loading} = this.props;
+		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading} = this.props;
 
 		const noCommunities = communities && communities.length === 0;
 		const noCourses = courses && courses.length === 0;
 		const noAdminCourses = administeredCourses && administeredCourses.length === 0;
 		const noBooks = books && books.length === 0;
-		const emptySearch = searchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
+		const emptySearch = hasSearchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
 
 		return (
 			<div className="library-view">
+				<Responsive.Item query={Responsive.isMobileContext} render={this.renderSearchBar} />
+
 				{loading ? (
 					<Loading.Mask/>
 				) : (
@@ -50,7 +65,7 @@ export default class Home extends React.Component {
 									<Communities items={communities} />
 								}
 
-								{((courses && !searchTerm) || !noCourses) &&
+								{((courses && !hasSearchTerm) || !noCourses) &&
 									<Courses items={courses} />
 								}
 

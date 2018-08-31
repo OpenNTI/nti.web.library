@@ -16,7 +16,7 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			upcomingCourses: null,
 			currentCourses: null,
 			archivedCourses: null,
-			searchTerm: false
+			hasSearchTerm: false
 		});
 	}
 
@@ -28,11 +28,11 @@ export default class AdminCourseStore extends Stores.BoundStore {
 			upcomingCourses: null,
 			currentCourses: null,
 			archivedCourses: null,
-			searchTerm: false
+			hasSearchTerm: false
 		});
 
 		if (this.searchTerm) {
-			this.set('searchTerm', true);
+			this.set('hasSearchTerm', true);
 			this.loadSearchTerm();
 		} else {
 			try {
@@ -126,7 +126,7 @@ export default class AdminCourseStore extends Stores.BoundStore {
 		const coursesParsed = await Promise.all(coursesPromises);
 		const today = new Date();
 		let currentCourses = [];
-		const assumeCurrent = coursesParsed.filter(y => y.getStartDate() == null || y.getEndDate() == null);
+		const assumeCurrent = coursesParsed.filter(y => y.getStartDate() == null || y.getEndDate() == null && !(y.getStartDate() && y.getStartDate() > today));
 		currentCourses.push(...assumeCurrent);
 		let currentDate = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() > today));
 		currentCourses.push(...currentDate);
