@@ -1,17 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {LinkTo} from '@nti/web-routing';
 
-export default function AdminToolbar () {
+import {CreateCourse} from './create-course';
+
+AdminToolbar.propTypes = {
+	store: PropTypes.object.isRequired
+};
+
+
+export default function AdminToolbar ({store}) {
 	return (
 		<div className="administrator-toolbar">
 			<div>Administrator</div>
 			<div className="controls">
-				<a className="admin-nav" href="/siteadmin" />
-				<div className="admin-create-button">
-					<div className="add-container">
-						<i className="icon-add" />
-					</div>
-					<div className="create-label">Create</div>
-				</div>
+				<LinkTo.Path to="./siteadmin" className="admin-nav">
+					<div className="icon-outline" />
+				</LinkTo.Path>
+
+				<CreateCourse canCreate store={store} />
 			</div>
 		</div>
 	);

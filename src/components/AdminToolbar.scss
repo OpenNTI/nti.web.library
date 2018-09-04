@@ -14,24 +14,20 @@
 			height: 40px;
 			border-radius: 30px;
 			margin-right: 10px;
-			font-size: 26px;
-			padding: 4px 4px 4px 7px;
+			font-size: 18px;
 			color: white;
 			cursor: pointer;
 			box-sizing: border-box;
 			position: relative;
+			text-decoration: none;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 
-			&::after {
-				content: '';
-				overflow: hidden;
-				top: 11px;
-				left: 11px;
-				right: auto;
-				// background-image: url(../images/sprite.png?t=20180808192524);
-				background-position: -281px -439px;
-				width: 18px;
-				height: 20px;
-				position: absolute;
+			.icon-outline {
+				background-image: url('./resources/images/outline.svg');
+				height: 24px;
+				width: 24px;
 			}
 		}
 

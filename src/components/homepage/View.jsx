@@ -38,7 +38,7 @@ class Home extends React.Component {
 	}
 
 	render () {
-		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading} = this.props;
+		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
 
 		const noCommunities = communities && communities.length === 0;
 		const noCourses = courses && courses.length === 0;
@@ -55,7 +55,7 @@ class Home extends React.Component {
 				) : (
 					<div>
 						{admin &&
-							<AdminToolbar />
+							<Responsive.Item query={Responsive.isWebappContext} component={AdminToolbar} store={store} />
 						}
 
 						{emptySearch ? (

@@ -3,12 +3,19 @@ import PropTypes from 'prop-types';
 import {Loading, Layouts} from '@nti/web-commons';
 import {Input, searchable} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
+import {scoped} from '@nti/lib-locale';
 
 import CoursesContainer from '../containers/CoursesContainer';
 
 import Store from './CourseStore';
 
 const {Responsive} = Layouts;
+
+const t = scoped('library.components.Courses', {
+	courses: 'Courses',
+	empty: 'No courses found.',
+	add: 'Add Courses'
+});
 
 export default
 @searchable()
@@ -53,11 +60,11 @@ class Courses extends React.Component {
 						Home
 					</LinkTo.Name>
 					<div className="title">
-						Courses
+						{t('courses')}
 					</div>
 
 					<LinkTo.Path to="./catalog" className="add-courses-button">
-						Add Courses
+						{t('add')}
 					</LinkTo.Path>
 				</div>
 
@@ -68,7 +75,7 @@ class Courses extends React.Component {
 						<Responsive.Item query={Responsive.isMobileContext} render={this.renderSearchBar} />
 
 						{emptySearch ? (
-							<div className="no-results">No courses found.</div>
+							<div className="no-results">{t('empty')}</div>
 						) : (
 							<div>
 								{upcomingCourses && upcomingCourses.length > 0 &&

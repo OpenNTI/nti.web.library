@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {scoped} from '@nti/lib-locale';
 
-const t = scoped('library.sections', {
+const t = scoped('library.components.SectionTitle', {
 	admin: 'Administered Courses',
 	courses: 'Courses',
 	upcomingcourses: 'Upcoming Courses',
