@@ -99,8 +99,50 @@ class AdminCourseStore extends Stores.BoundStore {
 		this.set('currentCourses', currentAdminCourses.Items);
 	}
 
+	async reloadUpcoming () {
+		this.set({
+			loading: true,
+			error: null,
+			upcomingCourses: null
+		});
+
+		try {
+			let service = await getService();
+			const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+			const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
+
+			this.set('upcomingCourses', upcomingAdminCourses.Items);
+		} catch (e) {
+			this.set('error', e);
+		} finally {
+			this.set('loading', false);
+		}
+	}
+
+	async reloadCurrent () {
+		this.set({
+			loading: true,
+			error: null,
+			currentCourses: null
+		});
+
+		try {
+			let service = await getService();
+			const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+
+			const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
+
+			this.set('currentCourses', currentAdminCourses.Items);
+		} catch (e) {
+			this.set('error', e);
+		} finally {
+			this.set('loading', false);
+		}
+	}
+
 	async loadArchivedCourses () {
 		this.set({
+			archivedCourses: null,
 			loadArchived: true
 		});
 

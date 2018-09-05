@@ -147,6 +147,28 @@ class HomePageStore extends Stores.BoundStore {
 		}
 	}
 
+	async reloadCourseFavorites () {
+		this.set({
+			loading: true,
+			error: null,
+			administeredCourses: null
+		});
+
+		try {
+			let service = await getService();
+			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+			const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
+			this.set({
+				'courses': courses.Items
+			});
+		} catch (e) {
+			this.set('error', e);
+		} finally {
+			this.set('loading', false);
+		}
+	}
+
 	async loadBooks () {
 		let service = await getService();
 		const booksCollection = service.getCollection('VisibleContentBundles', 'ContentBundles');

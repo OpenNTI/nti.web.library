@@ -98,8 +98,51 @@ class CourseStore extends Stores.BoundStore {
 		this.set('currentCourses', currentCourses.Items);
 	}
 
+	async reloadUpcoming () {
+		this.set({
+			loading: true,
+			error: null,
+			upcomingCourses: null
+		});
+
+		try {
+			let service = await getService();
+			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+			const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
+
+			this.set('upcomingCourses', upcomingCourses.Items);
+		} catch (e) {
+			this.set('error', e);
+		} finally {
+			this.set('loading', false);
+		}
+	}
+
+	async reloadCurrent () {
+		this.set({
+			loading: true,
+			error: null,
+			currentCourses: null
+		});
+
+		try {
+			let service = await getService();
+			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+			const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+
+			this.set('currentCourses', currentCourses.Items);
+		} catch (e) {
+			this.set('error', e);
+		} finally {
+			this.set('loading', false);
+		}
+	}
+
 	async loadArchivedCourses () {
 		this.set({
+			archivedCourses: null,
 			loadArchived: true
 		});
 

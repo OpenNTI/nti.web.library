@@ -45,6 +45,14 @@ class Courses extends React.Component {
 		this.props.store.loadArchivedCourses();
 	}
 
+	onModificationUpcoming = () => {
+		this.props.store.reloadUpcoming();
+	};
+
+	onModificationCurrent= () => {
+		this.props.store.reloadCurrent();
+	};
+
 	render () {
 		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived, hasSearchTerm} = this.props;
 
@@ -79,13 +87,13 @@ class Courses extends React.Component {
 						) : (
 							<div>
 								{upcomingCourses && upcomingCourses.length > 0 &&
-									<CoursesContainer items={upcomingCourses} itemsType="upcoming" />
+									<CoursesContainer items={upcomingCourses} itemsType="upcoming" onModification={this.onModificationUpcoming} />
 								}
 								{currentCourses && currentCourses.length > 0 &&
-									<CoursesContainer items={currentCourses} itemsType="current" />
+									<CoursesContainer items={currentCourses} itemsType="current" onModification={this.onModificationCurrent} />
 								}
 								{archivedCourses && archivedCourses.length > 0 &&
-									<CoursesContainer items={archivedCourses} itemsType="archived" />
+									<CoursesContainer items={archivedCourses} itemsType="archived" onModification={this.loadArchived} />
 								}
 								{!archivedCourses && (
 									<div className="loading-archived">

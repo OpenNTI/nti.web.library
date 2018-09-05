@@ -6,7 +6,7 @@ import Heading from '../SectionHeading';
 
 import Collection from './Collection';
 
-export default function Container ({section, items, date}) {
+export default function Container ({section, items, date, onModification}) {
 	return !items || items.length === 0 ?
 		(
 			<div className="library-collection">
@@ -14,7 +14,7 @@ export default function Container ({section, items, date}) {
 				<EmptyList type={`library-${section}`}/>
 			</div>
 		) : (
-			<Collection className={section} list={items} >
+			<Collection className={section} list={items} onModification={onModification}>
 				<Heading section={section} date={date} />
 			</Collection>
 		);
@@ -23,5 +23,6 @@ export default function Container ({section, items, date}) {
 Container.propTypes = {
 	section: PropTypes.string,
 	items: PropTypes.array,
-	date: PropTypes.string
+	date: PropTypes.string,
+	onModification: PropTypes.func
 };

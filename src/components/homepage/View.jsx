@@ -37,6 +37,14 @@ class Home extends React.Component {
 		);
 	}
 
+	onModificationCourse = () => {
+		this.props.store.reloadCourseFavorites();
+	};
+
+	onModificationAdmin = () => {
+		this.props.store.reloadAdminFavorites();
+	};
+
 	render () {
 		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
 
@@ -67,11 +75,11 @@ class Home extends React.Component {
 								}
 
 								{((courses && !hasSearchTerm) || !noCourses) &&
-									<Courses items={courses} />
+									<Courses items={courses} onModification={this.onModificationCourse}/>
 								}
 
 								{!noAdminCourses &&
-									<Courses admin items={administeredCourses} />
+									<Courses admin items={administeredCourses} onModification={this.onModificationAdmin} />
 								}
 
 								{!noBooks &&

@@ -8,14 +8,15 @@ export default class Course extends React.Component  {
 	}
 
 	static propTypes = {
-		item: PropTypes.object.isRequired
+		item: PropTypes.object.isRequired,
+		onModification: PropTypes.func
 	};
 
 	render () {
-		const {props: {item}} = this;
+		const {props: {item, onModification}} = this;
 
 		return (
-			<Card course={item} />
+			<Card course={item} onModification={onModification} />
 		);
 	}
 }
