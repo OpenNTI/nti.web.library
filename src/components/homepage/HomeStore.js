@@ -151,7 +151,7 @@ class HomePageStore extends Stores.BoundStore {
 		this.set({
 			loading: true,
 			error: null,
-			administeredCourses: null
+			courses: null
 		});
 
 		try {
