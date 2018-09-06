@@ -14,7 +14,7 @@ export default function AdminToolbar ({store}) {
 		<div className="administrator-toolbar">
 			<div>Administrator</div>
 			<div className="controls">
-				<LinkTo.Path to="./siteadmin" className="admin-nav">
+				<LinkTo.Path to="/app/siteadmin" className="admin-nav">
 					<div className="icon-outline" />
 				</LinkTo.Path>
 
