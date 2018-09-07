@@ -20,6 +20,10 @@ export default class CreateCourse extends Component {
 		store: PropTypes.object.isRequired
 	}
 
+	static contextTypes = {
+		router: PropTypes.object.isRequired
+	}
+
 	state = {}
 
 	attachFlyoutRef = x => (this.flyout = x);
@@ -36,25 +40,24 @@ export default class CreateCourse extends Component {
 
 	onCourseCreated = () => {
 		this.props.store.reloadAdminFavorites();
-	};
+	}
 
 	onCourseModified = () => {
 		this.props.store.reloadAdminFavorites();
-	};
+	}
 
-	launchCourseWizard = template => {
+	launchCourseWizard = async template => {
 		if (this.flyout) {
 			this.flyout.dismiss();
 		}
 
-		Editor.createCourse(this.onCourseModified, template).then(createdEntry => {
-			this.onCourseCreated(createdEntry);	// course was created, do post processing
+		const { router } = this.context;
+		const newEntry = await Editor.createCourse(this.onCourseModified, template);
 
-			if (createdEntry) {
-				this.context.router.routeTo.object(createdEntry);
-			}
-		});
-	};
+		if (newEntry) {
+			router.routeTo.object(newEntry);
+		}
+	}
 
 	renderCreateTrigger () {
 		return (
