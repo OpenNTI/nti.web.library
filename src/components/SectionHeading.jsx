@@ -51,9 +51,9 @@ class SectionHeading extends React.Component {
 						)}
 
 						{!empty && this.showSeeAll() && (
-							<LinkTo.Name name={section === 'admin' ? ('library-admin-courses') : ('library-courses')} className="see-all">
+							<LinkTo.Path to={section === 'admin' ? ('./library/library-admin-courses') : ('./library/library-courses')} className="see-all">
 							See All
-							</LinkTo.Name>
+							</LinkTo.Path>
 						)}
 					</div>
 				)}
