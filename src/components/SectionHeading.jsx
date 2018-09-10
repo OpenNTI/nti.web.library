@@ -2,9 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {LinkTo} from '@nti/web-routing';
 import {Connectors} from '@nti/lib-store';
+import {Layouts} from '@nti/web-commons';
 
 import SectionTitle from './SectionTitle';
 import AddButton from './AddButton';
+
+const {Responsive} = Layouts;
 
 export default
 @Connectors.Any.connect({
@@ -43,8 +46,13 @@ class SectionHeading extends React.Component {
 	render () {
 		const {section, date, empty} = this.props;
 		const { router } = this.context;
+		let base;
 
-		const base = '/' + router.baseroute.split('/')[1];
+		if(Responsive.isMobileContext()) {
+			base = '/mobile';
+		} else {
+			base = router.baseroute ? '/' + router.baseroute.split('/')[1] : '';
+		}
 
 		return (
 			<div className="library-section-heading">
