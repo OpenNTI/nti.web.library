@@ -24,6 +24,10 @@ class SectionHeading extends React.Component {
 		totalAdministeredCourses: PropTypes.number
 	}
 
+	static contextTypes = {
+		router: PropTypes.object.isRequired
+	}
+
 	showSeeAll () {
 		const {section, courses, totalCourses, administeredCourses, totalAdministeredCourses} = this.props;
 
@@ -38,6 +42,9 @@ class SectionHeading extends React.Component {
 
 	render () {
 		const {section, date, empty} = this.props;
+		const { router } = this.context;
+
+		const base = '/' + router.baseroute.split('/')[1];
 
 		return (
 			<div className="library-section-heading">
@@ -51,9 +58,9 @@ class SectionHeading extends React.Component {
 						)}
 
 						{!empty && this.showSeeAll() && (
-							<LinkTo.Name name={section === 'admin' ? ('library-admin-courses') : ('library-courses')} className="see-all">
+							<LinkTo.Path to={section === 'admin' ? (base + '/library/admin-courses') : (base + '/library/courses')} className="see-all">
 							See All
-							</LinkTo.Name>
+							</LinkTo.Path>
 						)}
 					</div>
 				)}
