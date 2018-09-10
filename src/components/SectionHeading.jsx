@@ -30,7 +30,8 @@ class SectionHeading extends React.Component {
 	}
 
 	static contextTypes = {
-		router: PropTypes.object.isRequired
+		router: PropTypes.object.isRequired,
+		basePath: PropTypes.string
 	}
 
 	showSeeAll () {
@@ -47,13 +48,13 @@ class SectionHeading extends React.Component {
 
 	render () {
 		const {section, date, empty} = this.props;
-		const { router } = this.context;
+		const { router, basePath } = this.context;
 		let base;
 
 		if(Responsive.isMobileContext()) {
-			base = '/mobile';
+			base = basePath;
 		} else {
-			base = router.baseroute ? '/' + router.baseroute.split('/')[1] : '';
+			base = router.baseroute ? '/' + router.baseroute.split('/')[1] + '/' : '';
 		}
 
 		return (
@@ -68,7 +69,7 @@ class SectionHeading extends React.Component {
 						)}
 
 						{!empty && this.showSeeAll() && (
-							<LinkTo.Path to={section === 'admin' ? (base + '/library/admin-courses') : (base + '/library/courses')} className="see-all">
+							<LinkTo.Path to={section === 'admin' ? (base + 'library/admin-courses') : (base + 'library/courses')} className="see-all">
 							See All
 							</LinkTo.Path>
 						)}
