@@ -14,7 +14,8 @@ export default
 	courses: 'courses',
 	totalCourses: 'totalCourses',
 	administeredCourses: 'administeredCourses',
-	totalAdministeredCourses: 'totalAdministeredCourses'
+	totalAdministeredCourses: 'totalAdministeredCourses',
+	hasSearchTerm: 'hasSearchTerm'
 })
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -24,7 +25,8 @@ class SectionHeading extends React.Component {
 		courses: PropTypes.array,
 		totalCourses: PropTypes.number,
 		administeredCourses: PropTypes.array,
-		totalAdministeredCourses: PropTypes.number
+		totalAdministeredCourses: PropTypes.number,
+		hasSearchTerm: PropTypes.bool
 	}
 
 	static contextTypes = {
@@ -32,11 +34,11 @@ class SectionHeading extends React.Component {
 	}
 
 	showSeeAll () {
-		const {section, courses, totalCourses, administeredCourses, totalAdministeredCourses} = this.props;
+		const {section, courses, totalCourses, administeredCourses, totalAdministeredCourses, hasSearchTerm} = this.props;
 
-		if(section === 'courses') {
+		if(section === 'courses' && !hasSearchTerm) {
 			return (courses && courses.length) < totalCourses;
-		} else if(section === 'admin') {
+		} else if(section === 'admin' && !hasSearchTerm) {
 			return (administeredCourses && administeredCourses.length) < totalAdministeredCourses;
 		}
 
