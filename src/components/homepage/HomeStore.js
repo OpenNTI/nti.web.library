@@ -121,7 +121,9 @@ class HomePageStore extends Stores.BoundStore {
 		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
 		this.set({
 			'courses': courses.Items,
-			'administeredCourses': administeredCourses.Items
+			'administeredCourses': administeredCourses.Items,
+			'totalCourses': courses.Total,
+			'totalAdministeredCourses': administeredCourses.Total
 		});
 	}
 
@@ -138,7 +140,8 @@ class HomePageStore extends Stores.BoundStore {
 
 			const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
 			this.set({
-				'administeredCourses': administeredCourses.Items
+				'administeredCourses': administeredCourses.Items,
+				'totalAdministeredCourses': administeredCourses.Total
 			});
 		} catch (e) {
 			this.set('error', e);
@@ -160,7 +163,8 @@ class HomePageStore extends Stores.BoundStore {
 
 			const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
 			this.set({
-				'courses': courses.Items
+				'courses': courses.Items,
+				'totalCourses': courses.Total
 			});
 		} catch (e) {
 			this.set('error', e);
