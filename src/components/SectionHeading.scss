@@ -30,8 +30,7 @@
 }
 
 @include respond-to(handhelds) {
-	.library-section-heading.library-section-heading {
+	.library-section-heading {
 		padding: 0 10px;
-		margin-bottom: 0;
 	}
 }

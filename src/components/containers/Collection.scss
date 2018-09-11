@@ -26,11 +26,11 @@
 }
 
 @include respond-to(handhelds) {
-	.library-collection.library-collection {
+	.library-collection {
 		margin-bottom: 5px;
 	}
 
-	.library-collection.library-collection ul {
+	.library-collection ul {
 		display: block;
 		white-space: nowrap;
 		width: calc(100vw);
@@ -45,7 +45,7 @@
 		}
 	}
 
-	.library-collection.library-collection .library-object {
+	.library-collection .library-object {
 		width: 185px;
 		margin: 0 5px;
 	}
