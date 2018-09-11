@@ -59,11 +59,12 @@ class AdminCourses extends React.Component {
 		const noCurrent = currentCourses && currentCourses.length === 0;
 		const noArchived = archivedCourses && archivedCourses.length === 0;
 		const emptySearch = hasSearchTerm && noUpcoming && noCurrent && noArchived;
+		const homeLink = Responsive.isMobileContext ? 'library-home-mobile' : 'library-home';
 
 		return (
 			<div className="courses-view">
 				<div className="breadcrumb">
-					<LinkTo.Name name="library-home" className="home-link">
+					<LinkTo.Name name={homeLink} className="home-link">
 						Home
 					</LinkTo.Name>
 					<div className="title">
