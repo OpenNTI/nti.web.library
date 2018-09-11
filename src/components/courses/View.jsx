@@ -32,6 +32,10 @@ class Courses extends React.Component {
 		children: PropTypes.node
 	}
 
+	static contextTypes = {
+		basePath: PropTypes.string
+	}
+
 	renderSearchBar () {
 		return (
 			<div className="search-container">
@@ -71,7 +75,7 @@ class Courses extends React.Component {
 						{t('courses')}
 					</div>
 
-					<LinkTo.Path to="./catalog" className="add-courses-button">
+					<LinkTo.Path to={this.context.basePath + '/catalog'} className="add-courses-button">
 						{t('add')}
 					</LinkTo.Path>
 				</div>
