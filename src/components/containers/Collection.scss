@@ -1,10 +1,10 @@
 @import "~@nti/style-common";
 
-.library-collection {
+.library-collection.library-collection {
 	margin-bottom: 30px;
 }
 
-.library-collection ul {
+.library-collection.library-collection ul {
 	list-style: none;
 	padding: 0;
 	margin: 0 -8px;
@@ -15,13 +15,13 @@
 	flex-wrap: wrap;
 }
 
-.library-collection .library-object {
+.library-collection.library-collection .library-object {
 	width: 242px;
 	margin: 7px 9px;
 	position: relative;
 }
 
-.library-collection .library-object a {
+.library-collection.library-collection .library-object a {
 	text-decoration: none;
 }
 
@@ -30,7 +30,7 @@
 		margin-bottom: 5px;
 	}
 
-	.library-collection ul {
+	.library-collection.library-collection ul {
 		display: block;
 		white-space: nowrap;
 		width: calc(100vw);
@@ -45,7 +45,7 @@
 		}
 	}
 
-	.library-collection .library-object {
+	.library-collection.library-collection .library-object {
 		width: 185px;
 		margin: 0 5px;
 	}
