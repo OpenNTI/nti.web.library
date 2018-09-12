@@ -34,6 +34,7 @@ class Courses extends React.Component {
 	}
 
 	static contextTypes = {
+		router: PropTypes.object,
 		basePath: PropTypes.string
 	}
 
@@ -65,6 +66,7 @@ class Courses extends React.Component {
 		const noCurrent = currentCourses && currentCourses.length === 0;
 		const noArchived = archivedCourses && archivedCourses.length === 0;
 		const emptySearch = hasSearchTerm && noUpcoming && noCurrent && noArchived;
+		const baseroute = this.context.basePath != null ? this.context.basePath : this.context.router.baseroute.replace('library', '');
 
 		return (
 			<div className="courses-view">
@@ -76,7 +78,7 @@ class Courses extends React.Component {
 						{t('courses')}
 					</div>
 
-					<LinkTo.Path to={this.context.basePath + '/catalog'} className="add-courses-button">
+					<LinkTo.Path to={baseroute + '/catalog'} className="add-courses-button">
 						{t('add')}
 					</LinkTo.Path>
 				</div>
