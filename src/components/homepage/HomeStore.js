@@ -7,6 +7,8 @@ export default
 class HomePageStore extends Stores.BoundStore {
 	constructor () {
 		super();
+		this.loaded = false;
+		this.prevSearch = false;
 
 		this.set({
 			loading: true,
@@ -20,20 +22,30 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async load () {
-		this.set({
-			loading: true,
-			error: null,
-			courses: null,
-			administeredCourses: null,
-			books: null,
-			communities: null,
-			hasSearchTerm: false
-		});
-
 		if (this.searchTerm) {
-			this.set('hasSearchTerm', true);
+			this.loaded = false;
+
+			this.set({
+				loading: true,
+				error: null,
+				courses: null,
+				administeredCourses: null,
+				books: null,
+				communities: null,
+				hasSearchTerm: true
+			});
 			this.loadSearchTerm();
-		} else {
+		} else if (!this.loaded || this.prevSearch) {
+			this.set({
+				loading: true,
+				error: null,
+				courses: null,
+				administeredCourses: null,
+				books: null,
+				communities: null,
+				hasSearchTerm: false
+			});
+
 			try {
 				const libraryPromises = [
 					this.loadFavorites(),
@@ -46,7 +58,12 @@ class HomePageStore extends Stores.BoundStore {
 			} catch (e) {
 				this.set('error', e);
 			} finally {
-				this.set('loading', false);
+				this.loaded = true;
+				this.prevSearch = false;
+
+				this.set({
+					loading: false
+				});
 			}
 		}
 	}
@@ -68,7 +85,12 @@ class HomePageStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set('error', e);
 		} finally {
-			this.set('loading', false);
+			this.loaded = true;
+			this.prevSearch = true;
+
+			this.set({
+				loading: false
+			});
 		}
 	}
 

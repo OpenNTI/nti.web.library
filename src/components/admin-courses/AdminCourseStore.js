@@ -9,6 +9,8 @@ export default
 class AdminCourseStore extends Stores.BoundStore {
 	constructor () {
 		super();
+		this.loaded = false;
+		this.prevSearch = false;
 
 		this.set({
 			loading: true,
@@ -22,20 +24,29 @@ class AdminCourseStore extends Stores.BoundStore {
 	}
 
 	async load () {
-		this.set({
-			loading: true,
-			loadArchived: false,
-			error: null,
-			upcomingCourses: null,
-			currentCourses: null,
-			archivedCourses: null,
-			hasSearchTerm: false
-		});
-
 		if (this.searchTerm) {
-			this.set('hasSearchTerm', true);
+			this.loaded = false;
+			this.set({
+				loading: true,
+				loadArchived: false,
+				error: null,
+				upcomingCourses: null,
+				currentCourses: null,
+				archivedCourses: null,
+				hasSearchTerm: true
+			});
 			this.loadSearchTerm();
-		} else {
+		} else if (!this.loaded || this.prevSearch) {
+			this.set({
+				loading: true,
+				loadArchived: false,
+				error: null,
+				upcomingCourses: null,
+				currentCourses: null,
+				archivedCourses: null,
+				hasSearchTerm: false
+			});
+
 			try {
 				const libraryPromises = [
 					this.loadUpcomingCourses(),
@@ -46,6 +57,8 @@ class AdminCourseStore extends Stores.BoundStore {
 			} catch (e) {
 				this.set('error', e);
 			} finally {
+				this.loaded = true;
+				this.prevSearch = false;
 				this.set('loading', false);
 			}
 		}
@@ -61,6 +74,8 @@ class AdminCourseStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set('error', e);
 		} finally {
+			this.loaded = true;
+			this.prevSearch = true;
 			this.set('loading', false);
 		}
 	}

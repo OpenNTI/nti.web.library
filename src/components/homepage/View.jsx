@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Loading, Layouts} from '@nti/web-commons';
-import {Input, searchable, contextual} from '@nti/web-search';
+import {searchable, contextual} from '@nti/web-search';
 import {scoped} from '@nti/lib-locale';
 
 import AdminToolbar from '../AdminToolbar';
@@ -35,15 +35,6 @@ class Home extends React.Component {
 		hasSearchTerm: PropTypes.bool
 	}
 
-	renderSearchBar () {
-		return (
-			<div className="search-container">
-				<Input />
-				<i className="icon-search" />
-			</div>
-		);
-	}
-
 	onModificationCourse = () => {
 		this.props.store.reloadCourseFavorites();
 	};
@@ -63,8 +54,6 @@ class Home extends React.Component {
 
 		return (
 			<div className="library-view">
-				<Responsive.Item query={Responsive.isMobileContext} render={this.renderSearchBar} />
-
 				{loading ? (
 					<Loading.Mask/>
 				) : (

@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Loading, Layouts} from '@nti/web-commons';
-import {Input, searchable, contextual} from '@nti/web-search';
+import {Loading} from '@nti/web-commons';
+import {searchable, contextual} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
 
 import CoursesContainer from '../containers/CoursesContainer';
 
 import Store from './CourseStore';
-
-const {Responsive} = Layouts;
 
 const t = scoped('library.components.Courses', {
 	courses: 'Courses',
@@ -36,15 +34,6 @@ class Courses extends React.Component {
 	static contextTypes = {
 		router: PropTypes.object,
 		basePath: PropTypes.string
-	}
-
-	renderSearchBar () {
-		return (
-			<div className="search-container">
-				<Input />
-				<i className="icon-search" />
-			</div>
-		);
 	}
 
 	loadArchived = () => {
@@ -86,9 +75,7 @@ class Courses extends React.Component {
 				{loading ? (
 					<Loading.Mask/>
 				) : (
-					<div>
-						<Responsive.Item query={Responsive.isMobileContext} render={this.renderSearchBar} />
-
+					<>
 						{emptySearch ? (
 							<div className="no-results">{t('empty')}</div>
 						) : (
@@ -113,7 +100,7 @@ class Courses extends React.Component {
 								)}
 							</div>
 						)}
-					</div>
+					</>
 				)}
 			</div>
 		);

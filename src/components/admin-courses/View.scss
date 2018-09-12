@@ -11,33 +11,6 @@
 		font-size: 18px;
 	}
 
-	.search-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin: 15px 5%;
-
-		.nti-text-input {
-			background-color: #494949;
-			color: white;
-			border: none;
-			padding: 7px;
-			padding-right: 0;
-			font: 11pt "Open Sans", sans-serif;
-			width: 100%;
-			height: 34px;
-			border-radius: 2px;
-			margin-bottom: 0;
-		}
-
-		.icon-search {
-			padding: 7px;
-			height: 34px;
-			background-color: #595959;
-			color: white;
-		}
-	}
-
 	.no-results {
 		text-align: center;
 		color: #b8b8b8;
