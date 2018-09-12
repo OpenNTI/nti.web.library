@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Loading, Layouts} from '@nti/web-commons';
-import {Input, searchable} from '@nti/web-search';
+import {Input, searchable, contextual} from '@nti/web-search';
+import {scoped} from '@nti/lib-locale';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
@@ -12,8 +13,14 @@ import HomePageStore from './HomeStore';
 
 const {Responsive} = Layouts;
 
+const t = scoped('library.components.Home', {
+	home: 'Home'
+});
+
+
 export default
 @searchable()
+@contextual(t('home'))
 @HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 class Home extends React.Component {
 	static propTypes = {

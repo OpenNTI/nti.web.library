@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Loading, Layouts} from '@nti/web-commons';
-import {Input, searchable} from '@nti/web-search';
+import {Input, searchable, contextual} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
 
@@ -19,6 +19,7 @@ const t = scoped('library.components.Courses', {
 
 export default
 @searchable()
+@contextual(t('courses'))
 @Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 class Courses extends React.Component {
 	static propTypes = {
