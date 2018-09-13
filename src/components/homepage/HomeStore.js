@@ -107,6 +107,9 @@ class HomePageStore extends Stores.BoundStore {
 
 		const courses = await service.getBatch(enrolledCollection.href + '?filter=' + searchTerm);
 		const administeredCourses = await service.getBatch(adminCollection.href + '?filter=' + searchTerm);
+
+		if (searchTerm !== this.searchTerm) { return; }
+
 		this.set({
 			'courses': courses.Items,
 			'administeredCourses': administeredCourses.Items
@@ -119,6 +122,9 @@ class HomePageStore extends Stores.BoundStore {
 		const booksBatch = await service.get(booksCollection.href + '?filter=' + searchTerm);
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
+
+		if (searchTerm !== this.searchTerm) { return; }
+
 		this.set('books', booksParsed);
 	}
 
@@ -130,6 +136,8 @@ class HomePageStore extends Stores.BoundStore {
 		function communityFilter (community) {
 			return community.alias.toLowerCase().startsWith(searchTerm.toLowerCase()) || community.realname.toLowerCase().startsWith(searchTerm.toLowerCase());
 		}
+
+		if (searchTerm !== this.searchTerm) { return; }
 
 		this.set('communities', communities.filter(communityFilter));
 	}

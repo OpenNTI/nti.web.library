@@ -192,6 +192,8 @@ class CourseStore extends Stores.BoundStore {
 		let archivedCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() < today));
 		let upcomingCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() > today));
 
+		if (searchTerm !== this.searchTerm) { return; }
+
 		this.set({
 			'currentCourses': currentCourses,
 			'archivedCourses': this.splitItemsBySemester(archivedCourses),
