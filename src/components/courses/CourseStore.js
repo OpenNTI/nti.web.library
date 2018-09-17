@@ -102,6 +102,8 @@ class CourseStore extends Stores.BoundStore {
 
 		const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
 
+		if (this.searchTerm) { return; }
+
 		this.set('upcomingCourses', upcomingCourses.Items);
 	}
 
@@ -110,6 +112,8 @@ class CourseStore extends Stores.BoundStore {
 		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
 
 		const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+
+		if (this.searchTerm) { return; }
 
 		this.set('currentCourses', currentCourses.Items);
 	}

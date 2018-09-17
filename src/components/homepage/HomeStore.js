@@ -162,6 +162,9 @@ class HomePageStore extends Stores.BoundStore {
 
 		const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
 		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
+
+		if (this.searchTerm) { return; }
+
 		this.set({
 			'courses': courses.Items,
 			'administeredCourses': administeredCourses.Items,
@@ -222,12 +225,18 @@ class HomePageStore extends Stores.BoundStore {
 		const booksBatch = await service.get(booksCollection.href);
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
+
+		if (this.searchTerm) { return; }
+
 		this.set('books', booksParsed);
 	}
 
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
+
+		if (this.searchTerm) { return; }
+
 		this.set('communities', await communities.fetch());
 	}
 }

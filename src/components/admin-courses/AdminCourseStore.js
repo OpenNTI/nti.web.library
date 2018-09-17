@@ -101,6 +101,8 @@ class AdminCourseStore extends Stores.BoundStore {
 		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
 		const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
 
+		if (this.searchTerm) { return; }
+
 		this.set('upcomingCourses', upcomingAdminCourses.Items);
 	}
 
@@ -110,6 +112,8 @@ class AdminCourseStore extends Stores.BoundStore {
 		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
 
 		const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
+
+		if (this.searchTerm) { return; }
 
 		this.set('currentCourses', currentAdminCourses.Items);
 	}
