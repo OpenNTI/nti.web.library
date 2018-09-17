@@ -1,12 +1,15 @@
 import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
 import {mixin} from '@nti/lib-decorators';
+import AppDispatcher from '@nti/lib-dispatcher';
 
 export default
 @mixin(Mixins.Searchable)
 class HomePageStore extends Stores.BoundStore {
 	constructor () {
 		super();
+
+		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
 		this.loaded = false;
 		this.prevSearch = false;
 
@@ -19,6 +22,16 @@ class HomePageStore extends Stores.BoundStore {
 			communities: null,
 			hasSearchTerm: false
 		});
+	}
+
+	handleDispatch = (event) => {
+		let type = event && (event.type || (event.action || {}).type);
+
+		if (!type) {
+			return;
+		} else if (type === 'catalog:redeem') {
+			this.reloadCourseFavorites();
+		}
 	}
 
 	async load () {
