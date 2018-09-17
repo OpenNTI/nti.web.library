@@ -46,10 +46,10 @@ class Home extends React.Component {
 	render () {
 		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
 
-		const noCommunities = communities && communities.length === 0;
-		const noCourses = courses && courses.length === 0;
-		const noAdminCourses = administeredCourses && administeredCourses.length === 0;
-		const noBooks = books && books.length === 0;
+		const noCommunities = !communities || communities.length === 0;
+		const noCourses = !courses || courses.length === 0;
+		const noAdminCourses = !administeredCourses || administeredCourses.length === 0;
+		const noBooks = !books || books.length === 0;
 		const emptySearch = hasSearchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
 
 		return (
