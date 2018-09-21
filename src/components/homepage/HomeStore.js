@@ -147,7 +147,7 @@ class HomePageStore extends Stores.BoundStore {
 		const communities = await communitiesCollection.fetch();
 
 		function communityFilter (community) {
-			return community.alias.toLowerCase().startsWith(searchTerm.toLowerCase()) || community.realname.toLowerCase().startsWith(searchTerm.toLowerCase());
+			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
 		}
 
 		if (searchTerm !== this.searchTerm) { return; }
