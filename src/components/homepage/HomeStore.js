@@ -29,7 +29,7 @@ class HomePageStore extends Stores.BoundStore {
 
 		if (!type) {
 			return;
-		} else if (type === 'catalog:redeem') {
+		} else if (type === 'catalog:redeem' || type === 'course:drop') {
 			this.reloadCourseFavorites();
 		}
 	}
