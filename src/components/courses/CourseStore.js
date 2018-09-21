@@ -1,6 +1,7 @@
 import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
 import {mixin} from '@nti/lib-decorators';
+import AppDispatcher from '@nti/lib-dispatcher';
 
 import {getSemesterText} from '../../utils/Semester';
 
@@ -9,6 +10,8 @@ export default
 class CourseStore extends Stores.BoundStore {
 	constructor () {
 		super();
+
+		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
 		this.loaded = false;
 		this.prevSearch = false;
 
@@ -21,6 +24,21 @@ class CourseStore extends Stores.BoundStore {
 			archivedCourses: null,
 			hasSearchTerm: false
 		});
+	}
+
+	handleDispatch = (event) => {
+		let type = event && (event.type || (event.action || {}).type);
+
+		if (!type) {
+			return;
+		} else if (type === 'course:drop') {
+			this.reloadUpcoming();
+			this.reloadCurrent();
+
+			if(this.get('archivedCourses')) {
+				this.loadArchivedCourses();
+			}
+		}
 	}
 
 	async load () {
