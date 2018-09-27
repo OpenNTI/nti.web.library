@@ -55,7 +55,7 @@ export default class CreateCourse extends Component {
 		const newEntry = await Editor.createCourse(this.onCourseModified, template);
 
 		if (newEntry) {
-			router.routeTo.object(newEntry);
+			router.routeTo.object(newEntry, 'new-course');
 		}
 	}
 
