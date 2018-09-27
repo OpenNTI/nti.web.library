@@ -174,48 +174,78 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async reloadAdminFavorites () {
-		this.set({
-			loading: true,
-			error: null,
-			administeredCourses: null
-		});
+		if (this.searchTerm) {
+			this.loaded = false;
 
-		try {
-			let service = await getService();
-			const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-
-			const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
 			this.set({
-				'administeredCourses': administeredCourses.Items,
-				'totalAdministeredCourses': administeredCourses.Total
+				loading: true,
+				error: null,
+				courses: null,
+				administeredCourses: null,
+				books: null,
+				communities: null,
+				hasSearchTerm: true
 			});
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.set('loading', false);
+			this.loadSearchTerm();
+		} else {
+			this.set({
+				loading: true,
+				error: null,
+				administeredCourses: null
+			});
+
+			try {
+				let service = await getService();
+				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+
+				const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
+				this.set({
+					'administeredCourses': administeredCourses.Items,
+					'totalAdministeredCourses': administeredCourses.Total
+				});
+			} catch (e) {
+				this.set('error', e);
+			} finally {
+				this.set('loading', false);
+			}
 		}
 	}
 
 	async reloadCourseFavorites () {
-		this.set({
-			loading: true,
-			error: null,
-			courses: null
-		});
+		if (this.searchTerm) {
+			this.loaded = false;
 
-		try {
-			let service = await getService();
-			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
-
-			const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
 			this.set({
-				'courses': courses.Items,
-				'totalCourses': courses.Total
+				loading: true,
+				error: null,
+				courses: null,
+				administeredCourses: null,
+				books: null,
+				communities: null,
+				hasSearchTerm: true
 			});
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.set('loading', false);
+			this.loadSearchTerm();
+		} else {
+			this.set({
+				loading: true,
+				error: null,
+				courses: null
+			});
+
+			try {
+				let service = await getService();
+				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+				const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
+				this.set({
+					'courses': courses.Items,
+					'totalCourses': courses.Total
+				});
+			} catch (e) {
+				this.set('error', e);
+			} finally {
+				this.set('loading', false);
+			}
 		}
 	}
 

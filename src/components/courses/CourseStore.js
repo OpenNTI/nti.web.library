@@ -137,64 +137,111 @@ class CourseStore extends Stores.BoundStore {
 	}
 
 	async reloadUpcoming () {
-		this.set({
-			loading: true,
-			error: null,
-			upcomingCourses: null
-		});
+		if (this.searchTerm) {
+			this.loaded = false;
 
-		try {
-			let service = await getService();
-			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+			this.set({
+				loading: true,
+				loadArchived: false,
+				error: null,
+				upcomingCourses: null,
+				currentCourses: null,
+				archivedCourses: null,
+				hasSearchTerm: true
+			});
 
-			const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
+			this.loadSearchTerm();
+		} else {
+			this.set({
+				loading: true,
+				error: null,
+				upcomingCourses: null
+			});
 
-			this.set('upcomingCourses', upcomingCourses.Items);
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.set('loading', false);
+			try {
+				let service = await getService();
+				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+				const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
+
+				this.set('upcomingCourses', upcomingCourses.Items);
+			} catch (e) {
+				this.set('error', e);
+			} finally {
+				this.set('loading', false);
+			}
 		}
 	}
 
 	async reloadCurrent () {
-		this.set({
-			loading: true,
-			error: null,
-			currentCourses: null
-		});
+		if (this.searchTerm) {
+			this.loaded = false;
 
-		try {
-			let service = await getService();
-			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+			this.set({
+				loading: true,
+				loadArchived: false,
+				error: null,
+				upcomingCourses: null,
+				currentCourses: null,
+				archivedCourses: null,
+				hasSearchTerm: true
+			});
 
-			const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+			this.loadSearchTerm();
+		} else {
+			this.set({
+				loading: true,
+				error: null,
+				currentCourses: null
+			});
 
-			this.set('currentCourses', currentCourses.Items);
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.set('loading', false);
+			try {
+				let service = await getService();
+				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+
+				const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+
+				this.set('currentCourses', currentCourses.Items);
+			} catch (e) {
+				this.set('error', e);
+			} finally {
+				this.set('loading', false);
+			}
 		}
 	}
 
 	async loadArchivedCourses () {
-		this.set({
-			archivedCourses: null,
-			loadArchived: true
-		});
+		if (this.searchTerm) {
+			this.loaded = false;
+			this.set({
+				loading: true,
+				loadArchived: true,
+				error: null,
+				upcomingCourses: null,
+				currentCourses: null,
+				archivedCourses: null,
+				hasSearchTerm: true
+			});
 
-		try {
-			let service = await getService();
-			const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+			this.loadSearchTerm();
+		} else {
+			this.set({
+				archivedCourses: null,
+				loadArchived: true
+			});
 
-			const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
+			try {
+				let service = await getService();
+				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
 
-			this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.set('loadArchived', false);
+				const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
+
+				this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
+			} catch (e) {
+				this.set('error', e);
+			} finally {
+				this.set('loadArchived', false);
+			}
 		}
 	}
 
