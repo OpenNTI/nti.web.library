@@ -10,8 +10,6 @@ class HomePageStore extends Stores.BoundStore {
 		super();
 
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
-		this.loaded = false;
-		this.prevSearch = false;
 
 		this.set({
 			loading: true,
@@ -35,9 +33,10 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async load () {
-		if (this.searchTerm) {
-			this.loaded = false;
+		// on each load, clear the pending queue
+		this.clearPending();
 
+		if (this.searchTerm) {
 			this.set({
 				loading: true,
 				error: null,
@@ -48,7 +47,8 @@ class HomePageStore extends Stores.BoundStore {
 				hasSearchTerm: true
 			});
 			this.loadSearchTerm();
-		} else if (!this.loaded || this.prevSearch) {
+		}
+		else {
 			this.set({
 				loading: true,
 				error: null,
@@ -68,15 +68,16 @@ class HomePageStore extends Stores.BoundStore {
 				];
 
 				await Promise.all(libraryPromises);
-			} catch (e) {
-				this.set('error', e);
-			} finally {
-				this.loaded = true;
-				this.prevSearch = false;
 
-				this.set({
-					loading: false
-				});
+				if(this.searchTerm) {
+					return;
+				}
+
+				this.applyPending();
+
+				this.set({loading: false});
+			} catch (e) {
+				this.set({error: e, loading: false});
 			}
 		}
 	}
@@ -85,8 +86,6 @@ class HomePageStore extends Stores.BoundStore {
 		const searchTerm = this.searchTerm;
 
 		try {
-			if (searchTerm !== this.searchTerm) { return; }
-
 			const librarySearchPromises = [
 				this.searchCourses(searchTerm),
 				this.searchBooks(searchTerm),
@@ -95,16 +94,51 @@ class HomePageStore extends Stores.BoundStore {
 			];
 
 			await Promise.all(librarySearchPromises);
-		} catch (e) {
-			this.set('error', e);
-		} finally {
-			this.loaded = true;
-			this.prevSearch = true;
 
-			this.set({
-				loading: false
-			});
+			if (searchTerm !== this.searchTerm) { return; }
+
+			this.applyPending();
+
+			this.set({loading: false});
+		} catch (e) {
+			this.set({error: e, loading: false});
 		}
+	}
+
+	/**
+	 * Flush the pending queue (without applying the data)
+	 *
+	 * @return {null}      No return value
+	 */
+	clearPending () {
+		this.pending = {};
+	}
+
+	/**
+	 * Add items to be set on the store (instead of setting them immediately, which triggers an event emit)
+	 *
+	 * @param {Object} obj Object containing key-value pairs to eventually be set on the store
+	 * @return {null}      No return value
+	 */
+	addToPending (obj) {
+		if(!this.pending) {
+			this.pending = {};
+		}
+
+		for(let key of Object.keys(obj)) {
+			this.pending[key] = obj[key];
+		}
+	}
+
+	/**
+	 * Flush the pending queue and set the data on the store, triggering an event emit
+	 *
+	 * @return {null}      No return value
+	 */
+	applyPending () {
+		this.set(this.pending);
+
+		this.clearPending();
 	}
 
 	async checkAdmin () {
@@ -121,9 +155,7 @@ class HomePageStore extends Stores.BoundStore {
 		const courses = await service.getBatch(enrolledCollection.href + '?filter=' + searchTerm);
 		const administeredCourses = await service.getBatch(adminCollection.href + '?filter=' + searchTerm);
 
-		if (searchTerm !== this.searchTerm) { return; }
-
-		this.set({
+		this.addToPending({
 			'courses': courses.Items,
 			'administeredCourses': administeredCourses.Items
 		});
@@ -136,9 +168,7 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		if (searchTerm !== this.searchTerm) { return; }
-
-		this.set('books', booksParsed);
+		this.addToPending('books', booksParsed);
 	}
 
 	async searchCommunities (searchTerm) {
@@ -150,9 +180,7 @@ class HomePageStore extends Stores.BoundStore {
 			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
 		}
 
-		if (searchTerm !== this.searchTerm) { return; }
-
-		this.set('communities', communities.filter(communityFilter));
+		this.addToPending('communities', communities.filter(communityFilter));
 	}
 
 	async loadFavorites () {
@@ -163,9 +191,7 @@ class HomePageStore extends Stores.BoundStore {
 		const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
 		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
 
-		if (this.searchTerm) { return; }
-
-		this.set({
+		this.addToPending({
 			'courses': courses.Items,
 			'administeredCourses': administeredCourses.Items,
 			'totalCourses': courses.Total,
@@ -256,17 +282,13 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		if (this.searchTerm) { return; }
-
-		this.set('books', booksParsed);
+		this.addToPending('books', booksParsed);
 	}
 
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
 
-		if (this.searchTerm) { return; }
-
-		this.set('communities', await communities.fetch());
+		this.addToPending('communities', await communities.fetch());
 	}
 }
