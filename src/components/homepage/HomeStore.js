@@ -282,13 +282,14 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending('books', booksParsed);
+		this.addToPending({'books': booksParsed});
 	}
 
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
+		const fetchedComm = await communities.fetch();
 
-		this.addToPending('communities', await communities.fetch());
+		this.addToPending({'communities': fetchedComm});
 	}
 }
