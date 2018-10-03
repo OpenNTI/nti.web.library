@@ -40,7 +40,7 @@
     "@nti/util-logger": "^1.4.0",
     "@nti/web-client": "^1.6.0",
     "@nti/web-commons": "0.x.x",
-    "@nti/web-content": "^1.27.0",
+    "@nti/web-content": "^1.29.0",
     "@nti/web-course": "^1.30.0",
     "@nti/web-profiles": "^1.6.0",
     "@nti/web-routing": "0.x.x",
