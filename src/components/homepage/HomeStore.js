@@ -10,6 +10,8 @@ class HomePageStore extends Stores.BoundStore {
 		super();
 
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
+		this.loaded = false;
+		this.prevSearch = false;
 
 		this.set({
 			loading: true,
@@ -37,6 +39,8 @@ class HomePageStore extends Stores.BoundStore {
 		this.clearPending();
 
 		if (this.searchTerm) {
+			this.loaded = false;
+
 			this.set({
 				loading: true,
 				error: null,
@@ -48,7 +52,7 @@ class HomePageStore extends Stores.BoundStore {
 			});
 			this.loadSearchTerm();
 		}
-		else {
+		else if(!this.loaded || this.prevSearch) {
 			this.set({
 				loading: true,
 				error: null,
@@ -75,6 +79,9 @@ class HomePageStore extends Stores.BoundStore {
 
 				this.applyPending();
 
+				this.loaded = true;
+				this.prevSearch = false;
+
 				this.set({loading: false});
 			} catch (e) {
 				this.set({error: e, loading: false});
@@ -98,6 +105,9 @@ class HomePageStore extends Stores.BoundStore {
 			if (searchTerm !== this.searchTerm) { return; }
 
 			this.applyPending();
+
+			this.loaded = true;
+			this.prevSearch = true;
 
 			this.set({loading: false});
 		} catch (e) {
@@ -232,6 +242,8 @@ class HomePageStore extends Stores.BoundStore {
 			} catch (e) {
 				this.set('error', e);
 			} finally {
+				this.loaded = true;
+
 				this.set('loading', false);
 			}
 		}
@@ -270,6 +282,8 @@ class HomePageStore extends Stores.BoundStore {
 			} catch (e) {
 				this.set('error', e);
 			} finally {
+				this.loaded = true;
+
 				this.set('loading', false);
 			}
 		}
