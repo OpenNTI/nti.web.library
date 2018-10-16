@@ -178,7 +178,7 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending('books', booksParsed);
+		this.addToPending({'books': booksParsed});
 	}
 
 	async searchCommunities (searchTerm) {
@@ -190,7 +190,7 @@ class HomePageStore extends Stores.BoundStore {
 			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
 		}
 
-		this.addToPending('communities', communities.filter(communityFilter));
+		this.addToPending({'communities': communities.filter(communityFilter)});
 	}
 
 	async loadFavorites () {
