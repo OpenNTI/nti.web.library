@@ -63,7 +63,7 @@ class SectionHeading extends React.Component {
 				{(section === 'courses' || section === 'admin') && (
 					<div className="course-section-heading">
 						{section === 'courses' ? (
-							<AddButton />
+							<AddButton section={section} />
 						) : (
 							<div />
 						)}
