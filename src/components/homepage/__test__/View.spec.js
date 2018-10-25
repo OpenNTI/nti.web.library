@@ -128,7 +128,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067172',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 2',
@@ -136,7 +137,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067173',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 3',
@@ -144,7 +146,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067174',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 4',
@@ -152,7 +155,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067175',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 5',
@@ -160,7 +164,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067176',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			}
 		];
 
@@ -300,7 +305,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067172',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 2',
@@ -308,7 +314,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067173',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 3',
@@ -316,7 +323,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067174',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 4',
@@ -324,7 +332,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067175',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			},
 			{
 				title: 'Book 5',
@@ -332,7 +341,8 @@ describe('Home page test', () => {
 				MimeType: 'application/vnd.nextthought.publishablecontentpackagebundle',
 				isBundle: true,
 				NTIID: 'tag:nextthought.com,2011-10:OU-Bundle-717525311368067176',
-				getDefaultAssetRoot: () => {}
+				getDefaultAssetRoot: () => {},
+				isPublished: () => true
 			}
 		];
 
