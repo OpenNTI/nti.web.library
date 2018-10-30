@@ -293,7 +293,12 @@ class HomePageStore extends Stores.BoundStore {
 		let service = await getService();
 		const booksCollection = service.getCollection('VisibleContentBundles', 'ContentBundles');
 		const booksBatch = await service.get(booksCollection.href);
-		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
+		const bundles = booksBatch.titles.map(x => {
+			x.homepage = true;
+			return x;
+		});
+
+		const booksPromises = bundles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
 		this.addToPending({'books': booksParsed});
