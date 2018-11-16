@@ -71,7 +71,7 @@ class Home extends React.Component {
 									<Communities items={communities} />
 								}
 
-								{((courses && !hasSearchTerm) || (!noCourses && hasCatalog)) &&
+								{(!hasSearchTerm && (!noCourses || hasCatalog)) &&
 									<Courses items={courses} onModification={this.onModificationCourse}/>
 								}
 
