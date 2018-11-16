@@ -68,7 +68,8 @@ class HomePageStore extends Stores.BoundStore {
 					this.loadFavorites(),
 					this.loadBooks(),
 					this.loadCommunities(),
-					this.checkAdmin()
+					this.checkAdmin(),
+					this.checkCatalog()
 				];
 
 				await Promise.all(libraryPromises);
@@ -97,7 +98,8 @@ class HomePageStore extends Stores.BoundStore {
 				this.searchCourses(searchTerm),
 				this.searchBooks(searchTerm),
 				this.searchCommunities(searchTerm),
-				this.checkAdmin()
+				this.checkAdmin(),
+				this.checkCatalog()
 			];
 
 			await Promise.all(librarySearchPromises);
@@ -155,6 +157,12 @@ class HomePageStore extends Stores.BoundStore {
 		let service = await getService();
 		const admin = service.getWorkspace('SiteAdmin') ? true : false;
 		this.set('admin', admin);
+	}
+
+	async checkCatalog () {
+		let service = await getService();
+		const hasCatalog = service.getCollection('Courses', 'Catalog') ? true : false;
+		this.set('hasCatalog', hasCatalog);
 	}
 
 	async searchCourses (searchTerm) {

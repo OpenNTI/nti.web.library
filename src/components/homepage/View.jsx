@@ -21,7 +21,7 @@ const t = scoped('library.components.Home', {
 export default
 @searchable()
 @contextual(t('home'))
-@HomePageStore.connect({admin: 'admin', courses: 'courses', administeredCourses: 'administeredCourses', 'books': 'books', 'communities': 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
+@HomePageStore.connect({admin: 'admin', hasCatalog: 'hasCatalog', courses: 'courses', administeredCourses: 'administeredCourses', books: 'books', communities: 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -32,6 +32,7 @@ class Home extends React.Component {
 		communities: PropTypes.array,
 		children: PropTypes.node,
 		admin: PropTypes.bool,
+		hasCatalog: PropTypes.bool,
 		hasSearchTerm: PropTypes.bool
 	}
 
@@ -44,7 +45,7 @@ class Home extends React.Component {
 	};
 
 	render () {
-		let {admin, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
+		let {admin, hasCatalog, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
 
 		const noCommunities = !communities || communities.length === 0;
 		const noCourses = !courses || courses.length === 0;
@@ -70,7 +71,7 @@ class Home extends React.Component {
 									<Communities items={communities} />
 								}
 
-								{((courses && !hasSearchTerm) || !noCourses) &&
+								{((courses && !hasSearchTerm) || (!noCourses && hasCatalog)) &&
 									<Courses items={courses} onModification={this.onModificationCourse}/>
 								}
 
