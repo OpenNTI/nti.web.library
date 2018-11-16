@@ -364,11 +364,11 @@ describe('Home page test', () => {
 			}
 		);
 
-		expect(homepageCmp.find('.library-collection').length).toBe(4);
+		expect(homepageCmp.find('.library-collection').length).toBe(3);
 		expect(homepageCmp.find('.library-collection.communities').length).toBe(1);
 		expect(homepageCmp.find('.library-collection.admin').length).toBe(1);
 		expect(homepageCmp.find('.library-collection.books').length).toBe(1);
-		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(1);
+		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(0);
 		expect(homepageCmp.find('Course').length).toBe(6);
 		expect(homepageCmp.find('.book-card').length).toBe(5);
 		expect(homepageCmp.find('.user-community-card').length).toBe(1);
