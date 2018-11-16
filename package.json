@@ -1,6 +1,6 @@
 {
   "name": "@nti/web-library",
-  "version": "1.4.0",
+  "version": "1.5.0-alpha",
   "author": "nextthought",
   "license": "UNLICENSED",
   "description": "NextThought library that supports filtering with search",
