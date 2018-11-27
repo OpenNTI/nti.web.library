@@ -53,6 +53,8 @@ class Home extends React.Component {
 		const noBooks = !books || books.length === 0;
 		const emptySearch = hasSearchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
 
+		const canShowCoursesSection = !noCourses || hasCatalog;
+
 		return (
 			<div className="library-view">
 				{loading ? (
@@ -71,7 +73,7 @@ class Home extends React.Component {
 									<Communities items={communities} />
 								}
 
-								{(!hasSearchTerm && (!noCourses || hasCatalog)) &&
+								{((!hasSearchTerm && canShowCoursesSection) || (hasSearchTerm && !noCourses)) &&
 									<Courses items={courses} onModification={this.onModificationCourse}/>
 								}
 
