@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 
 import HomePage from '../View';
+import Community from '../../items/Community';
 
 const onBefore = () => {
 	global.$AppConfig = {
@@ -194,7 +195,7 @@ describe('Home page test', () => {
 		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(1);
 		expect(homepageCmp.find('Course').length).toBe(6);
 		expect(homepageCmp.find('.book-card').length).toBe(5);
-		expect(homepageCmp.find('.user-community-card').length).toBe(1);
+		expect(homepageCmp.find(Community).length).toBe(1);
 		expect(homepageCmp.find('.library-object').length).toBe(12);
 	});
 
@@ -371,7 +372,7 @@ describe('Home page test', () => {
 		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(0);
 		expect(homepageCmp.find('Course').length).toBe(6);
 		expect(homepageCmp.find('.book-card').length).toBe(5);
-		expect(homepageCmp.find('.user-community-card').length).toBe(1);
+		expect(homepageCmp.find(Community).length).toBe(1);
 		expect(homepageCmp.find('.library-object').length).toBe(12);
 	});
 });
