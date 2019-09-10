@@ -73,9 +73,7 @@ export default class CreateCourse extends Component {
 		});
 	}
 
-	onCommunityCreated = () => {
-		debugger;
-	}
+	onCommunityCreated = () => {}
 
 	cancelCreateCommunity = () => this.setState({creatingCommunity: false})
 
