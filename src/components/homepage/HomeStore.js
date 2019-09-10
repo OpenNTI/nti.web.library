@@ -192,7 +192,7 @@ class HomePageStore extends Stores.BoundStore {
 	async searchCommunities (searchTerm) {
 		let service = await getService();
 		const communitiesCollection = await service.getCommunities();
-		const communities = await communitiesCollection.fetch();
+		const communities = await communitiesCollection.load();
 
 		function communityFilter (community) {
 			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
@@ -310,7 +310,7 @@ class HomePageStore extends Stores.BoundStore {
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
-		const fetchedComm = await communities.fetch();
+		const fetchedComm = await communities.load();
 
 		this.addToPending({'communities': fetchedComm});
 	}

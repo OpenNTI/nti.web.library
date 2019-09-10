@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {LinkTo} from '@nti/web-routing';
 
-import {CreateCourse} from './create-course';
+import {CreateButton} from './object-creation';
 
 AdminToolbar.propTypes = {
 	store: PropTypes.object.isRequired
@@ -18,7 +18,7 @@ export default function AdminToolbar ({store}) {
 					<div className="icon-outline" />
 				</LinkTo.Path>
 
-				<CreateCourse canCreate store={store} />
+				<CreateButton canCreate store={store} />
 			</div>
 		</div>
 	);

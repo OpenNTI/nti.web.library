@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Flyout } from '@nti/web-commons';
+import { Flyout, Prompt } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
 import { getService } from '@nti/web-client';
+import {Community} from '@nti/web-profiles';
 import { Models } from '@nti/lib-interfaces';
 import {scoped} from '@nti/lib-locale';
 
 import Option from './Option';
 
 const t = scoped('library.components.CreateCourse', {
-	new: 'New Course',
+	new: 'Create a Course',
 	import: 'Import a Course',
-	importDescription: 'Use content from a previous course.'
+	importDescription: 'Use content from a previous course.',
+	createCommunity: 'Create a Community'
 });
 
 export default class CreateCourse extends Component {
@@ -32,10 +34,15 @@ export default class CreateCourse extends Component {
 		const service = await getService();
 		const courseWorkspace = service.getWorkspace('Courses');
 		const allCoursesCollection = courseWorkspace && service.getCollection('AllCourses', courseWorkspace.Title);
+		const communityWorkspace = service.getCommunities();
 
-		if (allCoursesCollection && allCoursesCollection.accepts.includes(Models.courses.scorm.SCORMInstance.MimeType)) {
-			this.setState({canCreateScorm: true});
-		}
+		const canCreateScorm = allCoursesCollection && allCoursesCollection.accepts.includes(Models.courses.scorm.SCORMInstance.MimeType);
+		const canCreateCommunity = communityWorkspace && communityWorkspace.canCreateCommunity();
+
+		this.setState({
+			canCreateScorm,
+			canCreateCommunity
+		});
 	}
 
 	onCourseCreated = () => {
@@ -59,13 +66,37 @@ export default class CreateCourse extends Component {
 		}
 	}
 
+
+	launchCommunityWizard = async () => {
+		this.setState({
+			creatingCommunity: true
+		});
+	}
+
+	onCommunityCreated = () => {
+		debugger;
+	}
+
+	cancelCreateCommunity = () => this.setState({creatingCommunity: false})
+
+
 	renderCreateTrigger () {
+		const {creatingCommunity} = this.state;
+
 		return (
 			<div className="admin-create-button">
 				<div className="add-container">
 					<i className="icon-add" />
 				</div>
 				<div className="create-label">Create</div>
+				{creatingCommunity && (
+					<Prompt.Dialog>
+						<Community.Creation.Modal
+							onCancel={this.cancelCreateCommunity}
+							afterSave={this.onCommunityCreated}
+						/>
+					</Prompt.Dialog>
+				)}
 			</div>
 		);
 	}
@@ -89,17 +120,24 @@ export default class CreateCourse extends Component {
 						description=""
 						onClick={() => this.launchCourseWizard(Templates.Blank)}
 					/>
+					{this.state.canCreateCommunity && (
+						<Option
+							className="new-community"
+							title={t('createCommunity')}
+							description=""
+							onClick={this.launchCommunityWizard}
+						/>
+					)}
 					<Option
 						className="import-course"
 						title={t('import')}
-						description={t('importDescription')}
+						iconClassName="icon-upload"
 						onClick={() => this.launchCourseWizard(Templates.Import)}
 					/>
 					{this.state.canCreateScorm && (
 						<Option
 							className="import-scorm-package"
 							title="Import a SCORM Package"
-							description="Use content from external services."
 							onClick={() => this.launchCourseWizard(Templates.Scorm)}
 						/>
 					)}
