@@ -73,7 +73,18 @@ export default class CreateCourse extends Component {
 		});
 	}
 
-	onCommunityCreated = () => {}
+	onCommunityCreated = (community) => {
+		const {router} = this.context;
+
+		this.props.store.reloadCommunities();
+		this.setState({
+			creatingCommunity: false
+		});
+
+		if (community) {
+			router.routeTo.object(community, 'new-community');
+		}
+	}
 
 	cancelCreateCommunity = () => this.setState({creatingCommunity: false})
 
