@@ -190,15 +190,20 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async searchCommunities (searchTerm) {
-		let service = await getService();
-		const communitiesCollection = await service.getCommunities();
-		const communities = await communitiesCollection.load();
-
 		function communityFilter (community) {
 			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
 		}
+	
+		try {
+			let service = await getService();
+			const communitiesCollection = await service.getCommunities();
+			const communities = await communitiesCollection.load();
 
-		this.addToPending({'communities': communities.filter(communityFilter)});
+
+			this.addToPending({'communities': (communities || []).filter(communityFilter)});
+		} catch (e) {
+			//swallow
+		}
 	}
 
 	async loadFavorites () {
