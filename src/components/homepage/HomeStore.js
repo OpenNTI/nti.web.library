@@ -353,7 +353,7 @@ class HomePageStore extends Stores.BoundStore {
 	async loadCommunities () {
 		let service = await getService();
 		const communities = await service.getCommunities();
-		const fetchedComm = await communities.load();
+		const fetchedComm = await communities.load(true);
 
 		this.addToPending({'communities': fetchedComm});
 	}
