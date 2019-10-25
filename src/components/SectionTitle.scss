@@ -4,4 +4,8 @@
 	font-size: 20px;
 	margin: 0;
 	white-space: nowrap;
+
+	.library-view.library-light-background & {
+		color: var(--secondary-grey);
+	}
 }

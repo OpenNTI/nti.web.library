@@ -6,6 +6,15 @@
 	margin-bottom: 30px;
 	color: white;
 
+	.library-view.library-light-background & {
+		color: var(--secondary-grey);
+
+		.controls .admin-nav {
+			background: white;
+			box-shadow: 0 0 3px 0 var(--border-grey);
+		}
+	}
+
 	.controls {
 		display: flex;
 

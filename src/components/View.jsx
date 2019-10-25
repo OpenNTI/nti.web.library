@@ -1,5 +1,7 @@
+import React from 'react';
+import cx from 'classnames';
 import {Router, Route} from '@nti/web-routing';
-import {Layouts} from '@nti/web-commons';
+import {Layouts, Theme} from '@nti/web-commons';
 
 import {Home} from './homepage';
 import {Courses} from './courses';
@@ -7,7 +9,7 @@ import {AdminCourses} from './admin-courses';
 
 const {Responsive} = Layouts;
 
-export default Responsive.isMobileContext() ? (
+const Routes = Responsive.isMobileContext() ? (
 	Router.for([
 		Route({path: '/mobile/library/courses', component: Courses, name: 'library-courses'}),
 		Route({path: '/mobile/library/admin-courses', component: AdminCourses, name: 'library-admin-courses'}),
@@ -20,3 +22,16 @@ export default Responsive.isMobileContext() ? (
 		Route({path: '/', component: Home, name: 'library-home'})
 	])
 );
+
+export default function LibraryView (props) {
+	const theme = Theme.useTheme();
+	const libraryTheme = theme.scope('library');
+	const background = libraryTheme.background;
+	const className = background === 'light' ? 'library-light-background' : 'library-dark-background';
+
+	return (
+		<section className={cx('library-view', className)}>
+			<Routes {...props} />
+		</section>
+	);
+}
