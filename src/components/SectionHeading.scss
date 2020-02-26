@@ -18,6 +18,10 @@
 			font-size: 14px;
 			line-height: 28px;
 			text-decoration: none;
+
+			.library-view.library-light-background & {
+				color: var(--secondary-grey);
+			}
 		}
 	}
 
