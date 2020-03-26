@@ -10,6 +10,7 @@
 		color: var(--secondary-grey);
 
 		.controls .admin-nav {
+			color: var(--secondary-grey);
 			background: white;
 			box-shadow: 0 0 3px 0 var(--border-grey);
 		}
@@ -19,7 +20,7 @@
 		display: flex;
 
 		.admin-nav {
-			width: 40px;
+			padding: 4px 10px;
 			background-color: #555;
 			height: 40px;
 			border-radius: 30px;
@@ -38,6 +39,7 @@
 				background-image: url('../resources/images/outline.svg');
 				height: 24px;
 				width: 24px;
+				margin: 0 5px 0 0;
 			}
 		}
 
