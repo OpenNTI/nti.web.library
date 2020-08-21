@@ -1,3 +1,4 @@
+import './View.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Flyout, Prompt } from '@nti/web-commons';

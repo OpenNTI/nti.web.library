@@ -1,3 +1,4 @@
+import './SectionHeading.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {LinkTo} from '@nti/web-routing';

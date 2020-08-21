@@ -1,3 +1,4 @@
+import './index.scss';
 import Bundle from './Bundle';
 import Community from './Community';
 import Course from './Course';

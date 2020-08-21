@@ -1,3 +1,4 @@
+import './Course.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Card} from '@nti/web-course';

@@ -1,3 +1,4 @@
+import './Container.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {EmptyList} from '@nti/web-commons';
