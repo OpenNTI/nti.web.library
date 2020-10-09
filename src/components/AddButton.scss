@@ -1,7 +1,7 @@
 .button.library-add {
 	color: var(--primary-blue);
 	cursor: pointer;
-	font: normal 600 0.875em/2em "Open Sans", sans-serif;
+	font: normal 600 0.875em/2em var(--body-font-family);
 	font-size: 14px;
 	text-decoration: none;
 }

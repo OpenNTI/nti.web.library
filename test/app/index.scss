@@ -4,6 +4,6 @@ body {
 	margin: 0;
 	background: #343434;
 	color: white;
-	font: normal 300 1.25em/2em $body-font-family;
+	font: normal 300 1.25em/2em var(--body-font-family);
 	font-size: 20px;
 }
