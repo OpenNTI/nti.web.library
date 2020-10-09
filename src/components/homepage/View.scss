@@ -6,12 +6,12 @@
 	width: 1024px;
 	margin: 0;
 	top: 32px;
-	font: normal 300 1.25em/2em "Open Sans", sans-serif;
+	font: normal 300 1.25em/2em var(--body-font-family);
 	font-size: 20px;
 
 	.no-results {
 		text-align: center;
-		color: #b8b8b8;
+		color: var(--tertiary-grey);
 		font-size: 3rem;
 		margin-top: 40px;
 	}
