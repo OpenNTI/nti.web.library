@@ -1,5 +1,4 @@
-import 'raf/polyfill';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+// import 'raf/polyfill';
 
-Enzyme.configure({ adapter: new Adapter() });
+// add custom jest matchers from jest-dom
+import '@testing-library/jest-dom/extend-expect';

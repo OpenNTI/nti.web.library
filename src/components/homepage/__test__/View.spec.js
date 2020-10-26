@@ -1,18 +1,14 @@
 /* eslint-env jest */
-jest.mock('../HomeStore', () => {
-
-	return {
-		connect: () => () => {}
-	};
-
-});
+jest.mock('../HomeStore', () => ({
+	connect: () => () => {}
+}));
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
+
 
 import HomePage from '../View';
-import Community from '../../items/Community';
 
 const onBefore = () => {
 	global.$AppConfig = {
@@ -20,6 +16,28 @@ const onBefore = () => {
 	};
 };
 
+class Context extends React.Component {
+	static childContextTypes = {
+		router: PropTypes.object
+	}
+
+	getChildContext () {
+		return {
+			router: {
+				baseroute: '/',
+				history: {
+					createHref: (location) => {},
+					push: (path, state) => {},
+					replace: (path, state) => {}
+				}
+			}
+		};
+	}
+
+	render () {
+		return this.props.children;
+	}
+}
 
 describe('Home page test', () => {
 	beforeEach(onBefore);
@@ -170,33 +188,25 @@ describe('Home page test', () => {
 			}
 		];
 
-		const homepageCmp = mount(
-			<HomePage communities={communities} courses={courses} books={books} loading={false} />, {
-				context: {
-					router: {
-						baseroute: '/',
-						history: {
-							createHref: (location) => {},
-							push: (path, state) => {},
-							replace: (path, state) => {}
-						}
-					}
-				},
-				childContextTypes: {
-					router: PropTypes.object
-				}
-			}
+		const {container, findByTestId, unmount} = render(
+			<Context>
+				<HomePage communities={communities} courses={courses} books={books} loading={false} />
+			</Context>
 		);
 
-		expect(homepageCmp.find('.library-collection').length).toBe(3);
-		expect(homepageCmp.find('.library-collection.communities').length).toBe(1);
-		expect(homepageCmp.find('.library-collection.courses').length).toBe(1);
-		expect(homepageCmp.find('.library-collection.books').length).toBe(1);
-		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(1);
-		expect(homepageCmp.find('Course').length).toBe(6);
-		expect(homepageCmp.find('.book-card').length).toBe(5);
-		expect(homepageCmp.find(Community).length).toBe(1);
-		expect(homepageCmp.find('.library-object').length).toBe(12);
+		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();
+
+		expect(container.querySelectorAll('.library-collection').length).toBe(3);
+		expect(container.querySelectorAll('.library-collection.communities').length).toBe(1);
+		expect(container.querySelectorAll('.library-collection.courses').length).toBe(1);
+		expect(container.querySelectorAll('.library-collection.books').length).toBe(1);
+		expect(container.querySelectorAll('a.nti-link-to-path.library-add').length).toBe(1);
+		expect(container.querySelectorAll('.nti-course-card-container').length).toBe(6);
+		expect(container.querySelectorAll('.book-card').length).toBe(5);
+		expect(container.querySelectorAll('.community-card').length).toBe(1);
+		expect(container.querySelectorAll('.library-object').length).toBe(12);
+
+		await unmount();
 	});
 
 	test('Admin home page test', async () => {
@@ -347,32 +357,24 @@ describe('Home page test', () => {
 			}
 		];
 
-		const homepageCmp = mount(
-			<HomePage communities={communities} courses={courses} administeredCourses={administeredCourses} admin books={books} loading={false} />, {
-				context: {
-					router: {
-						baseroute: '/',
-						history: {
-							createHref: (location) => {},
-							push: (path, state) => {},
-							replace: (path, state) => {}
-						}
-					}
-				},
-				childContextTypes: {
-					router: PropTypes.object
-				}
-			}
+		const {container, findByTestId, unmount} = render(
+			<Context>
+				<HomePage communities={communities} courses={courses} administeredCourses={administeredCourses} admin books={books} loading={false} />
+			</Context>
 		);
 
-		expect(homepageCmp.find('.library-collection').length).toBe(3);
-		expect(homepageCmp.find('.library-collection.communities').length).toBe(1);
-		expect(homepageCmp.find('.library-collection.admin').length).toBe(1);
-		expect(homepageCmp.find('.library-collection.books').length).toBe(1);
-		expect(homepageCmp.find('a.nti-link-to-path.library-add').length).toBe(0);
-		expect(homepageCmp.find('Course').length).toBe(6);
-		expect(homepageCmp.find('.book-card').length).toBe(5);
-		expect(homepageCmp.find(Community).length).toBe(1);
-		expect(homepageCmp.find('.library-object').length).toBe(12);
+		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();
+
+		expect(container.querySelectorAll('.library-collection').length).toBe(3);
+		expect(container.querySelectorAll('.library-collection.communities').length).toBe(1);
+		expect(container.querySelectorAll('.library-collection.admin').length).toBe(1);
+		expect(container.querySelectorAll('.library-collection.books').length).toBe(1);
+		expect(container.querySelectorAll('a.nti-link-to-path.library-add').length).toBe(0);
+		expect(container.querySelectorAll('.nti-course-card-container').length).toBe(6);
+		expect(container.querySelectorAll('.book-card').length).toBe(5);
+		expect(container.querySelectorAll('.community-card').length).toBe(1);
+		expect(container.querySelectorAll('.library-object').length).toBe(12);
+
+		await unmount();
 	});
 });

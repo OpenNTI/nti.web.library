@@ -21,7 +21,7 @@ export default class LibraryCollection extends React.Component {
 	render () {
 		const {props: {children, className, list, title, subtitle, onModification}} = this;
 
-		let titleRow = isEmpty(title) ? null : ( <h5>{title}<label>{subtitle}</label></h5> );
+		const titleRow = isEmpty(title) ? null : ( <h5>{title}<label>{subtitle}</label></h5> );
 
 		return (
 			<div className={cx('library-collection', className)}>
@@ -29,11 +29,11 @@ export default class LibraryCollection extends React.Component {
 				{children}
 				<ul>
 					{list.map(item => {
-						let Item = getItem(item);
-						let catalogEntry = item.CatalogEntry || {};
+						const Item = getItem(item);
+						const key = item.NTIID || item.href || item?.CatalogEntry?.NTIID || item?.CatalogEntry?.href;
 
 						return Item && (
-							<li className="library-object" key={item.NTIID || item.href || catalogEntry.NTIID || catalogEntry.href} >
+							<li className="library-object" data-testid={key} key={key} >
 								<Item item={item} onModification={onModification} />
 							</li>
 						);
