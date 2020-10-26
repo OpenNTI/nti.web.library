@@ -43,7 +43,6 @@
     "@nti/web-routing": "NextThought/nti.web.routing",
     "@nti/web-search": "NextThought/nti.web.search",
     "classnames": "^2.2.6",
-    "natural-orderby": "^1.0.2",
     "prop-types": "^15.6.2",
     "react": "*"
   },
