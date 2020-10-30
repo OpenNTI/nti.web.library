@@ -23,15 +23,15 @@ const Routes = Responsive.isMobileContext() ? (
 	])
 );
 
-export default function LibraryView (props) {
+export default React.forwardRef(function LibraryView (props, ref) {
 	const theme = Theme.useTheme();
 	const libraryTheme = theme.scope('library');
 	const background = libraryTheme.background;
 	const className = background === 'light' ? 'library-light-background' : 'library-dark-background';
 
 	return (
-		<section className={cx('library-view', className)}>
+		<section ref={ref} className={cx('library-view', className)}>
 			<Routes {...props} />
 		</section>
 	);
-}
+});
