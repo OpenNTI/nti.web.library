@@ -14,7 +14,7 @@ const Option = ({ title, description, onClick, className, iconClassName }) => (
 
 Option.propTypes = {
 	title: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired,
+	description: PropTypes.string,
 	onClick: PropTypes.func.isRequired,
 	className: PropTypes.string,
 	iconClassName: PropTypes.string
