@@ -33,7 +33,6 @@
     "@nti/lib-locale": "NextThought/nti.lib.locale",
     "@nti/lib-ntiids": "NextThought/nti.lib.ntiids",
     "@nti/lib-store": "NextThought/nti.lib.store",
-    "@nti/style-common": "NextThought/nti.style.common",
     "@nti/util-logger": "NextThought/nti.util.logger",
     "@nti/web-client": "NextThought/nti.web.client",
     "@nti/web-commons": "NextThought/nti.web.commons",
@@ -48,6 +47,7 @@
   },
   "devDependencies": {
     "@nti/cmp-scripts": "^2.0.6",
+    "@nti/style-common": "NextThought/nti.style.common",
     "@testing-library/react": "^11.0.4",
     "@testing-library/jest-dom": "^5.11.5",
     "react": "^16.4.2",
