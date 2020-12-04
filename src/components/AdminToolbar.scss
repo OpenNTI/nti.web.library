@@ -76,8 +76,8 @@
 				justify-content: center;
 				text-align: center;
 
-				.icon-add::before {
-					content: "\E902";
+				i {
+					letter-spacing: -1.5px;
 				}
 			}
 
