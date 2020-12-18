@@ -40,17 +40,18 @@
     "@nti/web-course": "NextThought/nti.web.course",
     "@nti/web-profiles": "NextThought/nti.web.profiles",
     "@nti/web-routing": "NextThought/nti.web.routing",
-    "@nti/web-search": "NextThought/nti.web.search",
-    "classnames": "^2.2.6",
-    "prop-types": "^15.6.2",
-    "react": "*"
+    "@nti/web-search": "NextThought/nti.web.search"
   },
   "devDependencies": {
     "@nti/cmp-scripts": "^2.0.6",
     "@nti/style-common": "NextThought/nti.style.common",
     "@testing-library/react": "^11.0.4",
-    "@testing-library/jest-dom": "^5.11.5",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "@testing-library/jest-dom": "^5.11.5"
+  },
+  "peerDependencies": {
+    "classnames": "*",
+    "react": "*",
+    "react-dom": "*",
+    "prop-types": "*"
   }
 }
