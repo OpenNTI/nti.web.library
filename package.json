@@ -43,15 +43,6 @@
     "@nti/web-search": "NextThought/nti.web.search"
   },
   "devDependencies": {
-    "@nti/cmp-scripts": "^2.0.6",
-    "@nti/style-common": "NextThought/nti.style.common",
-    "@testing-library/react": "^11.0.4",
-    "@testing-library/jest-dom": "^5.11.5"
-  },
-  "peerDependencies": {
-    "classnames": "*",
-    "react": "*",
-    "react-dom": "*",
-    "prop-types": "*"
+    "@nti/cmp-scripts": "^2.31.8"
   }
 }
