@@ -1,1 +1,1 @@
-export Courses from './View';
+export { default as Courses } from './View';

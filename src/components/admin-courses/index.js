@@ -1,1 +1,1 @@
-export AdminCourses from './View';
+export { default as AdminCourses } from './View';

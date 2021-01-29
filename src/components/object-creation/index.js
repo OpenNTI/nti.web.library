@@ -1,1 +1,1 @@
-export CreateButton from './View';
+export { default as CreateButton } from './View';
