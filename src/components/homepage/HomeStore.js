@@ -120,7 +120,7 @@ class HomePageStore extends Stores.BoundStore {
 	/**
 	 * Flush the pending queue (without applying the data)
 	 *
-	 * @return {null}      No return value
+	 * @returns {null}      No return value
 	 */
 	clearPending () {
 		this.pending = {};
@@ -130,7 +130,7 @@ class HomePageStore extends Stores.BoundStore {
 	 * Add items to be set on the store (instead of setting them immediately, which triggers an event emit)
 	 *
 	 * @param {Object} obj Object containing key-value pairs to eventually be set on the store
-	 * @return {null}      No return value
+	 * @returns {null}      No return value
 	 */
 	addToPending (obj) {
 		if(!this.pending) {
@@ -145,7 +145,7 @@ class HomePageStore extends Stores.BoundStore {
 	/**
 	 * Flush the pending queue and set the data on the store, triggering an event emit
 	 *
-	 * @return {null}      No return value
+	 * @returns {null}      No return value
 	 */
 	applyPending () {
 		this.set(this.pending);
