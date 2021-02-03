@@ -174,7 +174,7 @@ class HomePageStore extends Stores.BoundStore {
 		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
 		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
 
-		const params = {filter: searchTerm, batchSize: 80};
+		const params = {filter: searchTerm, batchSize: 80, batchStart: 0};
 
 		const courses = await service.getBatch(enrolledCollection.href, params);
 		const administeredCourses = await service.getBatch(adminCollection.href, params);
