@@ -91,30 +91,34 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async loadSearchTerm () {
-		const searchTerm = this.searchTerm;
+		clearTimeout(this.searchBufferTimeout);
 
-		try {
-			const librarySearchPromises = [
-				this.searchCourses(searchTerm),
-				this.searchBooks(searchTerm),
-				this.searchCommunities(searchTerm),
-				this.checkAdmin(),
-				this.checkCatalog()
-			];
+		this.searchBufferTimeout = setTimeout(async () => {
+			const searchTerm = this.searchTerm;
 
-			await Promise.all(librarySearchPromises);
+			try {
+				const librarySearchPromises = [
+					this.searchCourses(searchTerm),
+					this.searchBooks(searchTerm),
+					this.searchCommunities(searchTerm),
+					this.checkAdmin(),
+					this.checkCatalog()
+				];
 
-			if (searchTerm !== this.searchTerm) { return; }
+				await Promise.all(librarySearchPromises);
 
-			this.applyPending();
+				if (searchTerm !== this.searchTerm) { return; }
 
-			this.loaded = true;
-			this.prevSearch = true;
+				this.applyPending();
 
-			this.set({loading: false});
-		} catch (e) {
-			this.set({error: e, loading: false});
-		}
+				this.loaded = true;
+				this.prevSearch = true;
+
+				this.set({loading: false});
+			} catch (e) {
+				this.set({error: e, loading: false});
+			}
+		}, 300);
 	}
 
 	/**
@@ -170,8 +174,10 @@ class HomePageStore extends Stores.BoundStore {
 		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
 		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
 
-		const courses = await service.getBatch(enrolledCollection.href + '?filter=' + searchTerm);
-		const administeredCourses = await service.getBatch(adminCollection.href + '?filter=' + searchTerm);
+		const params = {filter: searchTerm, batchSize: 80};
+
+		const courses = await service.getBatch(enrolledCollection.href, params);
+		const administeredCourses = await service.getBatch(adminCollection.href, params);
 
 		this.addToPending({
 			'courses': courses.Items,
@@ -193,7 +199,7 @@ class HomePageStore extends Stores.BoundStore {
 		function communityFilter (community) {
 			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
 		}
-	
+
 		try {
 			let service = await getService();
 			const communitiesCollection = await service.getCommunities();
