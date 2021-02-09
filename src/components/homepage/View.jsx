@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {Loading, Layouts} from '@nti/web-commons';
 import {searchable, contextual} from '@nti/web-search';
 import {scoped} from '@nti/lib-locale';
@@ -18,11 +19,6 @@ const t = scoped('library.components.Home', {
 	home: 'Home'
 });
 
-
-export default
-@searchable()
-@contextual(t('home'))
-@HomePageStore.connect({admin: 'admin', hasCatalog: 'hasCatalog', courses: 'courses', administeredCourses: 'administeredCourses', books: 'books', communities: 'communities', loading: 'loading', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -93,3 +89,19 @@ class Home extends React.Component {
 		);
 	}
 }
+
+export default decorate(Home, [
+	searchable(),
+	contextual(t('home')),
+	HomePageStore.connect({
+		admin: 'admin',
+		hasCatalog: 'hasCatalog',
+		courses: 'courses',
+		administeredCourses: 'administeredCourses',
+		books: 'books',
+		communities: 'communities',
+		loading: 'loading',
+		hasSearchTerm: 'hasSearchTerm',
+		error: 'error'
+	}),
+]);

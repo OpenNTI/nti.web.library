@@ -1,6 +1,7 @@
 import './SectionHeading.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {decorate} from '@nti/lib-commons';
 import {LinkTo} from '@nti/web-routing';
 import {Connectors} from '@nti/lib-store';
 import {Layouts} from '@nti/web-commons';
@@ -10,14 +11,6 @@ import AddButton from './AddButton';
 
 const {Responsive} = Layouts;
 
-export default
-@Connectors.Any.connect({
-	courses: 'courses',
-	totalCourses: 'totalCourses',
-	administeredCourses: 'administeredCourses',
-	totalAdministeredCourses: 'totalAdministeredCourses',
-	hasSearchTerm: 'hasSearchTerm'
-})
 class SectionHeading extends React.Component {
 	static propTypes = {
 		section: PropTypes.string.isRequired,
@@ -86,3 +79,13 @@ class SectionHeading extends React.Component {
 		);
 	}
 }
+
+export default decorate(SectionHeading, [
+	Connectors.Any.connect({
+		courses: 'courses',
+		totalCourses: 'totalCourses',
+		administeredCourses: 'administeredCourses',
+		totalAdministeredCourses: 'totalAdministeredCourses',
+		hasSearchTerm: 'hasSearchTerm'
+	})
+]);

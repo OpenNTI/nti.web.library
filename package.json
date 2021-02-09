@@ -26,6 +26,7 @@
     "registry": "https://npm.nextthought.com"
   },
   "dependencies": {
+    "@nti/lib-commons": "NextThought/nti.lib.commons",
     "@nti/lib-decorators": "NextThought/nti.lib.decorators",
     "@nti/lib-dispatcher": "NextThought/nti.lib.dispatcher",
     "@nti/lib-dom": "NextThought/nti.lib.dom",

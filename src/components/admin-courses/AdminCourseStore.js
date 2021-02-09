@@ -1,11 +1,10 @@
 import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
 import {mixin} from '@nti/lib-decorators';
+import {decorate} from '@nti/lib-commons';
 
 import {getSemesterText} from '../../utils/Semester';
 
-export default
-@mixin(Mixins.Searchable)
 class AdminCourseStore extends Stores.BoundStore {
 	constructor () {
 		super();
@@ -247,3 +246,7 @@ class AdminCourseStore extends Stores.BoundStore {
 		});
 	}
 }
+
+export default decorate(AdminCourseStore, [
+	mixin(Mixins.Searchable)
+]);

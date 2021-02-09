@@ -1,6 +1,7 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {Loading} from '@nti/web-commons';
 import {searchable, contextual} from '@nti/web-search';
 import {LinkTo} from '@nti/web-routing';
@@ -15,10 +16,6 @@ const t = scoped('library.components.AdminCourses', {
 	empty: 'No Administered Courses found.'
 });
 
-export default
-@searchable()
-@contextual(t('admin'))
-@Store.connect({upcomingCourses: 'upcomingCourses', currentCourses: 'currentCourses', archivedCourses: 'archivedCourses', loading: 'loading', loadArchived: 'loadArchived', hasSearchTerm: 'hasSearchTerm', error: 'error'})
 class AdminCourses extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
@@ -96,3 +93,17 @@ class AdminCourses extends React.Component {
 		);
 	}
 }
+
+export default decorate(AdminCourses, [
+	searchable(),
+	contextual(t('admin')),
+	Store.connect({
+		upcomingCourses: 'upcomingCourses',
+		currentCourses: 'currentCourses',
+		archivedCourses: 'archivedCourses',
+		loading: 'loading',
+		loadArchived: 'loadArchived',
+		hasSearchTerm: 'hasSearchTerm',
+		error: 'error'
+	}),
+]);

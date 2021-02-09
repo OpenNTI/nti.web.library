@@ -1,10 +1,9 @@
 import {getService} from '@nti/web-client';
 import {Stores, Mixins} from '@nti/lib-store';
+import {decorate} from '@nti/lib-commons';
 import {mixin} from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
-export default
-@mixin(Mixins.Searchable)
 class HomePageStore extends Stores.BoundStore {
 	constructor () {
 		super();
@@ -364,3 +363,7 @@ class HomePageStore extends Stores.BoundStore {
 		this.addToPending({'communities': fetchedComm});
 	}
 }
+
+export default decorate(HomePageStore, [
+	mixin(Mixins.Searchable)
+]);
