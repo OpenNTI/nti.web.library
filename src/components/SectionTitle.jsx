@@ -13,6 +13,17 @@ const t = scoped('library.components.SectionTitle', {
 	books: 'Books'
 });
 
+const TitleMap = {
+	upcoming: 'upcomingcourses',
+	current: 'currentcourses',
+	archived: 'archivedcourses'
+};
+
+SectionTitle.getTitle = (section) => {
+	const key = TitleMap[section] ?? section;
+
+	return t.isMissing(key) ? section : t(key);
+};
 
 SectionTitle.propTypes = {
 	section: PropTypes.string.isRequired,

@@ -30,8 +30,10 @@ export default React.forwardRef(function LibraryView (props, ref) {
 	const className = background === 'light' ? 'library-light-background' : 'library-dark-background';
 
 	return (
-		<section ref={ref} className={cx('library-view', className)}>
-			<Routes {...props} />
-		</section>
+		<Theme.Scope scope="library">
+			<section ref={ref} className={cx('library-view', className)}>
+				<Routes {...props} />
+			</section>
+		</Theme.Scope>
 	);
 });
