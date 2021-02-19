@@ -1,15 +1,16 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {Loading} from '@nti/web-commons';
-import {searchable, contextual} from '@nti/web-search';
-import {LinkTo} from '@nti/web-routing';
 import {scoped} from '@nti/lib-locale';
+import {getService} from '@nti/web-client';
+import {Loading, Hooks, Page} from '@nti/web-commons';
+import {Collection as CourseCollection} from '@nti/web-course';
+import {LinkTo, Router} from '@nti/web-routing';
 
-import CoursesContainer from '../containers/CoursesContainer';
+import SectionTitle from '../SectionTitle';
 
-import Store from './CourseStore';
+const {useResolver} = Hooks;
+const {isPending, isResolved, isErrored} = useResolver;
 
 const t = scoped('library.components.Courses', {
 	courses: 'Courses',
@@ -17,104 +18,53 @@ const t = scoped('library.components.Courses', {
 	add: 'Add Courses'
 });
 
-class Courses extends React.Component {
-	static propTypes = {
-		loading: PropTypes.bool,
-		loadArchived: PropTypes.bool,
-		store: PropTypes.object,
-		upcomingCourses: PropTypes.array,
-		currentCourses: PropTypes.array,
-		archivedCourses: PropTypes.array,
-		hasSearchTerm: PropTypes.bool,
-		children: PropTypes.node
-	}
+EnrolledCourses.propTypes = {
+	basePath: PropTypes.string
+};
+function EnrolledCourses ({basePath}) {
+	const router = Router.useRouter();
+	const baseroute = basePath  ?? router.baseroute.replace('library', '');
 
+	const resolver = useResolver(async () => {
+		const service = await getService();
+
+		return service.getCollection('EnrolledCourses', 'Courses');
+	}, []);
+
+	const loading = isPending(resolver);
+	const error = isErrored(resolver) ? resolver : null;
+	const collection = isResolved(resolver) ? resolver : null;
+
+	return (
+		<div className="courses-view">
+			<div className="breadcrumb">
+				<LinkTo.Name name="library-home" className="home-link">
+					Home
+				</LinkTo.Name>
+				<div className="title">
+					{t('courses')}
+				</div>
+
+				<LinkTo.Path to={baseroute + '/catalog'} className="add-courses-button">
+					{t('add')}
+				</LinkTo.Path>
+			</div>
+			<Loading.Placeholder loading={loading} fallback={<Loading.Spinner.Large />}>
+				{error && (<Page.Content.Error error={error} />)}
+				{collection && (<CourseCollection.Page collection={collection} getSectionTitle={SectionTitle.getTitle} />)}
+			</Loading.Placeholder>
+		</div>
+	);
+}
+
+export default class EnrolledCoursesWrapper extends React.Component {
 	static contextTypes = {
-		router: PropTypes.object,
 		basePath: PropTypes.string
 	}
 
-	loadArchived = () => {
-		this.props.store.loadArchivedCourses();
-	}
-
-	onModificationUpcoming = () => {
-		this.props.store.reloadUpcoming();
-	};
-
-	onModificationCurrent= () => {
-		this.props.store.reloadCurrent();
-	};
-
 	render () {
-		let {upcomingCourses, currentCourses, archivedCourses, loading, loadArchived, hasSearchTerm} = this.props;
-
-		const noUpcoming = upcomingCourses && upcomingCourses.length === 0;
-		const noCurrent = currentCourses && currentCourses.length === 0;
-		const noArchived = archivedCourses && archivedCourses.length === 0;
-		const emptySearch = hasSearchTerm && noUpcoming && noCurrent && noArchived;
-		const baseroute = this.context.basePath != null ? this.context.basePath : this.context.router.baseroute.replace('library', '');
-
 		return (
-			<div className="courses-view">
-				<div className="breadcrumb">
-					<LinkTo.Name name="library-home" className="home-link">
-						Home
-					</LinkTo.Name>
-					<div className="title">
-						{t('courses')}
-					</div>
-
-					<LinkTo.Path to={baseroute + '/catalog'} className="add-courses-button">
-						{t('add')}
-					</LinkTo.Path>
-				</div>
-
-				{loading ? (
-					<Loading.Mask/>
-				) : (
-					<>
-						{emptySearch ? (
-							<div className="no-results">{t('empty')}</div>
-						) : (
-							<div>
-								{upcomingCourses && upcomingCourses.length > 0 &&
-									<CoursesContainer items={upcomingCourses} itemsType="upcoming" onModification={this.onModificationUpcoming} />
-								}
-								{currentCourses && currentCourses.length > 0 &&
-									<CoursesContainer items={currentCourses} itemsType="current" onModification={this.onModificationCurrent} />
-								}
-								{archivedCourses && archivedCourses.length > 0 &&
-									<CoursesContainer items={archivedCourses} itemsType="archived" onModification={this.loadArchived} />
-								}
-								{!archivedCourses && (
-									<div className="loading-archived">
-										{loadArchived ? (
-											<Loading.Spinner />
-										) : (
-											<a className="load-archived-button" onClick={this.loadArchived}>Load Archived</a>
-										)}
-									</div>
-								)}
-							</div>
-						)}
-					</>
-				)}
-			</div>
+			<EnrolledCourses basePath={this.context.basePath} {...this.props} />
 		);
 	}
 }
-
-
-export default decorate(Courses, [
-	searchable(),
-	contextual(t('courses')),
-	Store.connect({
-		upcomingCourses: 'upcomingCourses',
-		currentCourses: 'currentCourses',
-		archivedCourses: 'archivedCourses',
-		loading: 'loading',
-		loadArchived: 'loadArchived',
-		hasSearchTerm: 'hasSearchTerm',
-		error: 'error'}),
-]);
