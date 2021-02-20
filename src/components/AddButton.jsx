@@ -1,12 +1,12 @@
-import {join} from 'path';
+import { join } from 'path';
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {scoped} from '@nti/lib-locale';
-import {LinkTo} from '@nti/web-routing';
+import { scoped } from '@nti/lib-locale';
+import { LinkTo } from '@nti/web-routing';
 
-const styles = css`
+const styles = stylesheet`
 .add-button {
 	color: var(--primary-blue);
 	cursor: pointer;
@@ -17,28 +17,35 @@ const styles = css`
 `;
 
 const t = scoped('library.components.AddButton', {
-	courses: '+ Add'
+	courses: '+ Add',
 });
 
 export default class AddButton extends React.Component {
 	static propTypes = {
-		section: PropTypes.string
-	}
+		section: PropTypes.string,
+	};
 
 	static contextTypes = {
 		router: PropTypes.object,
 		basePath: PropTypes.string,
-		section: PropTypes.string
-	}
+		section: PropTypes.string,
+	};
 
-	render () {
-		const {section} = this.props;
-		const baseroute = this.context.basePath ?? this.context.router.baseroute.replace('library', '');
+	render() {
+		const { section } = this.props;
+		const baseroute =
+			this.context.basePath ??
+			this.context.router.baseroute.replace('library', '');
 
-		if (t.isMissing(section)) { return null; }
+		if (t.isMissing(section)) {
+			return null;
+		}
 
 		return (
-			<LinkTo.Path to={join(baseroute, 'catalog')} className={cx('button', 'library-add', styles.addButton)}>
+			<LinkTo.Path
+				to={join(baseroute, 'catalog')}
+				className={cx('button', 'library-add', styles.addButton)}
+			>
 				{t(section)}
 			</LinkTo.Path>
 		);
