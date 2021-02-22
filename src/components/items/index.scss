@@ -1,19 +1,19 @@
 .library-item {
-	$media-tab: "screen and (min-width: 600px)";
+	$media-tab: 'screen and (min-width: 600px)';
 
 	width: 170px;
 	position: relative;
 	overflow: visible;
 	transform: translate3d(0, 0, 0);
 	box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.8);
-	border-radius: 1px;//iOS won't render the shadow w/o this :/
+	border-radius: 1px; //iOS won't render the shadow w/o this :/
 
 	@media #{$media-tab} {
 		width: 232px;
 	}
 
 	& > a {
-		padding-top: 73%;//73.2758621%;
+		padding-top: 73%; //73.2758621%;
 		position: relative;
 		overflow: hidden;
 		display: block;
@@ -43,13 +43,16 @@
 			text-align: left;
 			padding: 0.2rem 1rem;
 
-			h3, h5, address {
+			h3,
+			h5,
+			address {
 				&::after {
 					content: ' ';
 				}
 			}
 
-			h3, h5 {
+			h3,
+			h5 {
 				color: white;
 				text-transform: uppercase;
 				overflow: hidden;
@@ -71,7 +74,8 @@
 				white-space: nowrap;
 			}
 
-			h3, address {
+			h3,
+			address {
 				white-space: normal;
 			}
 

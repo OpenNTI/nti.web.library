@@ -1,10 +1,10 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {Loading, Layouts} from '@nti/web-commons';
-import {searchable, contextual} from '@nti/web-search';
-import {scoped} from '@nti/lib-locale';
+import { decorate } from '@nti/lib-commons';
+import { Loading, Layouts } from '@nti/web-commons';
+import { searchable, contextual } from '@nti/web-search';
+import { scoped } from '@nti/lib-locale';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
@@ -13,10 +13,10 @@ import Books from '../containers/BooksContainer';
 
 import HomePageStore from './HomeStore';
 
-const {Responsive} = Layouts;
+const { Responsive } = Layouts;
 
 const t = scoped('library.components.Home', {
-	home: 'Home'
+	home: 'Home',
 });
 
 class Home extends React.Component {
@@ -30,8 +30,8 @@ class Home extends React.Component {
 		children: PropTypes.node,
 		admin: PropTypes.bool,
 		hasCatalog: PropTypes.bool,
-		hasSearchTerm: PropTypes.bool
-	}
+		hasSearchTerm: PropTypes.bool,
+	};
 
 	onModificationCourse = () => {
 		this.props.store.reloadCourseFavorites();
@@ -41,46 +41,76 @@ class Home extends React.Component {
 		this.props.store.reloadAdminFavorites();
 	};
 
-	render () {
-		let {admin, hasCatalog, courses, administeredCourses, books, communities, hasSearchTerm, loading, store} = this.props;
+	render() {
+		let {
+			admin,
+			hasCatalog,
+			courses,
+			administeredCourses,
+			books,
+			communities,
+			hasSearchTerm,
+			loading,
+			store,
+		} = this.props;
 
 		const noCommunities = !communities || communities.length === 0;
 		const noCourses = !courses || courses.length === 0;
-		const noAdminCourses = !administeredCourses || administeredCourses.length === 0;
+		const noAdminCourses =
+			!administeredCourses || administeredCourses.length === 0;
 		const noBooks = !books || books.length === 0;
-		const emptySearch = hasSearchTerm && noCommunities && noCourses && noAdminCourses && noBooks;
+		const emptySearch =
+			hasSearchTerm &&
+			noCommunities &&
+			noCourses &&
+			noAdminCourses &&
+			noBooks;
 
 		const canShowCoursesSection = !noCourses || hasCatalog;
 
 		return (
 			<div className="library-view">
 				{loading ? (
-					<Loading.Mask/>
+					<Loading.Mask />
 				) : (
 					<div>
-						{admin &&
-							<Responsive.Item query={Responsive.isWebappContext} component={AdminToolbar} store={store} />
-						}
+						{admin && (
+							<Responsive.Item
+								query={Responsive.isWebappContext}
+								component={AdminToolbar}
+								store={store}
+							/>
+						)}
 
 						{emptySearch ? (
 							<div className="no-results">No results found.</div>
 						) : (
 							<div>
-								{!noCommunities &&
+								{!noCommunities && (
 									<Communities items={communities} />
-								}
+								)}
 
-								{((!hasSearchTerm && canShowCoursesSection) || (hasSearchTerm && !noCourses)) &&
-									<Courses items={courses} onModification={this.onModificationCourse}/>
-								}
+								{((!hasSearchTerm && canShowCoursesSection) ||
+									(hasSearchTerm && !noCourses)) && (
+									<Courses
+										items={courses}
+										onModification={
+											this.onModificationCourse
+										}
+									/>
+								)}
 
-								{!noAdminCourses &&
-									<Courses admin items={administeredCourses} onModification={this.onModificationAdmin} />
-								}
+								{!noAdminCourses && (
+									<Courses
+										admin
+										items={administeredCourses}
+										onModification={
+											this.onModificationAdmin
+										}
+									/>
+								)}
 
-								{!noBooks &&
-									<Books items={books} />
-								}
+								{!noBooks && <Books items={books} />}
 							</div>
 						)}
 					</div>
@@ -102,6 +132,6 @@ export default decorate(Home, [
 		communities: 'communities',
 		loading: 'loading',
 		hasSearchTerm: 'hasSearchTerm',
-		error: 'error'
+		error: 'error',
 	}),
 ]);

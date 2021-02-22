@@ -5,14 +5,14 @@ import Container from './Container';
 
 export default class Books extends React.Component {
 	static propTypes = {
-		items: PropTypes.array
-	}
+		items: PropTypes.array,
+	};
 
-	render () {
-		const {props: {items}} = this;
+	render() {
+		const {
+			props: { items },
+		} = this;
 
-		return (
-			<Container section="books" items={items}/>
-		);
+		return <Container section="books" items={items} />;
 	}
 }

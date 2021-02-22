@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Flyout, Prompt } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
 import { getService } from '@nti/web-client';
-import {Community} from '@nti/web-profiles';
+import { Community } from '@nti/web-profiles';
 import { Models } from '@nti/lib-interfaces';
-import {scoped} from '@nti/lib-locale';
+import { scoped } from '@nti/lib-locale';
 
 import Option from './Option';
 
@@ -14,45 +14,52 @@ const t = scoped('library.components.CreateCourse', {
 	new: 'Create a Course',
 	import: 'Import a Course',
 	importDescription: 'Use content from a previous course.',
-	createCommunity: 'Create a Community'
+	createCommunity: 'Create a Community',
 });
 
 export default class CreateCourse extends Component {
 	static propTypes = {
 		canCreate: PropTypes.bool.isRequired,
-		store: PropTypes.object.isRequired
-	}
+		store: PropTypes.object.isRequired,
+	};
 
 	static contextTypes = {
-		router: PropTypes.object.isRequired
-	}
+		router: PropTypes.object.isRequired,
+	};
 
-	state = {}
+	state = {};
 
 	attachFlyoutRef = x => (this.flyout = x);
 
-	async componentDidMount () {
+	async componentDidMount() {
 		const service = await getService();
 		const courseWorkspace = service.getWorkspace('Courses');
-		const allCoursesCollection = courseWorkspace && service.getCollection('AllCourses', courseWorkspace.Title);
+		const allCoursesCollection =
+			courseWorkspace &&
+			service.getCollection('AllCourses', courseWorkspace.Title);
 		const communityWorkspace = service.getCommunities();
 
-		const canCreateScorm = allCoursesCollection && allCoursesCollection.accepts.includes(Models.courses.scorm.SCORMInstance.MimeType);
-		const canCreateCommunity = communityWorkspace && communityWorkspace.canCreateCommunity();
+		const canCreateScorm =
+			allCoursesCollection &&
+			allCoursesCollection.accepts.includes(
+				Models.courses.scorm.SCORMInstance.MimeType
+			);
+		const canCreateCommunity =
+			communityWorkspace && communityWorkspace.canCreateCommunity();
 
 		this.setState({
 			canCreateScorm,
-			canCreateCommunity
+			canCreateCommunity,
 		});
 	}
 
 	onCourseCreated = () => {
 		this.props.store.reloadAdminFavorites();
-	}
+	};
 
 	onCourseModified = () => {
 		this.props.store.reloadAdminFavorites();
-	}
+	};
 
 	launchCourseWizard = async template => {
 		if (this.flyout) {
@@ -60,38 +67,39 @@ export default class CreateCourse extends Component {
 		}
 
 		const { router } = this.context;
-		const newEntry = await Editor.createCourse(this.onCourseModified, template);
+		const newEntry = await Editor.createCourse(
+			this.onCourseModified,
+			template
+		);
 
 		if (newEntry) {
 			router.routeTo.object(newEntry, 'new-course');
 		}
-	}
-
+	};
 
 	launchCommunityWizard = async () => {
 		this.setState({
-			creatingCommunity: true
+			creatingCommunity: true,
 		});
-	}
+	};
 
-	onCommunityCreated = (community) => {
-		const {router} = this.context;
+	onCommunityCreated = community => {
+		const { router } = this.context;
 
 		this.props.store.reloadCommunities();
 		this.setState({
-			creatingCommunity: false
+			creatingCommunity: false,
 		});
 
 		if (community) {
 			router.routeTo.object(community, 'new-community');
 		}
-	}
+	};
 
-	cancelCreateCommunity = () => this.setState({creatingCommunity: false})
+	cancelCreateCommunity = () => this.setState({ creatingCommunity: false });
 
-
-	renderCreateTrigger () {
-		const {creatingCommunity} = this.state;
+	renderCreateTrigger() {
+		const { creatingCommunity } = this.state;
 
 		return (
 			<div className="admin-create-button">
@@ -111,7 +119,7 @@ export default class CreateCourse extends Component {
 		);
 	}
 
-	render () {
+	render() {
 		if (!this.props.canCreate) {
 			return null;
 		}
@@ -142,13 +150,17 @@ export default class CreateCourse extends Component {
 						className="import-course"
 						title={t('import')}
 						iconClassName="icon-upload"
-						onClick={() => this.launchCourseWizard(Templates.Import)}
+						onClick={() =>
+							this.launchCourseWizard(Templates.Import)
+						}
 					/>
 					{this.state.canCreateScorm && (
 						<Option
 							className="import-scorm-package"
 							title="Import a SCORM Package"
-							onClick={() => this.launchCourseWizard(Templates.Scorm)}
+							onClick={() =>
+								this.launchCourseWizard(Templates.Scorm)
+							}
 						/>
 					)}
 				</React.Fragment>

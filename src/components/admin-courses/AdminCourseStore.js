@@ -1,12 +1,12 @@
-import {getService} from '@nti/web-client';
-import {Stores, Mixins} from '@nti/lib-store';
-import {mixin} from '@nti/lib-decorators';
-import {decorate} from '@nti/lib-commons';
+import { getService } from '@nti/web-client';
+import { Stores, Mixins } from '@nti/lib-store';
+import { mixin } from '@nti/lib-decorators';
+import { decorate } from '@nti/lib-commons';
 
-import {getSemesterText} from '../../utils/Semester';
+import { getSemesterText } from '../../utils/Semester';
 
 class AdminCourseStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 		this.loaded = false;
 		this.prevSearch = false;
@@ -18,11 +18,11 @@ class AdminCourseStore extends Stores.BoundStore {
 			upcomingCourses: null,
 			currentCourses: null,
 			archivedCourses: null,
-			hasSearchTerm: false
+			hasSearchTerm: false,
 		});
 	}
 
-	async load () {
+	async load() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -32,7 +32,7 @@ class AdminCourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
 		} else if (!this.loaded || this.prevSearch) {
@@ -43,13 +43,13 @@ class AdminCourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: false
+				hasSearchTerm: false,
 			});
 
 			try {
 				const libraryPromises = [
 					this.loadUpcomingCourses(),
-					this.loadCurrentCourses()
+					this.loadCurrentCourses(),
 				];
 
 				await Promise.all(libraryPromises);
@@ -63,11 +63,13 @@ class AdminCourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadSearchTerm () {
+	async loadSearchTerm() {
 		const searchTerm = this.searchTerm;
 
 		try {
-			if (searchTerm !== this.searchTerm) { return; }
+			if (searchTerm !== this.searchTerm) {
+				return;
+			}
 
 			await this.searchCourses(searchTerm);
 		} catch (e) {
@@ -79,45 +81,63 @@ class AdminCourseStore extends Stores.BoundStore {
 		}
 	}
 
-	splitItemsBySemester (items) {
+	splitItemsBySemester(items) {
 		const semesters = [...new Set(items.map(x => getSemesterText(x)))];
 		let semesterBins = [];
 		semesters.map(semester => {
-			const filteredItems = items.filter(item => getSemesterText(item) === semester);
+			const filteredItems = items.filter(
+				item => getSemesterText(item) === semester
+			);
 
 			semesterBins.push({
 				semester: semester,
-				courses: filteredItems.sort((a, b) => a.getCreatedTime() < b.getCreatedTime())
+				courses: filteredItems.sort(
+					(a, b) => a.getCreatedTime() < b.getCreatedTime()
+				),
 			});
 		});
 
 		return semesterBins;
 	}
 
-	async loadUpcomingCourses () {
+	async loadUpcomingCourses() {
 		let service = await getService();
 
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-		const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
+		const adminCollection = service.getCollection(
+			'AdministeredCourses',
+			'Courses'
+		);
+		const upcomingAdminCourses = await service.getBatch(
+			adminCollection.getLink('Upcoming')
+		);
 
-		if (this.searchTerm) { return; }
+		if (this.searchTerm) {
+			return;
+		}
 
 		this.set('upcomingCourses', upcomingAdminCourses.Items);
 	}
 
-	async loadCurrentCourses () {
+	async loadCurrentCourses() {
 		let service = await getService();
 
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+		const adminCollection = service.getCollection(
+			'AdministeredCourses',
+			'Courses'
+		);
 
-		const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
+		const currentAdminCourses = await service.getBatch(
+			adminCollection.getLink('Current')
+		);
 
-		if (this.searchTerm) { return; }
+		if (this.searchTerm) {
+			return;
+		}
 
 		this.set('currentCourses', currentAdminCourses.Items);
 	}
 
-	async reloadUpcoming () {
+	async reloadUpcoming() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -127,20 +147,25 @@ class AdminCourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
-		} else  {
+		} else {
 			this.set({
 				loading: true,
 				error: null,
-				upcomingCourses: null
+				upcomingCourses: null,
 			});
 
 			try {
 				let service = await getService();
-				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-				const upcomingAdminCourses = await service.getBatch(adminCollection.getLink('Upcoming'));
+				const adminCollection = service.getCollection(
+					'AdministeredCourses',
+					'Courses'
+				);
+				const upcomingAdminCourses = await service.getBatch(
+					adminCollection.getLink('Upcoming')
+				);
 
 				this.set('upcomingCourses', upcomingAdminCourses.Items);
 			} catch (e) {
@@ -151,7 +176,7 @@ class AdminCourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async reloadCurrent () {
+	async reloadCurrent() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -161,21 +186,26 @@ class AdminCourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
-		} else  {
+		} else {
 			this.set({
 				loading: true,
 				error: null,
-				currentCourses: null
+				currentCourses: null,
 			});
 
 			try {
 				let service = await getService();
-				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+				const adminCollection = service.getCollection(
+					'AdministeredCourses',
+					'Courses'
+				);
 
-				const currentAdminCourses = await service.getBatch(adminCollection.getLink('Current'));
+				const currentAdminCourses = await service.getBatch(
+					adminCollection.getLink('Current')
+				);
 
 				this.set('currentCourses', currentAdminCourses.Items);
 			} catch (e) {
@@ -186,7 +216,7 @@ class AdminCourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadArchivedCourses () {
+	async loadArchivedCourses() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -196,23 +226,31 @@ class AdminCourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
-		} else  {
+		} else {
 			this.set({
 				archivedCourses: null,
-				loadArchived: true
+				loadArchived: true,
 			});
 
 			try {
 				let service = await getService();
 
-				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+				const adminCollection = service.getCollection(
+					'AdministeredCourses',
+					'Courses'
+				);
 
-				const archivedAdminCourses = await service.getBatch(adminCollection.getLink('Archived'));
+				const archivedAdminCourses = await service.getBatch(
+					adminCollection.getLink('Archived')
+				);
 
-				this.set('archivedCourses', this.splitItemsBySemester(archivedAdminCourses.Items));
+				this.set(
+					'archivedCourses',
+					this.splitItemsBySemester(archivedAdminCourses.Items)
+				);
 			} catch (e) {
 				this.set('error', e);
 			} finally {
@@ -221,32 +259,58 @@ class AdminCourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async searchCourses (searchTerm) {
+	async searchCourses(searchTerm) {
 		let service = await getService();
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-		const coursesBatch = await service.get(adminCollection.href + '?filter=' + searchTerm);
-		const coursesPromises = coursesBatch.Items.map(x => service.getObject(x));
+		const adminCollection = service.getCollection(
+			'AdministeredCourses',
+			'Courses'
+		);
+		const coursesBatch = await service.get(
+			adminCollection.href + '?filter=' + searchTerm
+		);
+		const coursesPromises = coursesBatch.Items.map(x =>
+			service.getObject(x)
+		);
 		const coursesParsed = await Promise.all(coursesPromises);
 		const today = new Date();
 		let currentCourses = [];
-		const assumeCurrent = coursesParsed.filter(y => y.getStartDate() == null || y.getEndDate() == null && !(y.getStartDate() && y.getStartDate() > today));
+		const assumeCurrent = coursesParsed.filter(
+			y =>
+				y.getStartDate() == null ||
+				(y.getEndDate() == null &&
+					!(y.getStartDate() && y.getStartDate() > today))
+		);
 		currentCourses.push(...assumeCurrent);
-		let currentDate = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() > today));
+		let currentDate = coursesParsed.filter(
+			y =>
+				y.getStartDate() &&
+				y.getStartDate() < today &&
+				y.getEndDate() &&
+				y.getEndDate() > today
+		);
 		currentCourses.push(...currentDate);
 
-		let archivedCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() < today));
-		let upcomingCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() > today));
+		let archivedCourses = coursesParsed.filter(
+			y =>
+				y.getStartDate() &&
+				y.getStartDate() < today &&
+				y.getEndDate() &&
+				y.getEndDate() < today
+		);
+		let upcomingCourses = coursesParsed.filter(
+			y => y.getStartDate() && y.getStartDate() > today
+		);
 
-		if (searchTerm !== this.searchTerm) { return; }
+		if (searchTerm !== this.searchTerm) {
+			return;
+		}
 
 		this.set({
-			'currentCourses': currentCourses,
-			'archivedCourses': this.splitItemsBySemester(archivedCourses),
-			'upcomingCourses': upcomingCourses
+			currentCourses: currentCourses,
+			archivedCourses: this.splitItemsBySemester(archivedCourses),
+			upcomingCourses: upcomingCourses,
 		});
 	}
 }
 
-export default decorate(AdminCourseStore, [
-	mixin(Mixins.Searchable)
-]);
+export default decorate(AdminCourseStore, [mixin(Mixins.Searchable)]);

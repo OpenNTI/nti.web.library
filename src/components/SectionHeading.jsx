@@ -1,15 +1,15 @@
 import './SectionHeading.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {decorate} from '@nti/lib-commons';
-import {LinkTo} from '@nti/web-routing';
-import {Connectors} from '@nti/lib-store';
-import {Layouts} from '@nti/web-commons';
+import { decorate } from '@nti/lib-commons';
+import { LinkTo } from '@nti/web-routing';
+import { Connectors } from '@nti/lib-store';
+import { Layouts } from '@nti/web-commons';
 
 import SectionTitle from './SectionTitle';
 import AddButton from './AddButton';
 
-const {Responsive} = Layouts;
+const { Responsive } = Layouts;
 
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -20,35 +20,47 @@ class SectionHeading extends React.Component {
 		totalCourses: PropTypes.number,
 		administeredCourses: PropTypes.array,
 		totalAdministeredCourses: PropTypes.number,
-		hasSearchTerm: PropTypes.bool
-	}
+		hasSearchTerm: PropTypes.bool,
+	};
 
 	static contextTypes = {
 		router: PropTypes.object.isRequired,
-		basePath: PropTypes.string
-	}
+		basePath: PropTypes.string,
+	};
 
-	showSeeAll () {
-		const {section, courses, totalCourses, administeredCourses, totalAdministeredCourses, hasSearchTerm} = this.props;
+	showSeeAll() {
+		const {
+			section,
+			courses,
+			totalCourses,
+			administeredCourses,
+			totalAdministeredCourses,
+			hasSearchTerm,
+		} = this.props;
 
-		if(section === 'courses' && !hasSearchTerm) {
+		if (section === 'courses' && !hasSearchTerm) {
 			return (courses && courses.length) < totalCourses;
-		} else if(section === 'admin' && !hasSearchTerm) {
-			return (administeredCourses && administeredCourses.length) < totalAdministeredCourses;
+		} else if (section === 'admin' && !hasSearchTerm) {
+			return (
+				(administeredCourses && administeredCourses.length) <
+				totalAdministeredCourses
+			);
 		}
 
 		return false;
 	}
 
-	render () {
-		const {section, date, empty} = this.props;
+	render() {
+		const { section, date, empty } = this.props;
 		const { router, basePath } = this.context;
 		let base;
 
-		if(Responsive.isMobileContext()) {
+		if (Responsive.isMobileContext()) {
 			base = basePath;
 		} else {
-			base = router.baseroute ? '/' + router.baseroute.split('/')[1] + '/' : '';
+			base = router.baseroute
+				? '/' + router.baseroute.split('/')[1] + '/'
+				: '';
 		}
 
 		return (
@@ -63,18 +75,22 @@ class SectionHeading extends React.Component {
 						)}
 
 						{!empty && this.showSeeAll() && (
-							<LinkTo.Path to={section === 'admin' ? (base + 'library/admin-courses') : (base + 'library/courses')} className="see-all">
-							See All
+							<LinkTo.Path
+								to={
+									section === 'admin'
+										? base + 'library/admin-courses'
+										: base + 'library/courses'
+								}
+								className="see-all"
+							>
+								See All
 							</LinkTo.Path>
 						)}
 					</div>
 				)}
 				{section === 'archivedcourses' && (
-					<div className="course-section-heading-date">
-						{date}
-					</div>
+					<div className="course-section-heading-date">{date}</div>
 				)}
-
 			</div>
 		);
 	}
@@ -86,6 +102,6 @@ export default decorate(SectionHeading, [
 		totalCourses: 'totalCourses',
 		administeredCourses: 'administeredCourses',
 		totalAdministeredCourses: 'totalAdministeredCourses',
-		hasSearchTerm: 'hasSearchTerm'
-	})
+		hasSearchTerm: 'hasSearchTerm',
+	}),
 ]);

@@ -1,9 +1,11 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .library-view {
 	--webapp-library-top-gap: 52px;
 
-	min-height: calc(100vh - var(--nt-app-top-offset, 70px) - var(--webapp-library-top-gap));
+	min-height: calc(
+		100vh - var(--nt-app-top-offset, 70px) - var(--webapp-library-top-gap)
+	);
 	height: auto !important;
 	width: 1024px;
 	margin: 0;

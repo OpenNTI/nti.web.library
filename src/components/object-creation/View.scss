@@ -1,4 +1,4 @@
-@import "~@nti/style-common";
+@import '~@nti/style-common';
 
 .admin-create-options {
 	.flyout-inner {
@@ -77,7 +77,8 @@
 	}
 }
 
-.course-panel-header-title, .course-panel-controls {
+.course-panel-header-title,
+.course-panel-controls {
 	font-weight: 400;
 }
 

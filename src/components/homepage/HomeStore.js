@@ -1,11 +1,11 @@
-import {getService} from '@nti/web-client';
-import {Stores, Mixins} from '@nti/lib-store';
-import {decorate} from '@nti/lib-commons';
-import {mixin} from '@nti/lib-decorators';
+import { getService } from '@nti/web-client';
+import { Stores, Mixins } from '@nti/lib-store';
+import { decorate } from '@nti/lib-commons';
+import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
 class HomePageStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
@@ -19,11 +19,11 @@ class HomePageStore extends Stores.BoundStore {
 			administeredCourses: null,
 			books: null,
 			communities: null,
-			hasSearchTerm: false
+			hasSearchTerm: false,
 		});
 	}
 
-	handleDispatch = (event) => {
+	handleDispatch = event => {
 		let type = event && (event.type || (event.action || {}).type);
 
 		if (!type) {
@@ -31,9 +31,9 @@ class HomePageStore extends Stores.BoundStore {
 		} else if (type === 'catalog:redeem' || type === 'course:drop') {
 			this.reloadCourseFavorites();
 		}
-	}
+	};
 
-	async load () {
+	async load() {
 		// on each load, clear the pending queue
 		this.clearPending();
 
@@ -47,11 +47,10 @@ class HomePageStore extends Stores.BoundStore {
 				administeredCourses: null,
 				books: null,
 				communities: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
-		}
-		else if(!this.loaded || this.prevSearch) {
+		} else if (!this.loaded || this.prevSearch) {
 			this.set({
 				loading: true,
 				error: null,
@@ -59,7 +58,7 @@ class HomePageStore extends Stores.BoundStore {
 				administeredCourses: null,
 				books: null,
 				communities: null,
-				hasSearchTerm: false
+				hasSearchTerm: false,
 			});
 
 			try {
@@ -68,12 +67,12 @@ class HomePageStore extends Stores.BoundStore {
 					this.loadBooks(),
 					this.loadCommunities(),
 					this.checkAdmin(),
-					this.checkCatalog()
+					this.checkCatalog(),
 				];
 
 				await Promise.all(libraryPromises);
 
-				if(this.searchTerm) {
+				if (this.searchTerm) {
 					return;
 				}
 
@@ -82,14 +81,14 @@ class HomePageStore extends Stores.BoundStore {
 				this.loaded = true;
 				this.prevSearch = false;
 
-				this.set({loading: false});
+				this.set({ loading: false });
 			} catch (e) {
-				this.set({error: e, loading: false});
+				this.set({ error: e, loading: false });
 			}
 		}
 	}
 
-	async loadSearchTerm () {
+	async loadSearchTerm() {
 		clearTimeout(this.searchBufferTimeout);
 
 		this.searchBufferTimeout = setTimeout(async () => {
@@ -101,21 +100,23 @@ class HomePageStore extends Stores.BoundStore {
 					this.searchBooks(searchTerm),
 					this.searchCommunities(searchTerm),
 					this.checkAdmin(),
-					this.checkCatalog()
+					this.checkCatalog(),
 				];
 
 				await Promise.all(librarySearchPromises);
 
-				if (searchTerm !== this.searchTerm) { return; }
+				if (searchTerm !== this.searchTerm) {
+					return;
+				}
 
 				this.applyPending();
 
 				this.loaded = true;
 				this.prevSearch = true;
 
-				this.set({loading: false});
+				this.set({ loading: false });
 			} catch (e) {
-				this.set({error: e, loading: false});
+				this.set({ error: e, loading: false });
 			}
 		}, 300);
 	}
@@ -125,7 +126,7 @@ class HomePageStore extends Stores.BoundStore {
 	 *
 	 * @returns {null}      No return value
 	 */
-	clearPending () {
+	clearPending() {
 		this.pending = {};
 	}
 
@@ -135,12 +136,12 @@ class HomePageStore extends Stores.BoundStore {
 	 * @param {Object} obj Object containing key-value pairs to eventually be set on the store
 	 * @returns {null}      No return value
 	 */
-	addToPending (obj) {
-		if(!this.pending) {
+	addToPending(obj) {
+		if (!this.pending) {
 			this.pending = {};
 		}
 
-		for(let key of Object.keys(obj)) {
+		for (let key of Object.keys(obj)) {
 			this.pending[key] = obj[key];
 		}
 	}
@@ -150,53 +151,76 @@ class HomePageStore extends Stores.BoundStore {
 	 *
 	 * @returns {null}      No return value
 	 */
-	applyPending () {
+	applyPending() {
 		this.set(this.pending);
 
 		this.clearPending();
 	}
 
-	async checkAdmin () {
+	async checkAdmin() {
 		let service = await getService();
 		const admin = service.getWorkspace('SiteAdmin') ? true : false;
 		this.set('admin', admin);
 	}
 
-	async checkCatalog () {
+	async checkCatalog() {
 		let service = await getService();
-		const hasCatalog = service.getCollection('Courses', 'Catalog') ? true : false;
+		const hasCatalog = service.getCollection('Courses', 'Catalog')
+			? true
+			: false;
 		this.set('hasCatalog', hasCatalog);
 	}
 
-	async searchCourses (searchTerm) {
+	async searchCourses(searchTerm) {
 		let service = await getService();
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+		const adminCollection = service.getCollection(
+			'AdministeredCourses',
+			'Courses'
+		);
+		const enrolledCollection = service.getCollection(
+			'EnrolledCourses',
+			'Courses'
+		);
 
-		const params = {filter: searchTerm, batchSize: 80, batchStart: 0};
+		const params = { filter: searchTerm, batchSize: 80, batchStart: 0 };
 
 		const courses = await service.getBatch(enrolledCollection.href, params);
-		const administeredCourses = await service.getBatch(adminCollection.href, params);
+		const administeredCourses = await service.getBatch(
+			adminCollection.href,
+			params
+		);
 
 		this.addToPending({
-			'courses': courses.Items,
-			'administeredCourses': administeredCourses.Items
+			courses: courses.Items,
+			administeredCourses: administeredCourses.Items,
 		});
 	}
 
-	async searchBooks (searchTerm) {
+	async searchBooks(searchTerm) {
 		let service = await getService();
-		const booksCollection = service.getCollection('VisibleContentBundles', 'ContentBundles');
-		const booksBatch = await service.get(booksCollection.href + '?filter=' + searchTerm);
+		const booksCollection = service.getCollection(
+			'VisibleContentBundles',
+			'ContentBundles'
+		);
+		const booksBatch = await service.get(
+			booksCollection.href + '?filter=' + searchTerm
+		);
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending({'books': booksParsed});
+		this.addToPending({ books: booksParsed });
 	}
 
-	async searchCommunities (searchTerm) {
-		function communityFilter (community) {
-			return community.alias.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || community.realname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
+	async searchCommunities(searchTerm) {
+		function communityFilter(community) {
+			return (
+				community.alias
+					.toLowerCase()
+					.indexOf(searchTerm.toLowerCase()) >= 0 ||
+				community.realname
+					.toLowerCase()
+					.indexOf(searchTerm.toLowerCase()) >= 0
+			);
 		}
 
 		try {
@@ -204,30 +228,41 @@ class HomePageStore extends Stores.BoundStore {
 			const communitiesCollection = await service.getCommunities();
 			const communities = await communitiesCollection.load();
 
-
-			this.addToPending({'communities': (communities || []).filter(communityFilter)});
+			this.addToPending({
+				communities: (communities || []).filter(communityFilter),
+			});
 		} catch (e) {
 			//swallow
 		}
 	}
 
-	async loadFavorites () {
+	async loadFavorites() {
 		let service = await getService();
-		const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+		const adminCollection = service.getCollection(
+			'AdministeredCourses',
+			'Courses'
+		);
+		const enrolledCollection = service.getCollection(
+			'EnrolledCourses',
+			'Courses'
+		);
 
-		const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
-		const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
+		const courses = await service.getBatch(
+			enrolledCollection.getLink('Favorites')
+		);
+		const administeredCourses = await service.getBatch(
+			adminCollection.getLink('Favorites')
+		);
 
 		this.addToPending({
-			'courses': courses.Items,
-			'administeredCourses': administeredCourses.Items,
-			'totalCourses': courses.Total,
-			'totalAdministeredCourses': administeredCourses.Total
+			courses: courses.Items,
+			administeredCourses: administeredCourses.Items,
+			totalCourses: courses.Total,
+			totalAdministeredCourses: administeredCourses.Total,
 		});
 	}
 
-	async reloadAdminFavorites () {
+	async reloadAdminFavorites() {
 		if (this.searchTerm) {
 			this.loaded = false;
 
@@ -238,24 +273,29 @@ class HomePageStore extends Stores.BoundStore {
 				administeredCourses: null,
 				books: null,
 				communities: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
 				loading: true,
 				error: null,
-				administeredCourses: null
+				administeredCourses: null,
 			});
 
 			try {
 				let service = await getService();
-				const adminCollection = service.getCollection('AdministeredCourses', 'Courses');
+				const adminCollection = service.getCollection(
+					'AdministeredCourses',
+					'Courses'
+				);
 
-				const administeredCourses = await service.getBatch(adminCollection.getLink('Favorites'));
+				const administeredCourses = await service.getBatch(
+					adminCollection.getLink('Favorites')
+				);
 				this.set({
-					'administeredCourses': administeredCourses.Items,
-					'totalAdministeredCourses': administeredCourses.Total
+					administeredCourses: administeredCourses.Items,
+					totalAdministeredCourses: administeredCourses.Total,
 				});
 			} catch (e) {
 				this.set('error', e);
@@ -267,7 +307,7 @@ class HomePageStore extends Stores.BoundStore {
 		}
 	}
 
-	async reloadCourseFavorites () {
+	async reloadCourseFavorites() {
 		if (this.searchTerm) {
 			this.loaded = false;
 
@@ -278,24 +318,29 @@ class HomePageStore extends Stores.BoundStore {
 				administeredCourses: null,
 				books: null,
 				communities: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
 				loading: true,
 				error: null,
-				courses: null
+				courses: null,
 			});
 
 			try {
 				let service = await getService();
-				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+				const enrolledCollection = service.getCollection(
+					'EnrolledCourses',
+					'Courses'
+				);
 
-				const courses = await service.getBatch(enrolledCollection.getLink('Favorites'));
+				const courses = await service.getBatch(
+					enrolledCollection.getLink('Favorites')
+				);
 				this.set({
-					'courses': courses.Items,
-					'totalCourses': courses.Total
+					courses: courses.Items,
+					totalCourses: courses.Total,
 				});
 			} catch (e) {
 				this.set('error', e);
@@ -307,7 +352,7 @@ class HomePageStore extends Stores.BoundStore {
 		}
 	}
 
-	async reloadCommunities () {
+	async reloadCommunities() {
 		if (this.searchTerm) {
 			this.loaded = false;
 
@@ -318,14 +363,14 @@ class HomePageStore extends Stores.BoundStore {
 				administeredCourses: null,
 				books: null,
 				communities: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
 				loading: true,
 				error: null,
-				communities: null
+				communities: null,
 			});
 
 			try {
@@ -334,7 +379,7 @@ class HomePageStore extends Stores.BoundStore {
 				const fetchComm = await communities.load();
 
 				this.set({
-					communities: fetchComm
+					communities: fetchComm,
 				});
 			} catch (e) {
 				this.set('error', e);
@@ -345,25 +390,26 @@ class HomePageStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadBooks () {
+	async loadBooks() {
 		let service = await getService();
-		const booksCollection = service.getCollection('VisibleContentBundles', 'ContentBundles');
+		const booksCollection = service.getCollection(
+			'VisibleContentBundles',
+			'ContentBundles'
+		);
 		const booksBatch = await service.get(booksCollection.href);
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending({'books': booksParsed});
+		this.addToPending({ books: booksParsed });
 	}
 
-	async loadCommunities () {
+	async loadCommunities() {
 		let service = await getService();
 		const communities = await service.getCommunities();
 		const fetchedComm = await communities.load(true);
 
-		this.addToPending({'communities': fetchedComm});
+		this.addToPending({ communities: fetchedComm });
 	}
 }
 
-export default decorate(HomePageStore, [
-	mixin(Mixins.Searchable)
-]);
+export default decorate(HomePageStore, [mixin(Mixins.Searchable)]);

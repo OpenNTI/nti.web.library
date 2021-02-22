@@ -1,13 +1,13 @@
-import {getService} from '@nti/web-client';
-import {Stores, Mixins} from '@nti/lib-store';
-import {mixin} from '@nti/lib-decorators';
+import { getService } from '@nti/web-client';
+import { Stores, Mixins } from '@nti/lib-store';
+import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
-import {decorate} from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 
-import {getSemesterText} from '../../utils/Semester';
+import { getSemesterText } from '../../utils/Semester';
 
 class CourseStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
@@ -21,11 +21,11 @@ class CourseStore extends Stores.BoundStore {
 			upcomingCourses: null,
 			currentCourses: null,
 			archivedCourses: null,
-			hasSearchTerm: false
+			hasSearchTerm: false,
 		});
 	}
 
-	handleDispatch = (event) => {
+	handleDispatch = event => {
 		let type = event && (event.type || (event.action || {}).type);
 
 		if (!type) {
@@ -34,13 +34,13 @@ class CourseStore extends Stores.BoundStore {
 			this.reloadUpcoming();
 			this.reloadCurrent();
 
-			if(this.get('archivedCourses')) {
+			if (this.get('archivedCourses')) {
 				this.loadArchivedCourses();
 			}
 		}
-	}
+	};
 
-	async load () {
+	async load() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -50,7 +50,7 @@ class CourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 
 			this.loadSearchTerm();
@@ -62,13 +62,13 @@ class CourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: false
+				hasSearchTerm: false,
 			});
 
 			try {
 				const libraryPromises = [
 					this.loadUpcomingCourses(),
-					this.loadCurrentCourses()
+					this.loadCurrentCourses(),
 				];
 
 				await Promise.all(libraryPromises);
@@ -82,11 +82,13 @@ class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadSearchTerm () {
+	async loadSearchTerm() {
 		const searchTerm = this.searchTerm;
 
 		try {
-			if (searchTerm !== this.searchTerm) { return; }
+			if (searchTerm !== this.searchTerm) {
+				return;
+			}
 
 			await this.searchCourses(searchTerm);
 		} catch (e) {
@@ -98,44 +100,62 @@ class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	splitItemsBySemester (items) {
+	splitItemsBySemester(items) {
 		const semesters = [...new Set(items.map(x => getSemesterText(x)))];
 		let semesterBins = [];
 		semesters.map(semester => {
-			const filteredItems = items.filter(item => getSemesterText(item) === semester);
+			const filteredItems = items.filter(
+				item => getSemesterText(item) === semester
+			);
 
 			semesterBins.push({
 				semester: semester,
-				courses: filteredItems.sort((a, b) => a.getCreatedTime() < b.getCreatedTime())
+				courses: filteredItems.sort(
+					(a, b) => a.getCreatedTime() < b.getCreatedTime()
+				),
 			});
 		});
 
 		return semesterBins;
 	}
 
-	async loadUpcomingCourses () {
+	async loadUpcomingCourses() {
 		let service = await getService();
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+		const enrolledCollection = service.getCollection(
+			'EnrolledCourses',
+			'Courses'
+		);
 
-		const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
+		const upcomingCourses = await service.getBatch(
+			enrolledCollection.getLink('Upcoming')
+		);
 
-		if (this.searchTerm) { return; }
+		if (this.searchTerm) {
+			return;
+		}
 
 		this.set('upcomingCourses', upcomingCourses.Items);
 	}
 
-	async loadCurrentCourses () {
+	async loadCurrentCourses() {
 		let service = await getService();
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+		const enrolledCollection = service.getCollection(
+			'EnrolledCourses',
+			'Courses'
+		);
 
-		const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+		const currentCourses = await service.getBatch(
+			enrolledCollection.getLink('Current')
+		);
 
-		if (this.searchTerm) { return; }
+		if (this.searchTerm) {
+			return;
+		}
 
 		this.set('currentCourses', currentCourses.Items);
 	}
 
-	async reloadUpcoming () {
+	async reloadUpcoming() {
 		if (this.searchTerm) {
 			this.loaded = false;
 
@@ -146,7 +166,7 @@ class CourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 
 			this.loadSearchTerm();
@@ -154,14 +174,19 @@ class CourseStore extends Stores.BoundStore {
 			this.set({
 				loading: true,
 				error: null,
-				upcomingCourses: null
+				upcomingCourses: null,
 			});
 
 			try {
 				let service = await getService();
-				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+				const enrolledCollection = service.getCollection(
+					'EnrolledCourses',
+					'Courses'
+				);
 
-				const upcomingCourses = await service.getBatch(enrolledCollection.getLink('Upcoming'));
+				const upcomingCourses = await service.getBatch(
+					enrolledCollection.getLink('Upcoming')
+				);
 
 				this.set('upcomingCourses', upcomingCourses.Items);
 			} catch (e) {
@@ -172,7 +197,7 @@ class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async reloadCurrent () {
+	async reloadCurrent() {
 		if (this.searchTerm) {
 			this.loaded = false;
 
@@ -183,7 +208,7 @@ class CourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 
 			this.loadSearchTerm();
@@ -191,14 +216,19 @@ class CourseStore extends Stores.BoundStore {
 			this.set({
 				loading: true,
 				error: null,
-				currentCourses: null
+				currentCourses: null,
 			});
 
 			try {
 				let service = await getService();
-				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+				const enrolledCollection = service.getCollection(
+					'EnrolledCourses',
+					'Courses'
+				);
 
-				const currentCourses = await service.getBatch(enrolledCollection.getLink('Current'));
+				const currentCourses = await service.getBatch(
+					enrolledCollection.getLink('Current')
+				);
 
 				this.set('currentCourses', currentCourses.Items);
 			} catch (e) {
@@ -209,7 +239,7 @@ class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadArchivedCourses () {
+	async loadArchivedCourses() {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
@@ -219,23 +249,31 @@ class CourseStore extends Stores.BoundStore {
 				upcomingCourses: null,
 				currentCourses: null,
 				archivedCourses: null,
-				hasSearchTerm: true
+				hasSearchTerm: true,
 			});
 
 			this.loadSearchTerm();
 		} else {
 			this.set({
 				archivedCourses: null,
-				loadArchived: true
+				loadArchived: true,
 			});
 
 			try {
 				let service = await getService();
-				const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
+				const enrolledCollection = service.getCollection(
+					'EnrolledCourses',
+					'Courses'
+				);
 
-				const archivedCourses = await service.getBatch(enrolledCollection.getLink('Archived'));
+				const archivedCourses = await service.getBatch(
+					enrolledCollection.getLink('Archived')
+				);
 
-				this.set('archivedCourses', this.splitItemsBySemester(archivedCourses.Items));
+				this.set(
+					'archivedCourses',
+					this.splitItemsBySemester(archivedCourses.Items)
+				);
 			} catch (e) {
 				this.set('error', e);
 			} finally {
@@ -244,32 +282,58 @@ class CourseStore extends Stores.BoundStore {
 		}
 	}
 
-	async searchCourses (searchTerm) {
+	async searchCourses(searchTerm) {
 		let service = await getService();
-		const enrolledCollection = service.getCollection('EnrolledCourses', 'Courses');
-		const coursesBatch = await service.get(enrolledCollection.href + '?filter=' + searchTerm);
-		const coursesPromises = coursesBatch.Items.map(x => service.getObject(x));
+		const enrolledCollection = service.getCollection(
+			'EnrolledCourses',
+			'Courses'
+		);
+		const coursesBatch = await service.get(
+			enrolledCollection.href + '?filter=' + searchTerm
+		);
+		const coursesPromises = coursesBatch.Items.map(x =>
+			service.getObject(x)
+		);
 		const coursesParsed = await Promise.all(coursesPromises);
 		const today = new Date();
 		let currentCourses = [];
-		const assumeCurrent = coursesParsed.filter(y => y.getStartDate() == null || y.getEndDate() == null && !(y.getStartDate() && y.getStartDate() > today));
+		const assumeCurrent = coursesParsed.filter(
+			y =>
+				y.getStartDate() == null ||
+				(y.getEndDate() == null &&
+					!(y.getStartDate() && y.getStartDate() > today))
+		);
 		currentCourses.push(...assumeCurrent);
-		let currentDate = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() > today));
+		let currentDate = coursesParsed.filter(
+			y =>
+				y.getStartDate() &&
+				y.getStartDate() < today &&
+				y.getEndDate() &&
+				y.getEndDate() > today
+		);
 		currentCourses.push(...currentDate);
 
-		let archivedCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() < today) && (y.getEndDate() && y.getEndDate() < today));
-		let upcomingCourses = coursesParsed.filter(y => (y.getStartDate() && y.getStartDate() > today));
+		let archivedCourses = coursesParsed.filter(
+			y =>
+				y.getStartDate() &&
+				y.getStartDate() < today &&
+				y.getEndDate() &&
+				y.getEndDate() < today
+		);
+		let upcomingCourses = coursesParsed.filter(
+			y => y.getStartDate() && y.getStartDate() > today
+		);
 
-		if (searchTerm !== this.searchTerm) { return; }
+		if (searchTerm !== this.searchTerm) {
+			return;
+		}
 
 		this.set({
-			'currentCourses': currentCourses,
-			'archivedCourses': this.splitItemsBySemester(archivedCourses),
-			'upcomingCourses': upcomingCourses
+			currentCourses: currentCourses,
+			archivedCourses: this.splitItemsBySemester(archivedCourses),
+			upcomingCourses: upcomingCourses,
 		});
 	}
 }
 
-export default decorate(CourseStore, [
-	mixin(Mixins.Searchable)
-]);
+export default decorate(CourseStore, [mixin(Mixins.Searchable)]);
