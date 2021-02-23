@@ -7,7 +7,7 @@ import { scoped } from '@nti/lib-locale';
 import { LinkTo } from '@nti/web-routing';
 
 const styles = stylesheet`
-.add-button {
+.add-button:global(.nti-link-to-path) {
 	color: var(--primary-blue);
 	cursor: pointer;
 	font: normal 600 0.875em/2em var(--body-font-family);
