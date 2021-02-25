@@ -70,25 +70,25 @@ class Home extends React.Component {
 		const canShowCoursesSection = !noCourses || hasCatalog;
 
 		return (
-			<Grid className="library-view">
+			<div className="library-view">
 				{loading ? (
 					<Loading.Mask />
 				) : (
 					<>
 						{admin && (
-							<Grid.Header>
+							<Grid.SingleColumn>
 								<Responsive.Item
 									query={Responsive.isWebappContext}
 									component={AdminToolbar}
 									store={store}
 								/>
-							</Grid.Header>
+							</Grid.SingleColumn>
 						)}
 
 						{emptySearch ? (
-							<Grid.Header className="no-results">No results found.</Grid.Header>
+							<Grid.SingleColumn className="no-results">No results found.</Grid.SingleColumn>
 						) : (
-							<Grid.Header>
+							<>
 								{!noCommunities && (
 									<Communities items={communities} />
 								)}
@@ -114,11 +114,11 @@ class Home extends React.Component {
 								)}
 
 								{!noBooks && <Books items={books} />}
-							</Grid.Header>
+							</>
 						)}
 					</>
 				)}
-			</Grid>
+			</div>
 		);
 	}
 }
