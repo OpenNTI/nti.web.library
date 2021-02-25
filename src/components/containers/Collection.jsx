@@ -1,11 +1,11 @@
-import './Collection.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import getItem from '../items';
 
-import CenteredGrid from './CenteredGrid';
+import Grid from './Grid';
+import './Collection.scss';
 
 const isEmpty = s => s == null || s === '';
 
@@ -16,8 +16,6 @@ const Title = ({title, subtitle}) => isEmpty(title) ? null : (
 	</h5>
 );
 
-const Container = props => <CenteredGrid colsize={242} gap={14} {...props} />
-
 export default function LibraryCollection ({
 	children,
 	className,
@@ -27,12 +25,12 @@ export default function LibraryCollection ({
 	onModification,
 }) {
 	return (
-		<Container className={cx('library-collection', className)}>
-			<CenteredGrid.Header>
+		<Grid className={cx('library-collection', className)}>
+			<Grid.Header>
 				<Title title={title} subtitle={subtitle} />
 				{children}
-			</CenteredGrid.Header>
-			<Container as="ul">
+			</Grid.Header>
+			<Grid as="ul">
 				{list.map(item => {
 					const Item = getItem(item);
 					const key =
@@ -56,8 +54,8 @@ export default function LibraryCollection ({
 						)
 					);
 				})}
-			</Container>
-		</Container>
+			</Grid>
+		</Grid>
 	);
 }
 

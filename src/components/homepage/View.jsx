@@ -10,7 +10,7 @@ import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
 import Courses from '../containers/CoursesContainer';
 import Books from '../containers/BooksContainer';
-import CenteredGrid from '../containers/CenteredGrid';
+import Grid from '../containers/Grid';
 
 import HomePageStore from './HomeStore';
 
@@ -70,25 +70,25 @@ class Home extends React.Component {
 		const canShowCoursesSection = !noCourses || hasCatalog;
 
 		return (
-			<CenteredGrid className="library-view">
+			<Grid className="library-view">
 				{loading ? (
 					<Loading.Mask />
 				) : (
 					<>
 						{admin && (
-							<CenteredGrid.Header>
+							<Grid.Header>
 								<Responsive.Item
 									query={Responsive.isWebappContext}
 									component={AdminToolbar}
 									store={store}
 								/>
-							</CenteredGrid.Header>
+							</Grid.Header>
 						)}
 
 						{emptySearch ? (
-							<CenteredGrid.Header className="no-results">No results found.</CenteredGrid.Header>
+							<Grid.Header className="no-results">No results found.</Grid.Header>
 						) : (
-							<CenteredGrid.Header>
+							<Grid.Header>
 								{!noCommunities && (
 									<Communities items={communities} />
 								)}
@@ -114,11 +114,11 @@ class Home extends React.Component {
 								)}
 
 								{!noBooks && <Books items={books} />}
-							</CenteredGrid.Header>
+							</Grid.Header>
 						)}
 					</>
 				)}
-			</CenteredGrid>
+			</Grid>
 		);
 	}
 }
