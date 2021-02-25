@@ -1,6 +1,7 @@
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fill, var(--colsize, 242px));
+	grid-auto-rows: min-content;
     gap: var(--gap, 14px);
     margin: 0;
     justify-content: center;
