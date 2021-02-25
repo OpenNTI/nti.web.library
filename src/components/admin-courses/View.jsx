@@ -9,6 +9,7 @@ import { LinkTo } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
 
+const { Grid } = CourseCollection;
 const { useResolver } = Hooks;
 const { isPending, isResolved, isErrored } = useResolver;
 
@@ -30,12 +31,14 @@ export default function AdminCourses() {
 
 	return (
 		<div className="courses-view">
-			<div className="breadcrumb">
-				<LinkTo.Name name="library-home" className="home-link">
-					Home
-				</LinkTo.Name>
-				<div className="title">{t('admin')}</div>
-			</div>
+			<Grid singleColumn>
+				<div className="breadcrumb">
+					<LinkTo.Name name="library-home" className="home-link">
+						Home
+					</LinkTo.Name>
+					<div className="title">{t('admin')}</div>
+				</div>
+			</Grid>
 			<Loading.Placeholder
 				loading={loading}
 				fallback={<Loading.Spinner.Large />}
