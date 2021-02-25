@@ -17,7 +17,7 @@ export default class Courses extends React.Component {
 		} = this;
 
 		return (
-			<div>
+			<>
 				{items.map(item => {
 					return (
 						<Container
@@ -29,7 +29,7 @@ export default class Courses extends React.Component {
 						/>
 					);
 				})}
-			</div>
+			</>
 		);
 	}
 
@@ -40,18 +40,16 @@ export default class Courses extends React.Component {
 		let section = admin ? 'admin' : 'courses';
 		section = itemsType ? itemsType + section : section;
 
-		return (
-			<div>
-				{itemsType !== 'archived' ? (
-					<Container
-						section={section}
-						items={items}
-						onModification={onModification}
-					/>
-				) : (
-					this.splitItemsBySemester(section)
-				)}
-			</div>
-		);
+		return itemsType !== 'archived'
+			? (
+				<Container
+					section={section}
+					items={items}
+					onModification={onModification}
+				/>
+			)
+			: (
+				this.splitItemsBySemester(section)
+			)
 	}
 }

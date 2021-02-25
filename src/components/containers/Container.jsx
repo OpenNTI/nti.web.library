@@ -5,14 +5,17 @@ import { EmptyList } from '@nti/web-commons';
 
 import Heading from '../SectionHeading';
 
+import Grid from './Grid';
 import Collection from './Collection';
 
 export default function Container({ section, items, date, onModification }) {
-	return !items || items.length === 0 ? (
-		<div className="library-collection">
-			<Heading section={section} empty />
-			<EmptyList type={`library-${section}`} />
-		</div>
+	return !items?.length ? (
+		<Grid className="library-collection">
+			<Grid.Header>
+				<Heading section={section} empty />
+				<EmptyList type={`library-${section}`} />
+			</Grid.Header>
+		</Grid>
 	) : (
 		<Collection
 			className={section}
