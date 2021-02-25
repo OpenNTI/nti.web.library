@@ -43,59 +43,16 @@ export default function LibraryCollection ({
 
 					return (
 						Item && (
-							<>
-								<li
-									className="library-object"
-									data-testid={key}
-									key={key}
-								>
-									<Item
-										item={item}
-										onModification={onModification}
-									/>
-								</li>
-								{/* repeated for dev purposes. take this out. */}
-								<li
-									className="library-object"
-									data-testid={key}
-									key={key + Math.random()}
-								>
-									<Item
-										item={item}
-										onModification={onModification}
-									/>
-								</li>
-								<li
-									className="library-object"
-									data-testid={key}
-									key={key + Math.random()}
-								>
-									<Item
-										item={item}
-										onModification={onModification}
-									/>
-								</li>
-								<li
-									className="library-object"
-									data-testid={key}
-									key={key + Math.random()}
-								>
-									<Item
-										item={item}
-										onModification={onModification}
-									/>
-								</li>
-								<li
-									className="library-object"
-									data-testid={key}
-									key={key + Math.random()}
-								>
-									<Item
-										item={item}
-										onModification={onModification}
-									/>
-								</li>
-							</>
+							<li
+								className="library-object"
+								data-testid={key}
+								key={key}
+							>
+								<Item
+									item={item}
+									onModification={onModification}
+								/>
+							</li>
 						)
 					);
 				})}
