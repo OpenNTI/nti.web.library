@@ -12,7 +12,7 @@ export default function CenteredGrid ({as: Cmp = 'div', colsize, gap = 0, classN
 	const cssProperties = {
 		'--colsize': numpx(colsize),
 		'--gap': numpx(gap),
-	}
+	};
 	return (
 		<Cmp
 			style={cssProperties}
@@ -23,7 +23,9 @@ export default function CenteredGrid ({as: Cmp = 'div', colsize, gap = 0, classN
 }
 
 // sets 'grid-column: 1 / -1' to occupy a full row
-CenteredGrid.Header = ({as: Cmp = 'div', className, ...props}) => <Cmp className={cx(styles.header, className)} {...props} />
+CenteredGrid.Header = ({as: Cmp = 'div', className, ...props}) => (
+	<Cmp className={cx(styles.header, className)} {...props} />
+);
 
 CenteredGrid.propTypes = {
 	as: PropTypes.node,
@@ -32,4 +34,4 @@ CenteredGrid.propTypes = {
 		PropTypes.string // e.g. 'minmax(200, 1fr)'
 	]).isRequired,
 	gap: PropTypes.number
-}
+};
