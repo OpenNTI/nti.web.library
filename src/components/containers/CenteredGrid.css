@@ -1,0 +1,13 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, var(--colsize, 242px));
+    gap: var(--gap, 14px);
+    margin: 0;
+    justify-content: center;
+}
+
+/* headers and directly nested containers occupy the full available width */
+.container > .container,
+.header {
+	grid-column: 1 / -1;
+}
