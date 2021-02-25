@@ -2,11 +2,13 @@ import './Container.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EmptyList } from '@nti/web-commons';
+import { Collection as CourseCollection } from '@nti/web-course';
 
 import Heading from '../SectionHeading';
 
-import Grid from './Grid';
 import Collection from './Collection';
+
+const {Grid} = CourseCollection;
 
 export default function Container({ section, items, date, onModification }) {
 	return !items?.length ? (

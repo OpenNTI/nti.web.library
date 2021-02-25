@@ -5,16 +5,17 @@ import { decorate } from '@nti/lib-commons';
 import { Loading, Layouts } from '@nti/web-commons';
 import { searchable, contextual } from '@nti/web-search';
 import { scoped } from '@nti/lib-locale';
+import { Collection } from '@nti/web-course';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
 import Courses from '../containers/CoursesContainer';
 import Books from '../containers/BooksContainer';
-import Grid from '../containers/Grid';
 
 import HomePageStore from './HomeStore';
 
 const { Responsive } = Layouts;
+const { Grid } = Collection;
 
 const t = scoped('library.components.Home', {
 	home: 'Home',
@@ -76,17 +77,17 @@ class Home extends React.Component {
 				) : (
 					<>
 						{admin && (
-							<Grid.SingleColumn>
+							<Grid singleColumn>
 								<Responsive.Item
 									query={Responsive.isWebappContext}
 									component={AdminToolbar}
 									store={store}
 								/>
-							</Grid.SingleColumn>
+							</Grid>
 						)}
 
 						{emptySearch ? (
-							<Grid.SingleColumn className="no-results">No results found.</Grid.SingleColumn>
+							<Grid singleColumn className="no-results">No results found.</Grid>
 						) : (
 							<>
 								{!noCommunities && (

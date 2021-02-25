@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {Collection as CourseCollection } from '@nti/web-course';
 
 import getItem from '../items';
 
-import Grid from './Grid';
 import './Collection.scss';
 
+const { Grid } = CourseCollection;
 const isEmpty = s => s == null || s === '';
 
 const Title = ({title, subtitle}) => isEmpty(title) ? null : (
