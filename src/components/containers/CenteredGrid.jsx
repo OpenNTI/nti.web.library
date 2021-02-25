@@ -8,7 +8,7 @@ import styles from './CenteredGrid.css';
 const numpx = num => typeof num === 'number' ? `${num}px` : num;
 
 // Renders a grid container that fills with as many columns as will fit, centered
-export default function CenteredGrid ({as: Cmp = 'div', colsize, gap = 0, className, ...other}) {
+export default function CenteredGrid ({as: Cmp = 'div', colsize = 242, gap = 14, className, ...other}) {
 	const cssProperties = {
 		'--colsize': numpx(colsize),
 		'--gap': numpx(gap),
@@ -32,6 +32,6 @@ CenteredGrid.propTypes = {
 	colsize: PropTypes.oneOfType([
 		PropTypes.number, // e.g. 200
 		PropTypes.string // e.g. 'minmax(200, 1fr)'
-	]).isRequired,
+	]),
 	gap: PropTypes.number
 };
