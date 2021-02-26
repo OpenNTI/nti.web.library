@@ -60,19 +60,18 @@ class Home extends React.Component {
 			store,
 		} = this.props;
 
-		const noCommunities = !communities || communities.length === 0;
-		const noCourses = !courses || courses.length === 0;
-		const noAdminCourses =
-			!administeredCourses || administeredCourses.length === 0;
-		const noBooks = !books || books.length === 0;
+		const hasCommunities = communities?.length > 0;
+		const hasCourses = courses?.length > 0;
+		const hasAdminCourses = administeredCourses?.length > 0;
+		const hasBooks = books?.length > 0;
 		const emptySearch =
 			hasSearchTerm &&
-			noCommunities &&
-			noCourses &&
-			noAdminCourses &&
-			noBooks;
+			!hasCommunities &&
+			!hasCourses &&
+			!hasAdminCourses &&
+			!hasBooks;
 
-		const canShowCoursesSection = !noCourses || hasCatalog;
+		const canShowCoursesSection = hasCourses || hasCatalog;
 
 		return (
 			<div className="library-view">
@@ -96,12 +95,12 @@ class Home extends React.Component {
 							</Grid>
 						) : (
 							<>
-								{!noCommunities && (
+								{hasCommunities && (
 									<Communities items={communities} />
 								)}
 
 								{((!hasSearchTerm && canShowCoursesSection) ||
-									(hasSearchTerm && !noCourses)) && (
+									(hasSearchTerm && hasCourses)) && (
 									<Courses
 										items={courses}
 										onModification={
@@ -110,7 +109,7 @@ class Home extends React.Component {
 									/>
 								)}
 
-								{!noAdminCourses && (
+								{hasAdminCourses && (
 									<Courses
 										admin
 										items={administeredCourses}
@@ -120,7 +119,7 @@ class Home extends React.Component {
 									/>
 								)}
 
-								{!noBooks && <Books items={books} />}
+								{hasBooks && <Books items={books} />}
 							</>
 						)}
 					</>
