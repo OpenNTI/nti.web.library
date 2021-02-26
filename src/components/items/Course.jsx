@@ -18,6 +18,12 @@ export default class Course extends React.Component {
 			props: { item, onModification },
 		} = this;
 
-		return <Card course={item} onModification={onModification} />;
+		return (
+			<Card
+				course={item}
+				onModification={onModification}
+				variant="auto"
+			/>
+		);
 	}
 }
