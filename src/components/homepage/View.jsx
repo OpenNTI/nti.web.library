@@ -17,6 +17,10 @@ import HomePageStore from './HomeStore';
 const { Responsive } = Layouts;
 const { Grid } = Collection;
 
+const FullWidth = styled.div`
+	grid-column: full;
+`;
+
 const t = scoped('library.components.Home', {
 	home: 'Home',
 });
@@ -87,7 +91,9 @@ class Home extends React.Component {
 						)}
 
 						{emptySearch ? (
-							<Grid singleColumn className="no-results">No results found.</Grid>
+							<Grid singleColumn className="no-results">
+								<FullWidth>No results found.</FullWidth>
+							</Grid>
 						) : (
 							<>
 								{!noCommunities && (
