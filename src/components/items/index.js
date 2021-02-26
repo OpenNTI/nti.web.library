@@ -6,9 +6,5 @@ import Course from './Course';
 const WIDGETS = [Bundle, Community, Course];
 
 export default function getItem(item) {
-	for (let widget of WIDGETS) {
-		if (widget.handles && widget.handles(item)) {
-			return widget;
-		}
-	}
+	return WIDGETS.find(widget => widget.handles?.(item));
 }
