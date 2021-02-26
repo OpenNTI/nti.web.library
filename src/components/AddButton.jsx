@@ -8,10 +8,12 @@ import { LinkTo } from '@nti/web-routing';
 
 const styles = stylesheet`
 .add-button:global(.nti-link-to-path) {
-	color: var(--primary-blue);
+	color: white;
+	background-color: var(--secondary-green);
+	border-radius: 4px;
+	padding: 0.25rem 1rem;
 	cursor: pointer;
-	font: normal 600 0.875em/2em var(--body-font-family);
-	font-size: 14px;
+	font: normal 400 1rem/1.375 var(--body-font-family);
 	text-decoration: none;
 }
 `;
