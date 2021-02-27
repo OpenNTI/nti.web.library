@@ -1,4 +1,3 @@
-import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
@@ -8,6 +7,22 @@ import { Collection as CourseCollection } from '@nti/web-course';
 import { LinkTo, Router } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
+
+import styles from './View.css';
+
+const AddCourseLink = styled(LinkTo.Path)`
+	cursor: pointer;
+	font: normal 300 0.875em/35px var(--body-font-family);
+	color: white;
+	text-align: center;
+	border-radius: 5px;
+	padding: 0 1.5em;
+	background-color: var(--secondary-green);
+	text-decoration: none;
+	margin-left: auto;
+	font-size: 14px;
+	line-height: 35px;
+`;
 
 const { useResolver } = Hooks;
 const { isPending, isResolved, isErrored } = useResolver;
@@ -36,19 +51,19 @@ function EnrolledCourses({ basePath }) {
 	const collection = isResolved(resolver) ? resolver : null;
 
 	return (
-		<div className="courses-view">
-			<div className="breadcrumb">
-				<LinkTo.Name name="library-home" className="home-link">
+		<div className={styles.coursesView}>
+			<div className={styles.breadcrumb}>
+				<LinkTo.Name name="library-home" className={styles.homeLink}>
 					Home
 				</LinkTo.Name>
-				<div className="title">{t('courses')}</div>
+				<div className={styles.title}>{t('courses')}</div>
 
-				<LinkTo.Path
+				<AddCourseLink
 					to={baseroute + '/catalog'}
-					className="add-courses-button"
+					data-testid="add-courses-button"
 				>
 					{t('add')}
-				</LinkTo.Path>
+				</AddCourseLink>
 			</div>
 			<Loading.Placeholder
 				loading={loading}

@@ -1,4 +1,3 @@
-import './View.scss';
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
@@ -8,6 +7,7 @@ import { Collection as CourseCollection } from '@nti/web-course';
 import { LinkTo } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
+import styles from '../courses/View.css';
 
 const { Grid } = CourseCollection;
 const { useResolver } = Hooks;
@@ -30,13 +30,13 @@ export default function AdminCourses() {
 	const collection = isResolved(resolver) ? resolver : null;
 
 	return (
-		<div className="courses-view">
+		<div className={styles.coursesView}>
 			<Grid singleColumn>
-				<div className="breadcrumb">
-					<LinkTo.Name name="library-home" className="home-link">
+				<div className={styles.breadcrumb}>
+					<LinkTo.Name name="library-home" className={styles.homeLink}>
 						Home
 					</LinkTo.Name>
-					<div className="title">{t('admin')}</div>
+					<div className={styles.title}>{t('admin')}</div>
 				</div>
 			</Grid>
 			<Loading.Placeholder
