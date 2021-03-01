@@ -77,7 +77,7 @@ export default function LibraryCollection({
 								>
 									<Item
 										variant={
-											columns > 1 ? 'auto' : 'list-item'
+											columns > 1 ? 'card' : 'list-item'
 										}
 										item={item}
 										onModification={onModification}
