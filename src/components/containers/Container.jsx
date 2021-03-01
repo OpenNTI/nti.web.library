@@ -1,4 +1,3 @@
-import './Container.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EmptyList } from '@nti/web-commons';
@@ -8,14 +7,21 @@ import Heading from '../SectionHeading';
 
 import Collection from './Collection';
 
-const {Grid} = CourseCollection;
+const { Grid } = CourseCollection;
+
+const Empty = styled(EmptyList)`
+	text-align: center;
+	color: var(--tertiary-grey);
+	font-size: 2rem;
+	grid-column: full;
+`;
 
 export default function Container({ section, items, date, onModification }) {
 	return !items?.length ? (
 		<Grid className="library-collection">
 			<Grid.Header>
 				<Heading section={section} empty />
-				<EmptyList type={`library-${section}`} />
+				<Empty type={`library-${section}`} />
 			</Grid.Header>
 		</Grid>
 	) : (
