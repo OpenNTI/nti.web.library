@@ -59,29 +59,34 @@ export default function LibraryCollection({
 				{children}
 			</Grid.Header>
 			<Grid as={List}>
-				{list.map(item => {
-					const Item = getItem(item);
-					const key =
-						item.NTIID ||
-						item.href ||
-						item?.CatalogEntry?.NTIID ||
-						item?.CatalogEntry?.href;
+				{columns => {
+					return list.map(item => {
+						const Item = getItem(item);
+						const key =
+							item.NTIID ||
+							item.href ||
+							item?.CatalogEntry?.NTIID ||
+							item?.CatalogEntry?.href;
 
-					return (
-						Item && (
-							<ListItem
-								className="library-object"
-								data-testid={key}
-								key={key}
-							>
-								<Item
-									item={item}
-									onModification={onModification}
-								/>
-							</ListItem>
-						)
-					);
-				})}
+						return (
+							Item && (
+								<ListItem
+									className="library-object"
+									data-testid={key}
+									key={key}
+								>
+									<Item
+										variant={
+											columns > 1 ? 'auto' : 'list-item'
+										}
+										item={item}
+										onModification={onModification}
+									/>
+								</ListItem>
+							)
+						);
+					});
+				}}
 			</Grid>
 		</Container>
 	);
