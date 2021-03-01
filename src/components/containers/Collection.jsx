@@ -36,7 +36,6 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-	width: 242px;
 	margin: 0;
 	position: relative;
 	a {
