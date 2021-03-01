@@ -3,6 +3,7 @@
 .library-section-heading.library-section-heading {
 	display: flex;
 	align-items: baseline;
+	grid-column: full;
 
 	.course-section-heading {
 		width: 100%;
