@@ -40,16 +40,14 @@ export default class Courses extends React.Component {
 		let section = admin ? 'admin' : 'courses';
 		section = itemsType ? itemsType + section : section;
 
-		return itemsType !== 'archived'
-			? (
-				<Container
-					section={section}
-					items={items}
-					onModification={onModification}
-				/>
-			)
-			: (
-				this.splitItemsBySemester(section)
-			)
+		return itemsType !== 'archived' ? (
+			<Container
+				section={section}
+				items={items}
+				onModification={onModification}
+			/>
+		) : (
+			this.splitItemsBySemester(section)
+		);
 	}
 }

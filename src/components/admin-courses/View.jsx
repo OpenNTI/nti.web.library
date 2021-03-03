@@ -33,7 +33,10 @@ export default function AdminCourses() {
 		<div className={styles.coursesView}>
 			<Grid singleColumn>
 				<div className={styles.breadcrumb}>
-					<LinkTo.Name name="library-home" className={styles.homeLink}>
+					<LinkTo.Name
+						name="library-home"
+						className={styles.homeLink}
+					>
 						Home
 					</LinkTo.Name>
 					<div className={styles.title}>{t('admin')}</div>
