@@ -1,5 +1,3 @@
-import './SectionTitle.scss';
-import React from 'react';
 import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
 
@@ -19,6 +17,23 @@ const TitleMap = {
 	archived: 'archivedcourses',
 };
 
+const SectionTitle = styled('h1').attrs(({ section, ...props }) => ({
+	...props,
+	children: t(section),
+}))`
+	font: normal 300 1.25em/2em var(--body-font-family);
+	color: white;
+	font-size: 18px;
+	margin: 0;
+	white-space: nowrap;
+
+	:global(.library-light-background) & {
+		color: var(--secondary-grey);
+	}
+`;
+
+export default SectionTitle;
+
 SectionTitle.getTitle = section => {
 	const key = TitleMap[section] ?? section;
 
@@ -29,16 +44,3 @@ SectionTitle.propTypes = {
 	section: PropTypes.string.isRequired,
 	href: PropTypes.string,
 };
-
-export default function SectionTitle(props) {
-	const { section, href } = props;
-	let Component = 'h1';
-
-	let p = {
-		className: 'library-section-title',
-		children: t(section),
-		href,
-	};
-
-	return <Component {...p} />;
-}
