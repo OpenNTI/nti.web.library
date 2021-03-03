@@ -4,29 +4,18 @@ import { scoped } from '@nti/lib-locale';
 import { getService } from '@nti/web-client';
 import { Loading, Hooks, Page } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
-import { LinkTo, Router } from '@nti/web-routing';
+import { Router } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
 
-import styles from './View.css';
-
-const AddCourseLink = styled(LinkTo.Path)`
-	cursor: pointer;
-	font: normal 300 0.875em/35px var(--body-font-family);
-	text-align: center;
-	border-radius: 5px;
-	padding: 0 1.5em;
-	text-decoration: none;
-	margin-left: auto;
-	font-size: 14px;
-	line-height: 35px;
-
-	/* double-class-specificity to ensure these colors are applied over single-class-specificity */
-	&& {
-		color: white;
-		background-color: var(--secondary-green);
-	}
-`;
+import {
+	Container,
+	Toolbar,
+	Breadcrumbs,
+	HomeCrumb,
+	CurrentSectionTitleCrumb,
+	AddCourseLink,
+} from './parts';
 
 const { useResolver } = Hooks;
 const { isPending, isResolved, isErrored } = useResolver;
@@ -55,12 +44,14 @@ function EnrolledCourses({ basePath }) {
 	const collection = isResolved(resolver) ? resolver : null;
 
 	return (
-		<div className={styles.coursesView}>
-			<div className={styles.breadcrumb}>
-				<LinkTo.Name name="library-home" className={styles.homeLink}>
-					Home
-				</LinkTo.Name>
-				<div className={styles.title}>{t('courses')}</div>
+		<Container>
+			<Toolbar>
+				<Breadcrumbs>
+					<HomeCrumb>Home</HomeCrumb>
+					<CurrentSectionTitleCrumb>
+						{t('courses')}
+					</CurrentSectionTitleCrumb>
+				</Breadcrumbs>
 
 				<AddCourseLink
 					to={baseroute + '/catalog'}
@@ -68,7 +59,7 @@ function EnrolledCourses({ basePath }) {
 				>
 					{t('add')}
 				</AddCourseLink>
-			</div>
+			</Toolbar>
 			<Loading.Placeholder
 				loading={loading}
 				fallback={<Loading.Spinner.Large />}
@@ -81,7 +72,7 @@ function EnrolledCourses({ basePath }) {
 					/>
 				)}
 			</Loading.Placeholder>
-		</div>
+		</Container>
 	);
 }
 

@@ -4,10 +4,15 @@ import { scoped } from '@nti/lib-locale';
 import { getService } from '@nti/web-client';
 import { Hooks, Loading, Page } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
-import { LinkTo } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
-import styles from '../courses/View.css';
+import {
+	Container,
+	Toolbar,
+	Breadcrumbs,
+	HomeCrumb,
+	CurrentSectionTitleCrumb,
+} from '../courses/parts';
 
 const { Grid } = CourseCollection;
 const { useResolver } = Hooks;
@@ -30,17 +35,16 @@ export default function AdminCourses() {
 	const collection = isResolved(resolver) ? resolver : null;
 
 	return (
-		<div className={styles.coursesView}>
+		<Container>
 			<Grid singleColumn>
-				<div className={styles.breadcrumb}>
-					<LinkTo.Name
-						name="library-home"
-						className={styles.homeLink}
-					>
-						Home
-					</LinkTo.Name>
-					<div className={styles.title}>{t('admin')}</div>
-				</div>
+				<Toolbar>
+					<Breadcrumbs>
+						<HomeCrumb>Home</HomeCrumb>
+						<CurrentSectionTitleCrumb>
+							{t('admin')}
+						</CurrentSectionTitleCrumb>
+					</Breadcrumbs>
+				</Toolbar>
 			</Grid>
 			<Loading.Placeholder
 				loading={loading}
@@ -54,6 +58,6 @@ export default function AdminCourses() {
 					/>
 				)}
 			</Loading.Placeholder>
-		</div>
+		</Container>
 	);
 }
