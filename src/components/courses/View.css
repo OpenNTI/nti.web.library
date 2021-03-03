@@ -1,5 +1,5 @@
 .courses-view {
-	min-height: calc(100vh - 70px);
+	min-height: calc( 100vh - var(--nt-app-top-offset, 70px) - var(--webapp-library-top-gap) );
 	height: auto !important;
 	width: 1024px;
 	max-width: 100vw;
