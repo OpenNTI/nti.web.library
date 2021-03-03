@@ -13,15 +13,19 @@ import styles from './View.css';
 const AddCourseLink = styled(LinkTo.Path)`
 	cursor: pointer;
 	font: normal 300 0.875em/35px var(--body-font-family);
-	color: white;
 	text-align: center;
 	border-radius: 5px;
 	padding: 0 1.5em;
-	background-color: var(--secondary-green);
 	text-decoration: none;
 	margin-left: auto;
 	font-size: 14px;
 	line-height: 35px;
+
+	/* double-class-specificity to ensure these colors are applied over single-class-specificity */
+	&& {
+		color: white;
+		background-color: var(--secondary-green);
+	}
 `;
 
 const { useResolver } = Hooks;
