@@ -76,7 +76,8 @@
 
 @include respond-to(handhelds) {
 	.library-view {
-		max-width: 100vw;
+		max-width: calc(100vw - 1rem);
+		margin: 0 auto;
 
 		.no-results {
 			font-size: 2rem;
