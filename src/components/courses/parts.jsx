@@ -6,7 +6,7 @@ export const Container = styled.div`
 	);
 	height: auto !important;
 	width: 1024px;
-	max-width: 100vw;
+	max-width: 100%;
 	font: normal 300 1.25em/2em var(--body-font-family);
 	font-size: 20px;
 `;
