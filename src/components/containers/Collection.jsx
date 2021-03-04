@@ -18,8 +18,10 @@ const Title = ({ title, subtitle }) =>
 
 const Container = styled(Grid)`
 	margin-bottom: 30px;
-	width: 100vw;
-	max-width: 100%;
+
+	/* Grids are blocks, which fill their container's width leave these unset:
+	/* width: 100vw;
+	max-width: 100%; */
 
 	@media (--respond-to-handhelds) {
 		margin-bottom: 5px;
