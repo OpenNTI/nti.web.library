@@ -6,6 +6,7 @@ import { BookCard } from '@nti/web-content';
 export default class Bundle extends React.Component {
 	static propTypes = {
 		item: PropTypes.object.isRequired,
+		variant: PropTypes.string,
 	};
 
 	static handles(item) {
@@ -14,9 +15,9 @@ export default class Bundle extends React.Component {
 
 	render() {
 		const {
-			props: { item },
+			props: { item, variant },
 		} = this;
 
-		return <BookCard bundle={item} />;
+		return <BookCard bundle={item} variant={variant} />;
 	}
 }
