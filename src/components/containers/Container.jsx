@@ -14,6 +14,9 @@ const Empty = styled(EmptyList)`
 	color: var(--tertiary-grey);
 	font-size: 2rem;
 	grid-column: full;
+
+	/* safari 13 bug doesn't know where "full" starts */
+	grid-column-start: 1;
 `;
 
 export default function Container({ section, items, date, onModification }) {

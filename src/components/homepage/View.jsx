@@ -19,6 +19,9 @@ const { Grid } = Collection;
 
 const FullWidth = styled.div`
 	grid-column: full;
+
+	/* safari 13 bug doesn't know where "full" starts */
+	grid-column-start: 1;
 `;
 
 const t = scoped('library.components.Home', {
