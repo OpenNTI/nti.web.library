@@ -1,6 +1,7 @@
 import './SectionHeading.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import { decorate } from '@nti/lib-commons';
 import { LinkTo } from '@nti/web-routing';
 import { Connectors } from '@nti/lib-store';

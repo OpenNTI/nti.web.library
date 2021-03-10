@@ -1,6 +1,7 @@
 import './Bundle.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { BookCard } from '@nti/web-content';
 
 export default class Bundle extends React.Component {

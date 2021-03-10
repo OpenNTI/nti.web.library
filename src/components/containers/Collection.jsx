@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+
 import { Collection as CourseCollection } from '@nti/web-course';
 
 import getItem from '../items';

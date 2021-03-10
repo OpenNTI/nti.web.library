@@ -1,6 +1,7 @@
 import './View.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import { Flyout, Prompt } from '@nti/web-commons';
 import { Editor, Templates } from '@nti/web-course';
 import { getService } from '@nti/web-client';

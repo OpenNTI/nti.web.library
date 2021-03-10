@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { EmptyList } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
 
