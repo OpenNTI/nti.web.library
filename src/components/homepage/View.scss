@@ -26,6 +26,8 @@
 	.library-view {
 		max-width: calc(100vw - 1rem);
 		margin: 0 auto;
+		left: auto !important; // ext be damned
+		right: auto !important; // ext be damned
 
 		.no-results {
 			font-size: 2rem;
