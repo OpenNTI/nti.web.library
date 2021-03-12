@@ -7,7 +7,9 @@
 		100vh - var(--nt-app-top-offset, 70px) - var(--webapp-library-top-gap)
 	);
 	height: auto !important;
-	width: 100vw;
+	width: 100vw !important; // ext be damned
+	left: auto !important; // ext be damned
+	right: auto !important; // ext be damned
 	max-width: 100%;
 	margin: 0;
 	top: 32px;
@@ -26,8 +28,6 @@
 	.library-view {
 		max-width: calc(100vw - 1rem);
 		margin: 0 auto;
-		left: auto !important; // ext be damned
-		right: auto !important; // ext be damned
 
 		.no-results {
 			font-size: 2rem;
