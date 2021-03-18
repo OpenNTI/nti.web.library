@@ -86,10 +86,6 @@ class CourseStore extends Stores.BoundStore {
 		const searchTerm = this.searchTerm;
 
 		try {
-			if (searchTerm !== this.searchTerm) {
-				return;
-			}
-
 			await this.searchCourses(searchTerm);
 		} catch (e) {
 			this.set('error', e);
