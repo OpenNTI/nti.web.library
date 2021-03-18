@@ -6,6 +6,16 @@ import { decorate } from '@nti/lib-commons';
 
 import { getSemesterText } from '../../utils/Semester';
 
+const initialValues = {
+	loading: true,
+	loadArchived: false,
+	error: null,
+	upcomingCourses: null,
+	currentCourses: null,
+	archivedCourses: null,
+	hasSearchTerm: false,
+};
+
 class CourseStore extends Stores.BoundStore {
 	constructor() {
 		super();
@@ -14,15 +24,7 @@ class CourseStore extends Stores.BoundStore {
 		this.loaded = false;
 		this.prevSearch = false;
 
-		this.set({
-			loading: true,
-			loadArchived: false,
-			error: null,
-			upcomingCourses: null,
-			currentCourses: null,
-			archivedCourses: null,
-			hasSearchTerm: false,
-		});
+		this.set({ ...initialValues });
 	}
 
 	handleDispatch = event => {
@@ -44,26 +46,13 @@ class CourseStore extends Stores.BoundStore {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
-				loading: true,
-				loadArchived: false,
-				error: null,
-				upcomingCourses: null,
-				currentCourses: null,
-				archivedCourses: null,
+				...initialValues,
 				hasSearchTerm: true,
 			});
 
 			this.loadSearchTerm();
 		} else if (!this.loaded || this.prevSearch) {
-			this.set({
-				loading: true,
-				loadArchived: false,
-				error: null,
-				upcomingCourses: null,
-				currentCourses: null,
-				archivedCourses: null,
-				hasSearchTerm: false,
-			});
+			this.set({ ...initialValues });
 
 			try {
 				const libraryPromises = [
@@ -156,12 +145,7 @@ class CourseStore extends Stores.BoundStore {
 			this.loaded = false;
 
 			this.set({
-				loading: true,
-				loadArchived: false,
-				error: null,
-				upcomingCourses: null,
-				currentCourses: null,
-				archivedCourses: null,
+				...initialValues,
 				hasSearchTerm: true,
 			});
 
@@ -198,12 +182,7 @@ class CourseStore extends Stores.BoundStore {
 			this.loaded = false;
 
 			this.set({
-				loading: true,
-				loadArchived: false,
-				error: null,
-				upcomingCourses: null,
-				currentCourses: null,
-				archivedCourses: null,
+				...initialValues,
 				hasSearchTerm: true,
 			});
 
@@ -239,12 +218,8 @@ class CourseStore extends Stores.BoundStore {
 		if (this.searchTerm) {
 			this.loaded = false;
 			this.set({
-				loading: true,
+				...initialValues,
 				loadArchived: true,
-				error: null,
-				upcomingCourses: null,
-				currentCourses: null,
-				archivedCourses: null,
 				hasSearchTerm: true,
 			});
 
