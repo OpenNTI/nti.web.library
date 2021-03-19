@@ -4,6 +4,16 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
+const initialValues = {
+	loading: true,
+	error: null,
+	courses: null,
+	administeredCourses: null,
+	books: null,
+	communities: null,
+	hasSearchTerm: false,
+};
+
 class HomePageStore extends Stores.BoundStore {
 	constructor() {
 		super();
@@ -13,22 +23,14 @@ class HomePageStore extends Stores.BoundStore {
 		this.prevSearch = false;
 
 		this.set({
-			loading: true,
-			error: null,
-			courses: null,
-			administeredCourses: null,
-			books: null,
-			communities: null,
-			hasSearchTerm: false,
+			...initialValues,
 		});
 	}
 
 	handleDispatch = event => {
-		let type = event && (event.type || (event.action || {}).type);
+		const type = event && (event.type || (event.action || {}).type);
 
-		if (!type) {
-			return;
-		} else if (type === 'catalog:redeem' || type === 'course:drop') {
+		if (type === 'catalog:redeem' || type === 'course:drop') {
 			this.reloadCourseFavorites();
 		}
 	};
@@ -38,39 +40,18 @@ class HomePageStore extends Stores.BoundStore {
 		this.clearPending();
 
 		if (this.searchTerm) {
-			this.loaded = false;
-
-			this.set({
-				loading: true,
-				error: null,
-				courses: null,
-				administeredCourses: null,
-				books: null,
-				communities: null,
-				hasSearchTerm: true,
-			});
 			this.loadSearchTerm();
 		} else if (!this.loaded || this.prevSearch) {
-			this.set({
-				loading: true,
-				error: null,
-				courses: null,
-				administeredCourses: null,
-				books: null,
-				communities: null,
-				hasSearchTerm: false,
-			});
+			this.set({ ...initialValues });
 
 			try {
-				const libraryPromises = [
+				await Promise.all([
 					this.loadFavorites(),
 					this.loadBooks(),
 					this.loadCommunities(),
 					this.checkAdmin(),
 					this.checkCatalog(),
-				];
-
-				await Promise.all(libraryPromises);
+				]);
 
 				if (this.searchTerm) {
 					return;
@@ -89,6 +70,13 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async loadSearchTerm() {
+		this.loaded = false;
+
+		this.set({
+			...initialValues,
+			hasSearchTerm: true,
+		});
+
 		clearTimeout(this.searchBufferTimeout);
 
 		this.searchBufferTimeout = setTimeout(async () => {
@@ -158,13 +146,13 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async checkAdmin() {
-		let service = await getService();
-		const admin = service.getWorkspace('SiteAdmin') ? true : false;
+		const service = await getService();
+		const admin = !!service.getWorkspace('SiteAdmin');
 		this.set('admin', admin);
 	}
 
 	async checkCatalog() {
-		let service = await getService();
+		const service = await getService();
 		const hasCatalog = service.getCollection('Courses', 'Catalog')
 			? true
 			: false;
@@ -172,7 +160,7 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async searchCourses(searchTerm) {
-		let service = await getService();
+		const service = await getService();
 		const adminCollection = service.getCollection(
 			'AdministeredCourses',
 			'Courses'
@@ -197,7 +185,7 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async searchBooks(searchTerm) {
-		let service = await getService();
+		const service = await getService();
 		const booksCollection = service.getCollection(
 			'VisibleContentBundles',
 			'ContentBundles'
@@ -224,7 +212,7 @@ class HomePageStore extends Stores.BoundStore {
 		}
 
 		try {
-			let service = await getService();
+			const service = await getService();
 			const communitiesCollection = await service.getCommunities();
 			const communities = await communitiesCollection.load();
 
@@ -263,17 +251,6 @@ class HomePageStore extends Stores.BoundStore {
 
 	async reloadAdminFavorites() {
 		if (this.searchTerm) {
-			this.loaded = false;
-
-			this.set({
-				loading: true,
-				error: null,
-				courses: null,
-				administeredCourses: null,
-				books: null,
-				communities: null,
-				hasSearchTerm: true,
-			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
@@ -308,17 +285,6 @@ class HomePageStore extends Stores.BoundStore {
 
 	async reloadCourseFavorites() {
 		if (this.searchTerm) {
-			this.loaded = false;
-
-			this.set({
-				loading: true,
-				error: null,
-				courses: null,
-				administeredCourses: null,
-				books: null,
-				communities: null,
-				hasSearchTerm: true,
-			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
@@ -353,17 +319,6 @@ class HomePageStore extends Stores.BoundStore {
 
 	async reloadCommunities() {
 		if (this.searchTerm) {
-			this.loaded = false;
-
-			this.set({
-				loading: true,
-				error: null,
-				courses: null,
-				administeredCourses: null,
-				books: null,
-				communities: null,
-				hasSearchTerm: true,
-			});
 			this.loadSearchTerm();
 		} else {
 			this.set({
