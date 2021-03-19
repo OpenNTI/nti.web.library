@@ -237,7 +237,7 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async loadFavorites() {
-		let service = await getService();
+		const service = await getService();
 		const adminCollection = service.getCollection(
 			'AdministeredCourses',
 			'Courses'
@@ -247,11 +247,10 @@ class HomePageStore extends Stores.BoundStore {
 			'Courses'
 		);
 
-		const courses = await service.getBatch(
-			enrolledCollection.getLink('Favorites')
-		);
-		const administeredCourses = await service.getBatch(
-			adminCollection.getLink('Favorites')
+		const [courses, administeredCourses] = await Promise.all(
+			[enrolledCollection, adminCollection].map(c =>
+				service.getBatch(c.getLink('Favorites'))
+			)
 		);
 
 		this.addToPending({
