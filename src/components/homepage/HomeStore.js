@@ -83,15 +83,13 @@ class HomePageStore extends Stores.BoundStore {
 			const searchTerm = this.searchTerm;
 
 			try {
-				const librarySearchPromises = [
+				await Promise.all([
 					this.searchCourses(searchTerm),
 					this.searchBooks(searchTerm),
 					this.searchCommunities(searchTerm),
 					this.checkAdmin(),
 					this.checkCatalog(),
-				];
-
-				await Promise.all(librarySearchPromises);
+				]);
 
 				if (searchTerm !== this.searchTerm) {
 					return;
@@ -200,15 +198,9 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	async searchCommunities(searchTerm) {
-		function communityFilter(community) {
-			return (
-				community.alias
-					.toLowerCase()
-					.indexOf(searchTerm.toLowerCase()) >= 0 ||
-				community.realname
-					.toLowerCase()
-					.indexOf(searchTerm.toLowerCase()) >= 0
-			);
+		function communityFilter({ alias, realname }) {
+			const term = searchTerm.toLowerCase();
+			return [alias, realname].some(n => n?.toLowerCase().includes(term));
 		}
 
 		try {
