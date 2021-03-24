@@ -4,14 +4,22 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
+export const KEYS = {
+	administeredCourses: 'administeredCourses',
+	courses: 'courses',
+	books: 'books',
+	communities: 'communities',
+};
+
 const initialValues = {
 	loading: true,
 	error: null,
-	courses: null,
-	administeredCourses: null,
-	books: null,
-	communities: null,
 	hasSearchTerm: false,
+	...Object.keys(KEYS).reduce(
+		// set all collection keys to null
+		(acc, key) => ({ ...acc, [key]: null }),
+		{}
+	),
 };
 
 class HomePageStore extends Stores.BoundStore {
@@ -35,9 +43,13 @@ class HomePageStore extends Stores.BoundStore {
 		}
 	};
 
+	onSortChange = (collectionName, sortOn, sortDirection = 'ascending') => {
+		console.log(collectionName, sortOn, sortDirection);
+	};
+
 	async load() {
-		// on each load, clear the pending queue
-		this.clearPending();
+		// on each load, clear the staged queue
+		this.clearStaged();
 
 		if (this.searchTerm) {
 			this.loadSearchTerm();
@@ -57,7 +69,7 @@ class HomePageStore extends Stores.BoundStore {
 					return;
 				}
 
-				this.applyPending();
+				this.commitStaged();
 
 				this.loaded = true;
 				this.prevSearch = false;
@@ -95,7 +107,7 @@ class HomePageStore extends Stores.BoundStore {
 					return;
 				}
 
-				this.applyPending();
+				this.commitStaged();
 
 				this.loaded = true;
 				this.prevSearch = true;
@@ -108,12 +120,12 @@ class HomePageStore extends Stores.BoundStore {
 	}
 
 	/**
-	 * Flush the pending queue (without applying the data)
+	 * Flush the staged queue (without applying the data)
 	 *
 	 * @returns {null}      No return value
 	 */
-	clearPending() {
-		this.pending = {};
+	clearStaged() {
+		this.staged = {};
 	}
 
 	/**
@@ -122,25 +134,25 @@ class HomePageStore extends Stores.BoundStore {
 	 * @param {Object} obj Object containing key-value pairs to eventually be set on the store
 	 * @returns {null}      No return value
 	 */
-	addToPending(obj) {
-		if (!this.pending) {
-			this.pending = {};
+	stageChanges(obj) {
+		if (!this.staged) {
+			this.staged = {};
 		}
 
 		for (let key of Object.keys(obj)) {
-			this.pending[key] = obj[key];
+			this.staged[key] = obj[key];
 		}
 	}
 
 	/**
-	 * Flush the pending queue and set the data on the store, triggering an event emit
+	 * Flush the staged queue and set the data on the store, triggering an event emit
 	 *
 	 * @returns {null}      No return value
 	 */
-	applyPending() {
-		this.set(this.pending);
+	commitStaged() {
+		this.set(this.staged);
 
-		this.clearPending();
+		this.clearStaged();
 	}
 
 	async checkAdmin() {
@@ -176,9 +188,9 @@ class HomePageStore extends Stores.BoundStore {
 			params
 		);
 
-		this.addToPending({
-			courses: courses.Items,
-			administeredCourses: administeredCourses.Items,
+		this.stageChanges({
+			[KEYS.courses]: courses.Items,
+			[KEYS.administeredCourses]: administeredCourses.Items,
 		});
 	}
 
@@ -194,7 +206,7 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending({ books: booksParsed });
+		this.stageChanges({ [KEYS.books]: booksParsed });
 	}
 
 	async searchCommunities(searchTerm) {
@@ -208,8 +220,8 @@ class HomePageStore extends Stores.BoundStore {
 			const communitiesCollection = await service.getCommunities();
 			const communities = await communitiesCollection.load();
 
-			this.addToPending({
-				communities: (communities || []).filter(communityFilter),
+			this.stageChanges({
+				[KEYS.communities]: (communities || []).filter(communityFilter),
 			});
 		} catch (e) {
 			//swallow
@@ -233,9 +245,9 @@ class HomePageStore extends Stores.BoundStore {
 			)
 		);
 
-		this.addToPending({
-			courses: courses.Items,
-			administeredCourses: administeredCourses.Items,
+		this.stageChanges({
+			[KEYS.courses]: courses.Items,
+			[KEYS.administeredCourses]: administeredCourses.Items,
 			totalCourses: courses.Total,
 			totalAdministeredCourses: administeredCourses.Total,
 		});
@@ -248,7 +260,7 @@ class HomePageStore extends Stores.BoundStore {
 			this.set({
 				loading: true,
 				error: null,
-				administeredCourses: null,
+				[KEYS.administeredCourses]: null,
 			});
 
 			try {
@@ -262,7 +274,7 @@ class HomePageStore extends Stores.BoundStore {
 					adminCollection.getLink('Favorites')
 				);
 				this.set({
-					administeredCourses: administeredCourses.Items,
+					[KEYS.administeredCourses]: administeredCourses.Items,
 					totalAdministeredCourses: administeredCourses.Total,
 				});
 			} catch (e) {
@@ -282,7 +294,7 @@ class HomePageStore extends Stores.BoundStore {
 			this.set({
 				loading: true,
 				error: null,
-				courses: null,
+				[KEYS.courses]: null,
 			});
 
 			try {
@@ -296,7 +308,7 @@ class HomePageStore extends Stores.BoundStore {
 					enrolledCollection.getLink('Favorites')
 				);
 				this.set({
-					courses: courses.Items,
+					[KEYS.courses]: courses.Items,
 					totalCourses: courses.Total,
 				});
 			} catch (e) {
@@ -316,7 +328,7 @@ class HomePageStore extends Stores.BoundStore {
 			this.set({
 				loading: true,
 				error: null,
-				communities: null,
+				[KEYS.communities]: null,
 			});
 
 			try {
@@ -325,7 +337,7 @@ class HomePageStore extends Stores.BoundStore {
 				const fetchComm = await communities.load();
 
 				this.set({
-					communities: fetchComm,
+					[KEYS.communities]: fetchComm,
 				});
 			} catch (e) {
 				this.set('error', e);
@@ -346,15 +358,15 @@ class HomePageStore extends Stores.BoundStore {
 		const booksPromises = booksBatch.titles.map(x => service.getObject(x));
 		const booksParsed = await Promise.all(booksPromises);
 
-		this.addToPending({ books: booksParsed });
+		this.stageChanges({ [KEYS.books]: booksParsed });
 	}
 
 	async loadCommunities() {
-		let service = await getService();
+		const service = await getService();
 		const communities = await service.getCommunities();
 		const fetchedComm = await communities.load(true);
 
-		this.addToPending({ communities: fetchedComm });
+		this.stageChanges({ [KEYS.communities]: fetchedComm });
 	}
 }
 
