@@ -88,6 +88,7 @@ class SectionHeading extends React.Component {
 		administeredCourses: PropTypes.array,
 		totalAdministeredCourses: PropTypes.number,
 		hasSearchTerm: PropTypes.bool,
+		onSortChange: PropTypes.func,
 	};
 
 	static contextTypes = {
@@ -118,7 +119,7 @@ class SectionHeading extends React.Component {
 	}
 
 	render() {
-		const { section, date, empty } = this.props;
+		const { section, date, empty, onSortChange } = this.props;
 		const { router, basePath } = this.context;
 		let base;
 
@@ -132,7 +133,7 @@ class SectionHeading extends React.Component {
 
 		return (
 			<div className="library-section-heading">
-				<HeaderMenu section={section} onSortChange={console.log} />
+				<HeaderMenu section={section} onSortChange={onSortChange} />
 				{(section === 'courses' || section === 'admin') && (
 					<div className="course-section-heading">
 						{section === 'courses' ? (

@@ -20,7 +20,13 @@ const Empty = styled(EmptyList)`
 	grid-column-start: 1;
 `;
 
-export default function Container({ section, items, date, onModification }) {
+export default function Container({
+	section,
+	items,
+	date,
+	onModification,
+	onSortChange,
+}) {
 	return !items?.length ? (
 		<Grid className="library-collection">
 			<Grid.Header>
@@ -34,7 +40,11 @@ export default function Container({ section, items, date, onModification }) {
 			list={items}
 			onModification={onModification}
 		>
-			<Heading section={section} date={date} />
+			<Heading
+				section={section}
+				date={date}
+				onSortChange={onSortChange}
+			/>
 		</Collection>
 	);
 }
@@ -44,4 +54,5 @@ Container.propTypes = {
 	items: PropTypes.array,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
+	onSortChange: PropTypes.func,
 };

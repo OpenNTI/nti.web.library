@@ -9,6 +9,7 @@ export default class Courses extends React.Component {
 		items: PropTypes.array,
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
+		onSortChange: PropTypes.func,
 	};
 
 	splitItemsBySemester(section) {
@@ -35,15 +36,21 @@ export default class Courses extends React.Component {
 
 	render() {
 		const {
-			props: { admin, items, itemsType, onModification },
+			props: {
+				admin,
+				items,
+				itemsType = '',
+				onModification,
+				onSortChange,
+			},
 		} = this;
-		let section = admin ? 'admin' : 'courses';
-		section = itemsType ? itemsType + section : section;
+		const section = itemsType + (admin ? 'admin' : 'courses');
 
 		return itemsType !== 'archived' ? (
 			<Container
 				section={section}
 				items={items}
+				onSortChange={onSortChange}
 				onModification={onModification}
 			/>
 		) : (

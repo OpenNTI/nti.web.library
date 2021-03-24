@@ -41,6 +41,7 @@ class Home extends React.Component {
 		admin: PropTypes.bool,
 		hasCatalog: PropTypes.bool,
 		hasSearchTerm: PropTypes.bool,
+		onSortChange: PropTypes.func,
 	};
 
 	onModificationCourse = () => {
@@ -62,6 +63,7 @@ class Home extends React.Component {
 			hasSearchTerm,
 			loading,
 			store,
+			onSortChange,
 		} = this.props;
 
 		const hasCommunities = communities?.length > 0;
@@ -107,6 +109,13 @@ class Home extends React.Component {
 									(hasSearchTerm && hasCourses)) && (
 									<Courses
 										items={courses}
+										onSortChange={(sortOn, sortDirection) =>
+											onSortChange(
+												'courses',
+												sortOn,
+												sortDirection
+											)
+										}
 										onModification={
 											this.onModificationCourse
 										}
@@ -117,6 +126,13 @@ class Home extends React.Component {
 									<Courses
 										admin
 										items={administeredCourses}
+										onSortChange={(sortOn, sortDirection) =>
+											onSortChange(
+												'administeredCourses',
+												sortOn,
+												sortDirection
+											)
+										}
 										onModification={
 											this.onModificationAdmin
 										}
@@ -146,5 +162,6 @@ export default decorate(Home, [
 		loading: 'loading',
 		hasSearchTerm: 'hasSearchTerm',
 		error: 'error',
+		onSortChange: 'onSortChange',
 	}),
 ]);
