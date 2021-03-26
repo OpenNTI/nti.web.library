@@ -76,8 +76,7 @@ class HomePageStore extends Stores.BoundStore {
 				(batch, service) =>
 					Promise.all(batch.titles.map(x => service.getObject(x))) // preprocess batch items
 			),
-		admin: async () =>
-			!!(await getService()).getWorkspace('SiteAdmin')),
+		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
 		hasCatalog: async () =>
 			!!(await getService()).getCollection('Courses', 'Catalog'),
 	};
