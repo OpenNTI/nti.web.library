@@ -78,7 +78,7 @@ class SectionHeading extends React.Component {
 			sortOn: PropTypes.string,
 			sortDirection: PropTypes.string,
 		}),
-		administeredCourses: PropTypes.shape({
+		admin: PropTypes.shape({
 			items: PropTypes.array,
 			total: PropTypes.number,
 			sortOn: PropTypes.string,
@@ -95,22 +95,11 @@ class SectionHeading extends React.Component {
 	};
 
 	showSeeAll() {
-		const {
-			section,
-			courses,
-			administeredCourses,
-			hasSearchTerm,
-		} = this.props;
+		const { section, hasSearchTerm } = this.props;
 
-		if (section === 'courses' && !hasSearchTerm) {
-			return courses?.items?.length < courses?.total;
-		} else if (section === 'admin' && !hasSearchTerm) {
-			return (
-				administeredCourses?.items?.length < administeredCourses?.total
-			);
-		}
+		const { items: { length } = [], total = 0 } = this.props[section] ?? {}; // get data for 'courses' or 'admin', e.g. { items: [course, course], total: 99, etc. }
 
-		return false;
+		return !hasSearchTerm && length < total;
 	}
 
 	render() {
@@ -166,9 +155,7 @@ class SectionHeading extends React.Component {
 export default decorate(SectionHeading, [
 	Connectors.Any.connect({
 		courses: 'courses',
-		totalCourses: 'totalCourses',
-		administeredCourses: 'administeredCourses',
-		totalAdministeredCourses: 'totalAdministeredCourses',
+		administeredCourses: 'admin',
 		hasSearchTerm: 'hasSearchTerm',
 	}),
 ]);
