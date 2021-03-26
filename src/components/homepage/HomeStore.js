@@ -145,13 +145,13 @@ class HomePageStore extends Stores.BoundStore {
 			return;
 		}
 
-		console.log(collectionName, sortOn, sortDirection);
+		// console.log(collectionName, sortOn, sortDirection);
 		this.reload(collectionName);
 	};
 
 	async load() {
 		if (this.lastSearchTerm === this.searchTerm) {
-			console.log('skipping load', this.lastSearchTerm, this.searchTerm);
+			// console.log('skipping load', this.lastSearchTerm, this.searchTerm);
 			return;
 		}
 
@@ -179,44 +179,6 @@ class HomePageStore extends Stores.BoundStore {
 			this.set({ loading: false });
 		}
 	}
-
-	// async loadSearchTerm() {
-	// 	this.loaded = false;
-
-	// 	this.set({
-	// 		...initialValues,
-	// 		hasSearchTerm: true,
-	// 	});
-
-	// 	clearTimeout(this.searchBufferTimeout);
-
-	// 	this.searchBufferTimeout = setTimeout(async () => {
-	// 		const searchTerm = this.searchTerm;
-
-	// 		try {
-	// 			await Promise.all([
-	// 				this.searchCourses(searchTerm),
-	// 				this.searchBooks(searchTerm),
-	// 				this.searchCommunities(searchTerm),
-	// 				this.checkAdmin(),
-	// 				this.checkCatalog(),
-	// 			]);
-
-	// 			if (searchTerm !== this.searchTerm) {
-	// 				return;
-	// 			}
-
-	// 			this.commitStaged();
-
-	// 			this.loaded = true;
-	// 			this.prevSearch = true;
-
-	// 			this.set({ loading: false });
-	// 		} catch (e) {
-	// 			this.set({ error: e, loading: false });
-	// 		}
-	// 	}, 300);
-	// }
 
 	/**
 	 * Flush the staged queue (without applying the data)
@@ -254,104 +216,6 @@ class HomePageStore extends Stores.BoundStore {
 		this.clearStaged();
 	}
 
-	// async checkAdmin() {
-	// 	const service = await getService();
-	// 	const admin = !!service.getWorkspace('SiteAdmin');
-	// 	this.set('admin', admin);
-	// }
-
-	// async checkCatalog() {
-	// 	const service = await getService();
-	// 	const hasCatalog = service.getCollection('Courses', 'Catalog')
-	// 		? true
-	// 		: false;
-	// 	this.set('hasCatalog', hasCatalog);
-	// }
-
-	// async searchCourses(searchTerm) {
-	// 	const service = await getService();
-	// 	const adminCollection = service.getCollection(
-	// 		'AdministeredCourses',
-	// 		'Courses'
-	// 	);
-	// 	const enrolledCollection = service.getCollection(
-	// 		'EnrolledCourses',
-	// 		'Courses'
-	// 	);
-
-	// 	const params = { filter: searchTerm, batchSize: 80, batchStart: 0 };
-
-	// 	const courses = await service.getBatch(enrolledCollection.href, params);
-	// 	const administeredCourses = await service.getBatch(
-	// 		adminCollection.href,
-	// 		params
-	// 	);
-
-	// 	this.stageChanges({
-	// 		[KEYS.courses]: courses.Items,
-	// 		[KEYS.administeredCourses]: administeredCourses.Items,
-	// 	});
-	// }
-
-	// async searchBooks(searchTerm) {
-	// 	const service = await getService();
-	// 	const booksCollection = service.getCollection(
-	// 		'VisibleContentBundles',
-	// 		'ContentBundles'
-	// 	);
-	// 	const booksBatch = await service.get(
-	// 		booksCollection.href + '?filter=' + searchTerm
-	// 	);
-	// 	const booksPromises = booksBatch.titles.map(x => service.getObject(x));
-	// 	const booksParsed = await Promise.all(booksPromises);
-
-	// 	this.stageChanges({ [KEYS.books]: booksParsed });
-	// }
-
-	// async searchCommunities(searchTerm) {
-	// 	function communityFilter({ alias, realname }) {
-	// 		const term = searchTerm.toLowerCase();
-	// 		return [alias, realname].some(n => n?.toLowerCase().includes(term));
-	// 	}
-
-	// 	try {
-	// 		const service = await getService();
-	// 		const communitiesCollection = await service.getCommunities();
-	// 		const communities = await communitiesCollection.load();
-
-	// 		this.stageChanges({
-	// 			[KEYS.communities]: (communities || []).filter(communityFilter),
-	// 		});
-	// 	} catch (e) {
-	// 		//swallow
-	// 	}
-	// }
-
-	// async loadFavorites() {
-	// 	const service = await getService();
-	// 	const adminCollection = service.getCollection(
-	// 		'AdministeredCourses',
-	// 		'Courses'
-	// 	);
-	// 	const enrolledCollection = service.getCollection(
-	// 		'EnrolledCourses',
-	// 		'Courses'
-	// 	);
-
-	// 	const [courses, administeredCourses] = await Promise.all(
-	// 		[enrolledCollection, adminCollection].map(c =>
-	// 			service.getBatch(c.getLink('Favorites'))
-	// 		)
-	// 	);
-
-	// 	this.stageChanges({
-	// 		[KEYS.courses]: courses.Items,
-	// 		[KEYS.administeredCourses]: administeredCourses.Items,
-	// 		totalCourses: courses.Total,
-	// 		totalAdministeredCourses: administeredCourses.Total,
-	// 	});
-	// }
-
 	async reload(key) {
 		const loader = this.loaders[key];
 		if (loader) {
@@ -373,122 +237,6 @@ class HomePageStore extends Stores.BoundStore {
 			}
 		}
 	}
-
-	// async reloadAdminFavorites() {
-	// 	if (this.searchTerm) {
-	// 		this.loadSearchTerm();
-	// 	} else {
-	// 		this.set({
-	// 			loading: true,
-	// 			error: null,
-	// 			[KEYS.administeredCourses]: null,
-	// 		});
-
-	// 		try {
-	// 			let service = await getService();
-	// 			const adminCollection = service.getCollection(
-	// 				'AdministeredCourses',
-	// 				'Courses'
-	// 			);
-
-	// 			const administeredCourses = await service.getBatch(
-	// 				adminCollection.getLink('Favorites')
-	// 			);
-	// 			this.set({
-	// 				[KEYS.administeredCourses]: administeredCourses.Items,
-	// 				totalAdministeredCourses: administeredCourses.Total,
-	// 			});
-	// 		} catch (e) {
-	// 			this.set('error', e);
-	// 		} finally {
-	// 			this.loaded = true;
-
-	// 			this.set('loading', false);
-	// 		}
-	// 	}
-	// }
-
-	// async reloadCourseFavorites() {
-	// 	if (this.searchTerm) {
-	// 		this.loadSearchTerm();
-	// 	} else {
-	// 		this.set({
-	// 			loading: true,
-	// 			error: null,
-	// 			[KEYS.courses]: null,
-	// 		});
-
-	// 		try {
-	// 			let service = await getService();
-	// 			const enrolledCollection = service.getCollection(
-	// 				'EnrolledCourses',
-	// 				'Courses'
-	// 			);
-
-	// 			const courses = await service.getBatch(
-	// 				enrolledCollection.getLink('Favorites')
-	// 			);
-	// 			this.set({
-	// 				[KEYS.courses]: courses.Items,
-	// 				totalCourses: courses.Total,
-	// 			});
-	// 		} catch (e) {
-	// 			this.set('error', e);
-	// 		} finally {
-	// 			this.loaded = true;
-
-	// 			this.set('loading', false);
-	// 		}
-	// 	}
-	// }
-
-	// async reloadCommunities() {
-	// 	if (this.searchTerm) {
-	// 		this.loadSearchTerm();
-	// 	} else {
-	// 		this.set({
-	// 			loading: true,
-	// 			error: null,
-	// 			[KEYS.communities]: null,
-	// 		});
-
-	// 		try {
-	// 			const service = await getService();
-	// 			const communities = service.getCommunities();
-	// 			const fetchComm = await communities.load();
-
-	// 			this.set({
-	// 				[KEYS.communities]: fetchComm,
-	// 			});
-	// 		} catch (e) {
-	// 			this.set('error', e);
-	// 		} finally {
-	// 			this.loaded = true;
-	// 			this.set('loading', false);
-	// 		}
-	// 	}
-	// }
-
-	// async loadBooks() {
-	// 	let service = await getService();
-	// 	const booksCollection = service.getCollection(
-	// 		'VisibleContentBundles',
-	// 		'ContentBundles'
-	// 	);
-	// 	const booksBatch = await service.get(booksCollection.href);
-	// 	const booksPromises = booksBatch.titles.map(x => service.getObject(x));
-	// 	const booksParsed = await Promise.all(booksPromises);
-
-	// 	this.stageChanges({ [KEYS.books]: booksParsed });
-	// }
-
-	// async loadCommunities() {
-	// 	const service = await getService();
-	// 	const communities = await service.getCommunities();
-	// 	const fetchedComm = await communities.load(true);
-
-	// 	this.stageChanges({ [KEYS.communities]: fetchedComm });
-	// }
 }
 
 export default decorate(HomePageStore, [mixin(Mixins.Searchable)]);
