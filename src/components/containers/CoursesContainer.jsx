@@ -9,6 +9,7 @@ export default class Courses extends React.Component {
 		items: PropTypes.array,
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
+		sortOptions: PropTypes.arrayOf(PropTypes.string),
 		onSortChange: PropTypes.func,
 	};
 
@@ -41,6 +42,7 @@ export default class Courses extends React.Component {
 				items,
 				itemsType = '',
 				onModification,
+				sortOptions,
 				onSortChange,
 			},
 		} = this;
@@ -50,6 +52,7 @@ export default class Courses extends React.Component {
 			<Container
 				section={section}
 				items={items}
+				sortOptions={sortOptions}
 				onSortChange={onSortChange}
 				onModification={onModification}
 			/>

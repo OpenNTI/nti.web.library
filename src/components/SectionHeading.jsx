@@ -20,13 +20,6 @@ const t = scoped('library.sorting', {
 	title: 'By Title',
 });
 
-const getSortOptions = section => [
-	'createdTime',
-	'provideruniqueid',
-	'lastSeenTime',
-	'title',
-];
-
 const Menu = styled(List.Unadorned)`
 	font-size: 14px;
 	line-height: 19px;
@@ -60,11 +53,7 @@ const MenuContent = ({ dismissFlyout, options, onChange, ...other }) => {
 	);
 };
 
-const HeaderMenu = ({ section, onSortChange, ...props }) => {
-	const sortOptions = React.useMemo(
-		() => onSortChange && getSortOptions(section),
-		[section, onSortChange]
-	);
+const HeaderMenu = ({ section, sortOptions, onSortChange, ...props }) => {
 	const Text = <SectionTitle section={section} />;
 	return !sortOptions?.length ? (
 		Text
@@ -83,11 +72,20 @@ class SectionHeading extends React.Component {
 		section: PropTypes.string.isRequired,
 		date: PropTypes.string,
 		empty: PropTypes.bool,
-		courses: PropTypes.array,
-		totalCourses: PropTypes.number,
-		administeredCourses: PropTypes.array,
-		totalAdministeredCourses: PropTypes.number,
+		courses: PropTypes.shape({
+			items: PropTypes.array,
+			total: PropTypes.number,
+			sortOn: PropTypes.string,
+			sortDirection: PropTypes.string,
+		}),
+		administeredCourses: PropTypes.shape({
+			items: PropTypes.array,
+			total: PropTypes.number,
+			sortOn: PropTypes.string,
+			sortDirection: PropTypes.string,
+		}),
 		hasSearchTerm: PropTypes.bool,
+		sortOptions: PropTypes.arrayOf(PropTypes.string),
 		onSortChange: PropTypes.func,
 	};
 
@@ -100,18 +98,15 @@ class SectionHeading extends React.Component {
 		const {
 			section,
 			courses,
-			totalCourses,
 			administeredCourses,
-			totalAdministeredCourses,
 			hasSearchTerm,
 		} = this.props;
 
 		if (section === 'courses' && !hasSearchTerm) {
-			return (courses && courses.length) < totalCourses;
+			return courses?.items?.length < courses?.total;
 		} else if (section === 'admin' && !hasSearchTerm) {
 			return (
-				(administeredCourses && administeredCourses.length) <
-				totalAdministeredCourses
+				administeredCourses?.items?.length < administeredCourses?.total
 			);
 		}
 
@@ -119,7 +114,7 @@ class SectionHeading extends React.Component {
 	}
 
 	render() {
-		const { section, date, empty, onSortChange } = this.props;
+		const { section, date, empty, sortOptions, onSortChange } = this.props;
 		const { router, basePath } = this.context;
 		let base;
 
@@ -133,7 +128,11 @@ class SectionHeading extends React.Component {
 
 		return (
 			<div className="library-section-heading">
-				<HeaderMenu section={section} onSortChange={onSortChange} />
+				<HeaderMenu
+					section={section}
+					sortOptions={sortOptions}
+					onSortChange={onSortChange}
+				/>
 				{(section === 'courses' || section === 'admin') && (
 					<div className="course-section-heading">
 						{section === 'courses' ? (

@@ -25,6 +25,7 @@ export default function Container({
 	items,
 	date,
 	onModification,
+	sortOptions,
 	onSortChange,
 }) {
 	return !items?.length ? (
@@ -43,6 +44,7 @@ export default function Container({
 			<Heading
 				section={section}
 				date={date}
+				sortOptions={sortOptions}
 				onSortChange={onSortChange}
 			/>
 		</Collection>
@@ -54,5 +56,6 @@ Container.propTypes = {
 	items: PropTypes.array,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
+	sortOptions: PropTypes.arrayOf(PropTypes.string),
 	onSortChange: PropTypes.func,
 };

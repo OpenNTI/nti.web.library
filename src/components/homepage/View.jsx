@@ -13,7 +13,7 @@ import Communities from '../containers/Communities';
 import Courses from '../containers/CoursesContainer';
 import Books from '../containers/BooksContainer';
 
-import HomePageStore from './HomeStore';
+import { default as HomePageStore, KEYS } from './HomeStore';
 
 const { Responsive } = Layouts;
 const { Grid } = Collection;
@@ -29,13 +29,20 @@ const t = scoped('library.components.Home', {
 	home: 'Home',
 });
 
+const CollectionDataPropType = PropTypes.shape({
+	items: PropTypes.array,
+	total: PropTypes.number,
+	sortOn: PropTypes.string,
+	sortDirection: PropTypes.string,
+});
+
 class Home extends React.Component {
 	static propTypes = {
 		loading: PropTypes.bool,
 		store: PropTypes.object,
-		courses: PropTypes.array,
-		administeredCourses: PropTypes.array,
-		books: PropTypes.array,
+		courses: CollectionDataPropType,
+		administeredCourses: CollectionDataPropType,
+		books: CollectionDataPropType,
 		communities: PropTypes.array,
 		children: PropTypes.node,
 		admin: PropTypes.bool,
@@ -45,11 +52,11 @@ class Home extends React.Component {
 	};
 
 	onModificationCourse = () => {
-		this.props.store.reloadCourseFavorites();
+		this.props.store.reload(KEYS.courses);
 	};
 
 	onModificationAdmin = () => {
-		this.props.store.reloadAdminFavorites();
+		this.props.store.reload(KEYS.administeredCourses);
 	};
 
 	render() {
@@ -66,10 +73,10 @@ class Home extends React.Component {
 			onSortChange,
 		} = this.props;
 
-		const hasCommunities = communities?.length > 0;
-		const hasCourses = courses?.length > 0;
-		const hasAdminCourses = administeredCourses?.length > 0;
-		const hasBooks = books?.length > 0;
+		const hasCommunities = communities?.items?.length > 0;
+		const hasCourses = courses?.items?.length > 0;
+		const hasAdminCourses = administeredCourses?.items?.length > 0;
+		const hasBooks = books?.items?.length > 0;
 		const emptySearch =
 			hasSearchTerm &&
 			!hasCommunities &&
@@ -108,10 +115,13 @@ class Home extends React.Component {
 								{((!hasSearchTerm && canShowCoursesSection) ||
 									(hasSearchTerm && hasCourses)) && (
 									<Courses
-										items={courses}
+										items={courses?.items}
+										sortOptions={store.getSortOptions(
+											KEYS.courses
+										)}
 										onSortChange={(sortOn, sortDirection) =>
 											onSortChange(
-												'courses',
+												KEYS.courses,
 												sortOn,
 												sortDirection
 											)
@@ -125,10 +135,13 @@ class Home extends React.Component {
 								{hasAdminCourses && (
 									<Courses
 										admin
-										items={administeredCourses}
+										items={administeredCourses?.items}
+										sortOptions={store.getSortOptions(
+											KEYS.administeredCourses
+										)}
 										onSortChange={(sortOn, sortDirection) =>
 											onSortChange(
-												'administeredCourses',
+												KEYS.administeredCourses,
 												sortOn,
 												sortDirection
 											)
@@ -139,7 +152,7 @@ class Home extends React.Component {
 									/>
 								)}
 
-								{hasBooks && <Books items={books} />}
+								{hasBooks && <Books items={books?.items} />}
 							</>
 						)}
 					</>
@@ -155,10 +168,10 @@ export default decorate(Home, [
 	HomePageStore.connect({
 		admin: 'admin',
 		hasCatalog: 'hasCatalog',
-		courses: 'courses',
-		administeredCourses: 'administeredCourses',
-		books: 'books',
-		communities: 'communities',
+		courses: KEYS.courses,
+		administeredCourses: KEYS.administeredCourses,
+		books: KEYS.books,
+		communities: KEYS.communities,
 		loading: 'loading',
 		hasSearchTerm: 'hasSearchTerm',
 		error: 'error',
