@@ -142,6 +142,13 @@ class HomePageStore extends Stores.BoundStore {
 			return;
 		}
 
+		this[collectionName] = {
+			...this[collectionName],
+			sortOn,
+			sortDirection,
+			batchStart: 0,
+			nextBatch: undefined,
+		};
 		// console.log(collectionName, sortOn, sortDirection);
 		this.reload(collectionName);
 	};
