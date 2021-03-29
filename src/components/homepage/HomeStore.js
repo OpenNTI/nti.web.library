@@ -89,13 +89,25 @@ class HomePageStore extends Stores.BoundStore {
 	) {
 		const service = await getService();
 		const collection = service.getCollection(title, workspace);
-		const batch = await service.getBatch(collection.href, {
-			filter: this.searchTerm,
-			sortOn,
-			sortDirection,
-			batchStart: 0,
-			batchSize: 10,
-		});
+		const useFavorites =
+			!this.searchTerm && !sortOn && collection.hasLink('Favorites');
+
+		const link = useFavorites
+			? collection.getLink('Favorites')
+			: collection.href;
+
+		const batch = await service.getBatch(
+			link,
+			useFavorites
+				? null
+				: {
+						filter: this.searchTerm,
+						sortOn,
+						sortDirection,
+						batchStart: 0,
+						batchSize,
+				  }
+		);
 
 		const { Items: items = [], Total: total } =
 			(await preprocessor?.(batch, service)) || batch || {};
