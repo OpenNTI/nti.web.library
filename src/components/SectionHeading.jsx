@@ -4,68 +4,13 @@ import PropTypes from 'prop-types';
 import { decorate } from '@nti/lib-commons';
 import { LinkTo } from '@nti/web-routing';
 import { Connectors } from '@nti/lib-store';
-import { Flyout, Layouts, List } from '@nti/web-commons';
-import { scoped } from '@nti/lib-locale';
+import { Layouts } from '@nti/web-commons';
 
-import SectionTitle from './SectionTitle';
 import AddButton from './AddButton';
+import { SortMenu } from './SortMenu';
 import './SectionHeading.scss';
 
 const { Responsive } = Layouts;
-
-const t = scoped('library.sorting', {
-	createdTime: 'By Date Added',
-	provideruniqueid: 'By ID',
-	lastSeenTime: 'By Last Opened',
-	title: 'By Title',
-});
-
-const Menu = styled(List.Unadorned)`
-	font-size: 14px;
-	line-height: 19px;
-	font-weight: 600;
-	color: var(--primary-grey);
-	border-radius: 4px;
-	min-width: 200px;
-
-	li {
-		padding: 1rem 1.25rem;
-		border-bottom: 1px solid var(--border-grey-light);
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
-`;
-
-const MenuContent = ({ dismissFlyout, options, onChange, ...other }) => {
-	const onClick = option => {
-		onChange(option);
-		dismissFlyout();
-	};
-	return (
-		<Menu>
-			{options.map(option => (
-				<li key={option} onClick={() => onClick(option)}>
-					{t(option)}
-				</li>
-			))}
-		</Menu>
-	);
-};
-
-const HeaderMenu = ({ section, sortOptions, onSortChange, ...props }) => {
-	const Text = <SectionTitle section={section} />;
-	return !sortOptions?.length ? (
-		Text
-	) : (
-		<Flyout.Triggered
-			horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-			trigger={<SectionTitle section={section} />}
-		>
-			<MenuContent onChange={onSortChange} options={sortOptions} />
-		</Flyout.Triggered>
-	);
-};
 
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -117,7 +62,7 @@ class SectionHeading extends React.Component {
 
 		return (
 			<div className="library-section-heading">
-				<HeaderMenu
+				<SortMenu
 					section={section}
 					sortOptions={sortOptions}
 					onSortChange={onSortChange}
