@@ -142,7 +142,7 @@ class HomePageStore extends Stores.BoundStore {
 		const type = event && (event.type || (event.action || {}).type);
 
 		if (type === 'catalog:redeem' || type === 'course:drop') {
-			this.reloadCourseFavorites();
+			this.reload(KEYS.courses);
 		}
 	};
 
