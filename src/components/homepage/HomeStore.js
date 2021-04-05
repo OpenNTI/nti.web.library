@@ -1,4 +1,4 @@
-import { getService } from '@nti/web-client';
+import { getService, getUserPreferences } from '@nti/web-client';
 import { Stores, Mixins } from '@nti/lib-store';
 import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
@@ -10,7 +10,7 @@ const COLLECTION_NAMES = {
 	administeredCourses: 'AdministeredCourses',
 };
 
-// collections in the 'Courses' workspace are
+// collections in the 'Courses' workspace are titled
 // 'AllCourses', 'EnrolledCourses', 'AdministeredCourses';
 // TODO: unify/align the KEYS constants
 export const KEYS = {
@@ -96,16 +96,15 @@ class HomePageStore extends Stores.BoundStore {
 	async loadCollection(
 		title,
 		workspace,
-		{
-			sortOn = 'favorites',
-			sortDirection,
-			batchSize = 8,
-			batchStart = 0,
-		} = {},
+		{ batchSize = 8, batchStart = 0 } = {},
 		preprocessor
 	) {
 		const service = await getService();
 		const collection = service.getCollection(title, workspace);
+
+		const { sortOn = FAVORITES, sortDirection } =
+			(await getUserPreferences())?.getLibrarySort(title) || {};
+
 		const useFavorites =
 			!this.searchTerm &&
 			sortOn === FAVORITES &&
