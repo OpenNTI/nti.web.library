@@ -22,7 +22,10 @@ const initialValues = {
 	),
 };
 
+const FAVORITES = 'favorites';
+
 const courseSortOptions = [
+	FAVORITES,
 	'createdTime',
 	'provideruniqueid',
 	'lastSeenTime',
@@ -84,13 +87,20 @@ class HomePageStore extends Stores.BoundStore {
 	async loadCollection(
 		title,
 		workspace,
-		{ sortOn, sortDirection, batchSize, batchStart = 0 } = {},
+		{
+			sortOn = 'favorites',
+			sortDirection,
+			batchSize = 8,
+			batchStart = 0,
+		} = {},
 		preprocessor
 	) {
 		const service = await getService();
 		const collection = service.getCollection(title, workspace);
 		const useFavorites =
-			!this.searchTerm && !sortOn && collection.hasLink('Favorites');
+			!this.searchTerm &&
+			sortOn === FAVORITES &&
+			collection.hasLink('Favorites');
 
 		const link = useFavorites
 			? collection.getLink('Favorites')
