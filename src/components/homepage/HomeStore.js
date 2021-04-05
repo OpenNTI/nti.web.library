@@ -167,11 +167,21 @@ class HomePageStore extends Stores.BoundStore {
 
 	getSortOptions = collectionName => [...courseSortOptions];
 
-	onSortChange = (collectionName, sortOn, sortDirection = 'ascending') => {
+	onSortChange = async (
+		collectionName,
+		sortOn,
+		sortDirection = 'ascending'
+	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?
 			return;
 		}
+
+		getService()
+			.then(s => s.getUserPreferences())
+			.then(prefs =>
+				prefs.setLibrarySort(collectionName, sortOn, sortDirection)
+			);
 
 		this[collectionName] = {
 			...this[collectionName],
