@@ -4,13 +4,22 @@ import PropTypes from 'prop-types';
 import { decorate } from '@nti/lib-commons';
 import { LinkTo } from '@nti/web-routing';
 import { Connectors } from '@nti/lib-store';
-import { Layouts } from '@nti/web-commons';
+import { Layouts, Menu } from '@nti/web-commons';
+import { Collection } from '@nti/web-course';
 
+import SectionTitle from './SectionTitle';
 import AddButton from './AddButton';
-import { SortMenu } from './SortMenu';
 import './SectionHeading.scss';
 
 const { Responsive } = Layouts;
+
+const getSectionTitle = (section, sortedOn) => {
+	const sectionName = SectionTitle.getTitle(section);
+	const sortName = sortedOn
+		? ' ' + Collection.getSortOptionText(sortedOn)
+		: '';
+	return `${sectionName}${sortName}`;
+};
 
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -49,6 +58,8 @@ class SectionHeading extends React.Component {
 
 	render() {
 		const { section, date, empty, sortOptions, onSortChange } = this.props;
+		const data = this.props[section] || {};
+
 		const { router, basePath } = this.context;
 		let base;
 
@@ -62,10 +73,12 @@ class SectionHeading extends React.Component {
 
 		return (
 			<div className="library-section-heading">
-				<SortMenu
-					section={section}
-					sortOptions={sortOptions}
-					onSortChange={onSortChange}
+				<Menu
+					getText={Collection.getSortOptionText}
+					value={data.sortOn}
+					title={getSectionTitle(section, data.sortOn)}
+					options={sortOptions}
+					onChange={onSortChange}
 				/>
 				{(section === 'courses' || section === 'admin') && (
 					<div className="course-section-heading">
