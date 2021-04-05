@@ -4,9 +4,18 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
+const COLLECTION_NAMES = {
+	allCourses: 'AllCourses',
+	enrolledCourses: 'EnrolledCourses',
+	administeredCourses: 'AdministeredCourses',
+};
+
+// collections in the 'Courses' workspace are
+// 'AllCourses', 'EnrolledCourses', 'AdministeredCourses';
+// TODO: unify/align the KEYS constants
 export const KEYS = {
-	administeredCourses: 'administeredCourses',
-	courses: 'courses',
+	administeredCourses: COLLECTION_NAMES.administeredCourses,
+	courses: COLLECTION_NAMES.enrolledCourses,
 	books: 'books',
 	communities: 'communities',
 };
@@ -61,13 +70,13 @@ class HomePageStore extends Stores.BoundStore {
 		},
 		[KEYS.administeredCourses]: () =>
 			this.loadCollection(
-				'AdministeredCourses',
+				COLLECTION_NAMES.administeredCourses,
 				'Courses',
 				this[KEYS.administeredCourses] // pass current state to provide sortOn, sortDirection, etc.
 			),
 		[KEYS.courses]: () =>
 			this.loadCollection(
-				'EnrolledCourses',
+				COLLECTION_NAMES.enrolledCourses,
 				'Courses',
 				this[KEYS.courses] // pass current state to provide sortOn, sortDirection, etc.
 			),

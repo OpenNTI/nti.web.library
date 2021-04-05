@@ -112,8 +112,8 @@ class SectionHeading extends React.Component {
 
 export default decorate(SectionHeading, [
 	Connectors.Any.connect({
-		courses: 'courses',
-		administeredCourses: 'admin',
+		EnrolledCourses: 'courses',
+		AdministeredCourses: 'admin',
 		hasSearchTerm: 'hasSearchTerm',
 	}),
 ]);
