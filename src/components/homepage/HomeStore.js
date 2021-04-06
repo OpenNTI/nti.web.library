@@ -4,6 +4,8 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import AppDispatcher from '@nti/lib-dispatcher';
 
+const getPrefsSortKey = collectionName => `sort:library:${collectionName}`;
+
 const COLLECTION_NAMES = {
 	allCourses: 'AllCourses',
 	enrolledCourses: 'EnrolledCourses',
@@ -103,7 +105,7 @@ class HomePageStore extends Stores.BoundStore {
 		const collection = service.getCollection(title, workspace);
 
 		const { sortOn = FAVORITES, sortDirection } =
-			(await getUserPreferences())?.getLibrarySort(title) || {};
+			(await getUserPreferences())?.get(getPrefsSortKey(title)) || {};
 
 		const useFavorites =
 			!this.searchTerm &&
@@ -176,11 +178,10 @@ class HomePageStore extends Stores.BoundStore {
 			return;
 		}
 
-		getService()
-			.then(s => s.getUserPreferences())
-			.then(prefs =>
-				prefs.setLibrarySort(collectionName, sortOn, sortDirection)
-			);
+		(await getUserPreferences()).set(getPrefsSortKey(collectionName), {
+			sortOn,
+			sortDirection,
+		});
 
 		this[collectionName] = {
 			...this[collectionName],
