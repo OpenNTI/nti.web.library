@@ -5,8 +5,10 @@ import { Router, Route } from '@nti/web-routing';
 import { Layouts, Theme } from '@nti/web-commons';
 
 import { Home } from './homepage';
-import { Courses } from './courses';
-import { AdminCourses } from './admin-courses';
+// import { Courses } from './courses';
+// import { AdminCourses } from './admin-courses';
+import { CourseListAdmin as AdminCourses } from './CourseListAdmin';
+import { CourseListEnrolled as EnrolledCourses } from './CourseListEnrolled';
 
 const { Responsive } = Layouts;
 
@@ -14,7 +16,7 @@ const Routes = Responsive.isMobileContext()
 	? Router.for([
 			Route({
 				path: '/mobile/library/courses',
-				component: Courses,
+				component: EnrolledCourses,
 				name: 'library-courses',
 			}),
 			Route({
@@ -31,7 +33,7 @@ const Routes = Responsive.isMobileContext()
 	: Router.for([
 			Route({
 				path: '/courses',
-				component: Courses,
+				component: EnrolledCourses,
 				name: 'library-courses',
 			}),
 			Route({
