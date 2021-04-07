@@ -14,17 +14,9 @@ export const KEYS = {
 };
 
 class HomePageStore extends BaseCourseStore {
-	// constructor() {
-	// 	super();
-
-	// 	this.dispatcherID = AppDispatcher.register(this.handleDispatch);
-	// 	this.loaded = false;
-	// 	this.prevSearch = false;
-
-	// 	this.set({
-	// 		...initialValues,
-	// 	});
-	// }
+	constructor() {
+		super({ batchSize: 8 });
+	}
 
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {

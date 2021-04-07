@@ -40,9 +40,13 @@ const courseSortOptions = [
 ];
 
 class BaseCourseStore extends Stores.BoundStore {
-	constructor() {
+	constructor(options = {}) {
 		super();
 
+		this.options = {
+			batchSize: 8,
+			...options,
+		};
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
 		this.loaded = false;
 		this.prevSearch = false;
@@ -57,7 +61,7 @@ class BaseCourseStore extends Stores.BoundStore {
 	async loadCollection(
 		title,
 		workspace,
-		{ batchSize = 8, batchStart = 0 } = {},
+		{ batchSize = this.options.batchSize, batchStart = 0 } = {},
 		preprocessor
 	) {
 		const service = await getService();
@@ -97,6 +101,7 @@ class BaseCourseStore extends Stores.BoundStore {
 			sortOn,
 			sortDirection,
 			nextBatch: batch.getLink('batch-next'),
+			hasMore: total > items.length,
 		};
 	}
 
@@ -120,6 +125,26 @@ class BaseCourseStore extends Stores.BoundStore {
 			}),
 			{}
 		);
+	};
+
+	loadMore = async collectionName => {
+		const current = this.get(collectionName);
+
+		if (current?.nextBatch) {
+			const service = await getService();
+			const batch = await service.getBatch(current.nextBatch);
+			const { Items = [], Total: total } = batch;
+
+			const items = [...current.items, ...Items];
+
+			this.set(collectionName, {
+				...current,
+				items,
+				total,
+				nextBatch: batch.getLink('batch-next'),
+				hasMore: total > items.length,
+			});
+		}
 	};
 
 	handleDispatch = event => {
