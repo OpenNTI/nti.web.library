@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { User, Menu } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
-import { getService } from '@nti/web-client';
-import { Loading, Hooks, Page } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
 import { Router } from '@nti/web-routing';
 
@@ -18,8 +17,7 @@ import {
 	AddCourseLink,
 } from './parts';
 
-const { useResolver } = Hooks;
-const { isPending, isResolved, isErrored } = useResolver;
+const { usePrefs } = User;
 
 const t = scoped('library.components.Courses', {
 	courses: 'Courses',
@@ -27,22 +25,28 @@ const t = scoped('library.components.Courses', {
 	add: 'Add Courses',
 });
 
+const FAVORITES = 'favorites';
+
+const courseSortOptions = [
+	FAVORITES,
+	'createdTime',
+	'provideruniqueid',
+	'lastSeenTime',
+	'title',
+];
+
 EnrolledCourses.propTypes = {
 	basePath: PropTypes.string,
 };
 function EnrolledCourses({ basePath }) {
 	const router = Router.useRouter();
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
-
-	const resolver = useResolver(async () => {
-		const service = await getService();
-
-		return service.getCollection('EnrolledCourses', 'Courses');
-	}, []);
-
-	const loading = isPending(resolver);
-	const error = isErrored(resolver) ? resolver : null;
-	const collection = isResolved(resolver) ? resolver : null;
+	const prefs = usePrefs(['librarySort']);
+	const sortOn = prefs?.get('librarySort') ?? FAVORITES;
+	const onChange = React.useCallback(
+		sort => prefs?.set('librarySort', sort),
+		[prefs]
+	);
 
 	return (
 		<Container>
@@ -61,18 +65,18 @@ function EnrolledCourses({ basePath }) {
 					{t('add')}
 				</AddCourseLink>
 			</Toolbar>
-			<Loading.Placeholder
-				loading={loading}
-				fallback={<Loading.Spinner.Large />}
+			<CourseCollection.Page
+				collection="EnrolledCourses"
+				sortOn={sortOn}
+				getSectionTitle={SectionTitle.getTitle}
 			>
-				{error && <Page.Content.Error error={error} />}
-				{collection && (
-					<CourseCollection.Page
-						collection={collection}
-						getSectionTitle={SectionTitle.getTitle}
-					/>
-				)}
-			</Loading.Placeholder>
+				<Menu
+					slot="controls"
+					options={courseSortOptions}
+					value={sortOn}
+					onChange={onChange}
+				/>
+			</CourseCollection.Page>
 		</Container>
 	);
 }
