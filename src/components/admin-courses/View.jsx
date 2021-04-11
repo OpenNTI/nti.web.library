@@ -15,7 +15,7 @@ import {
 } from '../courses/parts';
 
 const { Grid } = CourseCollection;
-const { usePrefs } = User;
+const { usePreferences } = User;
 
 const t = scoped('library.components.AdminCourses', {
 	admin: 'Administered Courses',
@@ -33,7 +33,7 @@ const courseSortOptions = [
 ];
 
 export default function AdminCourses() {
-	const prefs = usePrefs(['librarySort']);
+	const prefs = usePreferences(['librarySort']);
 	const sortOn = prefs?.get('librarySort') ?? courseSortOptions[0];
 
 	const onChange = React.useCallback(

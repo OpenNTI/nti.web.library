@@ -17,7 +17,7 @@ import {
 	AddCourseLink,
 } from './parts';
 
-const { usePrefs } = User;
+const { usePreferences } = User;
 
 const t = scoped('library.components.Courses', {
 	courses: 'Courses',
@@ -41,8 +41,8 @@ EnrolledCourses.propTypes = {
 function EnrolledCourses({ basePath }) {
 	const router = Router.useRouter();
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
-	const prefs = usePrefs(['librarySort']);
-	const sortOn = prefs?.get('librarySort') ?? FAVORITES;
+	const prefs = usePreferences(['librarySort']);
+	const sortOn = prefs?.get('librarySort') ?? courseSortOptions[0];
 	const onChange = React.useCallback(
 		sort => prefs?.set('librarySort', sort),
 		[prefs]
