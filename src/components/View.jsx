@@ -5,10 +5,8 @@ import { Router, Route } from '@nti/web-routing';
 import { Layouts, Theme } from '@nti/web-commons';
 
 import { Home } from './homepage';
-// import { Courses } from './courses';
-// import { AdminCourses } from './admin-courses';
-import { CourseListAdmin as AdminCourses } from './CourseListAdmin';
-import { CourseListEnrolled as EnrolledCourses } from './CourseListEnrolled';
+import { Courses as EnrolledCourses } from './courses';
+import { AdminCourses } from './admin-courses';
 
 const { Responsive } = Layouts;
 
