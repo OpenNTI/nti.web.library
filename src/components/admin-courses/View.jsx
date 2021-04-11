@@ -2,8 +2,7 @@ import React from 'react';
 
 // import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
-import { getService } from '@nti/web-client';
-import { Hooks, Loading, Page } from '@nti/web-commons';
+import { User, Menu } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
 
 import SectionTitle from '../SectionTitle';
@@ -16,24 +15,31 @@ import {
 } from '../courses/parts';
 
 const { Grid } = CourseCollection;
-const { useResolver } = Hooks;
-const { isPending, isResolved, isErrored } = useResolver;
+const { usePrefs } = User;
 
 const t = scoped('library.components.AdminCourses', {
 	admin: 'Administered Courses',
 	empty: 'No Administered Courses found.',
 });
 
+const FAVORITES = 'favorites';
+
+const courseSortOptions = [
+	FAVORITES,
+	'createdTime',
+	'provideruniqueid',
+	'lastSeenTime',
+	'title',
+];
+
 export default function AdminCourses() {
-	const resolver = useResolver(async () => {
-		const service = await getService();
+	const prefs = usePrefs(['librarySort']);
+	const sortOn = prefs?.get('librarySort') ?? courseSortOptions[0];
 
-		return service.getCollection('AdministeredCourses', 'Courses');
-	}, []);
-
-	const loading = isPending(resolver);
-	const error = isErrored(resolver) ? resolver : null;
-	const collection = isResolved(resolver) ? resolver : null;
+	const onChange = React.useCallback(
+		sort => prefs?.set('librarySort', sort),
+		[prefs]
+	);
 
 	return (
 		<Container>
@@ -47,18 +53,18 @@ export default function AdminCourses() {
 					</Breadcrumbs>
 				</Toolbar>
 			</Grid>
-			<Loading.Placeholder
-				loading={loading}
-				fallback={<Loading.Spinner.Large />}
+			<CourseCollection.Page
+				collection="AdministeredCourses"
+				sortOn={sortOn}
+				getSectionTitle={SectionTitle.getTitle}
 			>
-				{error && <Page.Content.Error error={error} />}
-				{collection && (
-					<CourseCollection.Page
-						collection={collection}
-						getSectionTitle={SectionTitle.getTitle}
-					/>
-				)}
-			</Loading.Placeholder>
+				<Menu
+					slot="controls"
+					options={courseSortOptions}
+					value={sortOn}
+					onChange={onChange}
+				/>
+			</CourseCollection.Page>
 		</Container>
 	);
 }
