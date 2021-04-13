@@ -53,12 +53,17 @@ class HomePageStore extends BaseCourseStore {
 				.then(items => items.filter(filterFn));
 		},
 
-		// FIXME: courses are loaded via the nti/web-course store now. these calls are redundant
-		// but they bootstrap the sort params that end up getting passed to the other store.
-		[KEYS.administeredCourses]: ({ currentValue }) =>
-			this.#dataSources[KEYS.administeredCourses]?.load(currentValue),
-		[KEYS.courses]: ({ currentValue }) =>
-			this.#dataSources[KEYS.courses]?.load(currentValue),
+		// originally used to fetch the courses; now it just passes the sort info through.
+		// we should rework this for better clarity
+		[KEYS.administeredCourses]: ({
+			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+		}) => ({ sortOn, sortDirection, batchSize }),
+
+		// originally used to fetch the courses; now it just passes the sort info through.
+		// we should rework this for better clarity
+		[KEYS.enrolledCourses]: ({
+			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+		}) => ({ sortOn, sortDirection, batchSize }),
 
 		[KEYS.books]: ({ currentValue }) =>
 			this.loadCollection(
