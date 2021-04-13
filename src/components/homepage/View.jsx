@@ -177,24 +177,7 @@ function Home(props) {
 									onModification={onModificationCourse}
 								/>
 							)}
-
-							{hasAdminCourses && (
-								<Courses
-									admin
-									items={administeredCourses?.items}
-									sortOptions={store.getSortOptions(
-										KEYS.administeredCourses
-									)}
-									onSortChange={(sortOn, sortDirection) =>
-										onSortChange(
-											KEYS.administeredCourses,
-											sortOn,
-											sortDirection
-										)
-									}
-									onModification={onModificationAdmin}
-								/>
-							)} */}
+							*/}
 
 							{hasBooks && <Books items={books?.items} />}
 						</>
