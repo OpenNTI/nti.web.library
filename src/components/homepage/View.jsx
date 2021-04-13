@@ -40,8 +40,8 @@ const CollectionDataPropType = PropTypes.shape({
 Home.propTypes = {
 	loading: PropTypes.bool,
 	store: PropTypes.object,
-	courses: CollectionDataPropType,
-	administeredCourses: CollectionDataPropType,
+	EnrolledCourses: CollectionDataPropType,
+	AdministeredCourses: CollectionDataPropType,
 	books: CollectionDataPropType,
 	communities: PropTypes.array,
 	children: PropTypes.node,
@@ -65,7 +65,7 @@ function Home(props) {
 	let {
 		admin,
 		hasCatalog,
-		courses,
+		EnrolledCourses: courses,
 		AdministeredCourses: administeredCourses,
 		books,
 		communities,
@@ -219,6 +219,7 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 					collection,
 					sortOn: data?.sortOn,
 					sortDirection: data?.sortDirection,
+					batchSize: data?.batchSize,
 					searchTerm,
 				};
 			},
@@ -233,7 +234,7 @@ const Connected = decorate(WithCourses, [
 	HomePageStore.connect({
 		admin: 'admin',
 		hasCatalog: 'hasCatalog',
-		[KEYS.courses]: 'courses',
+		[KEYS.courses]: 'EnrolledCourses',
 		[KEYS.administeredCourses]: 'AdministeredCourses',
 		[KEYS.books]: 'books',
 		[KEYS.communities]: 'communities',
