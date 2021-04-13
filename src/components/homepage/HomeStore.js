@@ -52,10 +52,14 @@ class HomePageStore extends BaseCourseStore {
 				.then(communities => communities.load(true))
 				.then(items => items.filter(filterFn));
 		},
+
+		// FIXME: courses are loaded via the nti/web-course store now. these calls are redundant
+		// but they bootstrap the sort params that end up getting passed to the other store.
 		[KEYS.administeredCourses]: ({ currentValue }) =>
 			this.#dataSources[KEYS.administeredCourses]?.load(currentValue),
 		[KEYS.courses]: ({ currentValue }) =>
 			this.#dataSources[KEYS.courses]?.load(currentValue),
+
 		[KEYS.books]: ({ currentValue }) =>
 			this.loadCollection(
 				'VisibleContentBundles',
