@@ -19,6 +19,12 @@ import { default as HomePageStore, KEYS } from './HomeStore';
 const { Responsive } = Layouts;
 const { Grid } = Collection;
 
+const courseStorePredicate = collection => store =>
+	store?.binding?.collection === collection;
+
+const enrolledStorePredicate = courseStorePredicate(KEYS.courses);
+const adminStorePredicate = courseStorePredicate(KEYS.administeredCourses);
+
 const FullWidth = styled.div`
 	grid-column: full;
 
@@ -76,13 +82,8 @@ function Home(props) {
 		onSortChange,
 	} = props;
 
-	const { groups: enrolledGroups } = useStoreValue(
-		stor => stor?.binding?.collection === KEYS.courses
-	);
-
-	const { groups: adminGroups } = useStoreValue(
-		stor => stor?.binding?.collection === KEYS.administeredCourses
-	);
+	const { groups: enrolledGroups } = useStoreValue(enrolledStorePredicate);
+	const { groups: adminGroups } = useStoreValue(adminStorePredicate);
 
 	const hasCommunities = communities?.items?.length > 0;
 	const hasCourses = courses?.items?.length > 0;
