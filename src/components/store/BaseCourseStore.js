@@ -6,7 +6,8 @@ import AppDispatcher from '@nti/lib-dispatcher';
 
 import { COLLECTION_NAMES } from './constants';
 
-const getPrefsSortKey = collectionName => `sort:library:${collectionName}`;
+export const getPrefsSortKey = collectionName =>
+	`sort:library:${collectionName}`;
 
 // collections in the 'Courses' workspace are titled
 // 'AllCourses', 'EnrolledCourses', 'AdministeredCourses';
@@ -29,16 +30,6 @@ const initialValues = {
 	),
 };
 
-const FAVORITES = 'favorites';
-
-const courseSortOptions = [
-	FAVORITES,
-	'createdTime',
-	'provideruniqueid',
-	'lastSeenTime',
-	'title',
-];
-
 class BaseCourseStore extends Stores.BoundStore {
 	constructor(options = {}) {
 		super();
@@ -54,6 +45,22 @@ class BaseCourseStore extends Stores.BoundStore {
 		this.set({
 			...initialValues,
 		});
+
+		(async () => {
+			// set default sorts according to user preferences
+			const prefs = await getUserPreferences();
+			Object.entries(KEYS).forEach(([key, collectionName]) => {
+				const sort = prefs.get(getPrefsSortKey(collectionName));
+				if (sort) {
+					this.stageChanges({
+						[key]: {
+							...sort,
+							...this[key],
+						},
+					});
+				}
+			});
+		})();
 	}
 
 	loaders = {};
@@ -67,12 +74,12 @@ class BaseCourseStore extends Stores.BoundStore {
 		const service = await getService();
 		const collection = service.getCollection(title, workspace);
 
-		const { sortOn = FAVORITES, sortDirection } =
+		const { sortOn = 'favorites', sortDirection } =
 			(await getUserPreferences())?.get(getPrefsSortKey(title)) || {};
 
 		const useFavorites =
 			!this.searchTerm &&
-			sortOn === FAVORITES &&
+			sortOn === 'favorites' &&
 			collection.hasLink('Favorites');
 
 		const link = useFavorites
@@ -154,8 +161,6 @@ class BaseCourseStore extends Stores.BoundStore {
 			this.reload(KEYS.courses);
 		}
 	};
-
-	getSortOptions = collectionName => [...courseSortOptions];
 
 	onSortChange = async (
 		collectionName,

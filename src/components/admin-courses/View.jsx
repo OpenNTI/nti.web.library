@@ -1,6 +1,7 @@
 import React from 'react';
 
 // import PropTypes from 'prop-types';
+import { Models } from '@nti/lib-interfaces';
 import { scoped } from '@nti/lib-locale';
 import { User, Menu } from '@nti/web-commons';
 import { Collection as CourseCollection } from '@nti/web-course';
@@ -13,6 +14,10 @@ import {
 	HomeCrumb,
 	CurrentSectionTitleCrumb,
 } from '../courses/parts';
+import { getPrefsSortKey } from '../store/BaseCourseStore';
+const prefsSortKey = getPrefsSortKey('AdministeredCourses');
+
+const { sortOptions } = Models.library.AdministeredCoursesDataSource;
 
 const { Grid } = CourseCollection;
 const { usePreferences } = User;
@@ -22,24 +27,13 @@ const t = scoped('library.components.AdminCourses', {
 	empty: 'No Administered Courses found.',
 });
 
-const FAVORITES = 'favorites';
-
-const courseSortOptions = [
-	FAVORITES,
-	'createdTime',
-	'provideruniqueid',
-	'lastSeenTime',
-	'title',
-];
-
 export default function AdminCourses() {
-	const prefs = usePreferences(['librarySort']);
-	const sortOn = prefs?.get('librarySort') ?? courseSortOptions[0];
+	const prefs = usePreferences([prefsSortKey]);
+	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
 
-	const onChange = React.useCallback(
-		sort => prefs?.set('librarySort', sort),
-		[prefs]
-	);
+	const onChange = React.useCallback(sort => prefs?.set(prefsSortKey, sort), [
+		prefs,
+	]);
 
 	return (
 		<Container>
@@ -59,8 +53,9 @@ export default function AdminCourses() {
 				getSectionTitle={SectionTitle.getTitle}
 			>
 				<Menu
+					getText={CourseCollection.getSortOptionText}
 					slot="controls"
-					options={courseSortOptions}
+					options={sortOptions}
 					value={sortOn}
 					onChange={onChange}
 				/>

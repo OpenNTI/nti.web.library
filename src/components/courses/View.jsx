@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Models } from '@nti/lib-interfaces';
 import { User, Menu } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 import { Collection as CourseCollection } from '@nti/web-course';
 import { Router } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
+import { getPrefsSortKey } from '../store/BaseCourseStore';
 
 import {
 	Container,
@@ -16,6 +18,8 @@ import {
 	CurrentSectionTitleCrumb,
 	AddCourseLink,
 } from './parts';
+const prefsSortKey = getPrefsSortKey('EnrolledCourses');
+const { sortOptions } = Models.library.EnrolledCoursesDataSource;
 
 const { usePreferences } = User;
 
@@ -25,28 +29,18 @@ const t = scoped('library.components.Courses', {
 	add: 'Add Courses',
 });
 
-const FAVORITES = 'favorites';
-
-const courseSortOptions = [
-	FAVORITES,
-	'createdTime',
-	'provideruniqueid',
-	'lastSeenTime',
-	'title',
-];
-
 EnrolledCourses.propTypes = {
 	basePath: PropTypes.string,
 };
 function EnrolledCourses({ basePath }) {
 	const router = Router.useRouter();
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
-	const prefs = usePreferences(['librarySort']);
-	const sortOn = prefs?.get('librarySort') ?? courseSortOptions[0];
-	const onChange = React.useCallback(
-		sort => prefs?.set('librarySort', sort),
-		[prefs]
-	);
+	const prefs = usePreferences([prefsSortKey]);
+	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
+
+	const onChange = React.useCallback(sort => prefs?.set(prefsSortKey, sort), [
+		prefs,
+	]);
 
 	return (
 		<Container>
@@ -72,7 +66,7 @@ function EnrolledCourses({ basePath }) {
 			>
 				<Menu
 					slot="controls"
-					options={courseSortOptions}
+					options={sortOptions}
 					value={sortOn}
 					onChange={onChange}
 				/>

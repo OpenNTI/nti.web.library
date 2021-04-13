@@ -1,7 +1,12 @@
 import { getService } from '@nti/web-client';
+import { Models } from '@nti/lib-interfaces';
 
 import { COLLECTION_NAMES } from '../store/constants';
 import BaseCourseStore from '../store/BaseCourseStore';
+
+const {
+	library: { AdministeredCoursesDataSource, EnrolledCoursesDataSource },
+} = Models;
 
 // collections in the 'Courses' workspace are titled
 // 'AllCourses', 'EnrolledCourses', 'AdministeredCourses';
@@ -16,7 +21,22 @@ export const KEYS = {
 class HomePageStore extends BaseCourseStore {
 	constructor() {
 		super({ batchSize: 8 });
+
+		(async () => {
+			const service = await getService();
+			this.#dataSources[
+				KEYS.administeredCourses
+			] = new AdministeredCoursesDataSource(service);
+			this.#dataSources[KEYS.courses] = new EnrolledCoursesDataSource(
+				service
+			);
+		})();
 	}
+
+	#dataSources = {};
+
+	getSortOptions = collectionName =>
+		this.#dataSources[collectionName]?.sortOptions || [];
 
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {
@@ -33,17 +53,9 @@ class HomePageStore extends BaseCourseStore {
 				.then(items => items.filter(filterFn));
 		},
 		[KEYS.administeredCourses]: ({ currentValue }) =>
-			this.loadCollection(
-				COLLECTION_NAMES.administeredCourses,
-				'Courses',
-				currentValue // pass current state to provide sortOn, sortDirection, etc.
-			),
+			this.#dataSources[KEYS.administeredCourses]?.load(currentValue),
 		[KEYS.courses]: ({ currentValue }) =>
-			this.loadCollection(
-				COLLECTION_NAMES.enrolledCourses,
-				'Courses',
-				currentValue // pass current state to provide sortOn, sortDirection, etc.
-			),
+			this.#dataSources[KEYS.courses]?.load(currentValue),
 		[KEYS.books]: ({ currentValue }) =>
 			this.loadCollection(
 				'VisibleContentBundles',
