@@ -211,17 +211,12 @@ function Home(props) {
 const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 	(Cmp, collection) => {
 		return Collection.Store.compose(Cmp, {
-			deriveBindingFromProps: ({
-				[collection]: data,
-				searchTerm,
-				...other
-			}) => {
+			deriveBindingFromProps: ({ [collection]: data }) => {
 				return {
 					collection,
 					sortOn: data?.sortOn,
 					sortDirection: data?.sortDirection,
 					batchSize: data?.batchSize,
-					searchTerm,
 				};
 			},
 		});
