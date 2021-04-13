@@ -31,9 +31,10 @@ export default function AdminCourses() {
 	const prefs = usePreferences([prefsSortKey]);
 	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
 
-	const onChange = React.useCallback(sort => prefs?.set(prefsSortKey, sort), [
-		prefs,
-	]);
+	const onChange = React.useCallback(
+		sort => prefs?.set(prefsSortKey, { sortOn: sort }),
+		[prefs]
+	);
 
 	return (
 		<Container>
