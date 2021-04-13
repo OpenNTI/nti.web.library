@@ -7,7 +7,7 @@ import { Loading, Layouts } from '@nti/web-commons';
 import { searchable, contextual } from '@nti/web-search';
 import { scoped } from '@nti/lib-locale';
 import { Collection } from '@nti/web-course';
-import useStoreValue from '@nti/lib-store/src/hooks/use-store-value'; // FIXME: don't do this. export it if you need it.
+import { useStoreValue } from '@nti/lib-store';
 
 import AdminToolbar from '../AdminToolbar';
 import Communities from '../containers/Communities';
