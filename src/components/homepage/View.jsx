@@ -24,6 +24,7 @@ const courseStorePredicate = collection => store =>
 
 const enrolledStorePredicate = courseStorePredicate(KEYS.courses);
 const adminStorePredicate = courseStorePredicate(KEYS.administeredCourses);
+const hasItems = groups => (groups || []).some(g => g?.Items?.length > 0);
 
 const FullWidth = styled.div`
 	grid-column: full;
@@ -71,12 +72,11 @@ function Home(props) {
 	let {
 		admin,
 		hasCatalog,
-		EnrolledCourses: courses,
-		AdministeredCourses: administeredCourses,
+		// EnrolledCourses: courses,
+		// AdministeredCourses: administeredCourses,
 		books,
 		communities,
 		hasSearchTerm,
-		// searchTerm,
 		loading,
 		store,
 		onSortChange,
@@ -86,8 +86,8 @@ function Home(props) {
 	const { groups: adminGroups } = useStoreValue(adminStorePredicate);
 
 	const hasCommunities = communities?.items?.length > 0;
-	const hasCourses = courses?.items?.length > 0;
-	const hasAdminCourses = administeredCourses?.items?.length > 0;
+	const hasCourses = hasItems(enrolledGroups);
+	const hasAdminCourses = hasItems(adminGroups);
 	const hasBooks = books?.items?.length > 0;
 	const emptySearch =
 		hasSearchTerm &&
