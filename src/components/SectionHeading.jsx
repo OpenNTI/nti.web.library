@@ -26,6 +26,7 @@ class SectionHeading extends React.Component {
 		section: PropTypes.string.isRequired,
 		date: PropTypes.string,
 		empty: PropTypes.bool,
+		hasMore: PropTypes.bool,
 		courses: PropTypes.shape({
 			items: PropTypes.array,
 			total: PropTypes.number,
@@ -49,12 +50,13 @@ class SectionHeading extends React.Component {
 	};
 
 	showSeeAll() {
-		// return true;
-		const { section, hasSearchTerm } = this.props;
+		const { hasSearchTerm, hasMore } = this.props;
+		return !hasSearchTerm && hasMore;
+		// const { section, hasSearchTerm } = this.props;
 
-		const { items: { length } = [], total = 0 } = this.props[section] ?? {}; // get data for 'courses' or 'admin', e.g. { items: [course, course], total: 99, etc. }
+		// const { items: { length } = [], total = 0 } = this.props[section] ?? {}; // get data for 'courses' or 'admin', e.g. { items: [course, course], total: 99, etc. }
 
-		return !hasSearchTerm && length < total;
+		// return !hasSearchTerm && length < total;
 	}
 
 	render() {

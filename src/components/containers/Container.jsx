@@ -23,6 +23,7 @@ const Empty = styled(EmptyList)`
 export default function Container({
 	section,
 	items,
+	hasMore,
 	date,
 	onModification,
 	sortOptions,
@@ -43,6 +44,7 @@ export default function Container({
 		>
 			<Heading
 				section={section}
+				hasMore={hasMore}
 				date={date}
 				sortOptions={sortOptions}
 				onSortChange={onSortChange}
@@ -54,6 +56,7 @@ export default function Container({
 Container.propTypes = {
 	section: PropTypes.string,
 	items: PropTypes.array,
+	hasMore: PropTypes.bool,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
 	sortOptions: PropTypes.arrayOf(PropTypes.string),

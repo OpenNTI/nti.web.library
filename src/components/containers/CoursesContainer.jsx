@@ -6,6 +6,7 @@ import Container from './Container';
 export default class Courses extends React.Component {
 	static propTypes = {
 		admin: PropTypes.bool,
+		hasMore: PropTypes.bool,
 		items: PropTypes.array,
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
@@ -15,7 +16,7 @@ export default class Courses extends React.Component {
 
 	splitItemsBySemester(section) {
 		const {
-			props: { items, onModification },
+			props: { items, onModification, hasMore },
 		} = this;
 
 		return (
@@ -27,6 +28,7 @@ export default class Courses extends React.Component {
 							key={item.semester}
 							date={item.semester}
 							items={item.courses}
+							hasMore={hasMore}
 							onModification={onModification}
 						/>
 					);
@@ -39,6 +41,7 @@ export default class Courses extends React.Component {
 		const {
 			props: {
 				admin,
+				hasMore,
 				items,
 				itemsType = '',
 				onModification,
@@ -52,6 +55,7 @@ export default class Courses extends React.Component {
 			<Container
 				section={section}
 				items={items}
+				hasMore={hasMore}
 				sortOptions={sortOptions}
 				onSortChange={onSortChange}
 				onModification={onModification}

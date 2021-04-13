@@ -82,8 +82,12 @@ function Home(props) {
 		onSortChange,
 	} = props;
 
-	const { groups: enrolledGroups } = useStoreValue(enrolledStorePredicate);
-	const { groups: adminGroups } = useStoreValue(adminStorePredicate);
+	const { groups: enrolledGroups, hasMore: enrolledHasMore } = useStoreValue(
+		enrolledStorePredicate
+	);
+	const { groups: adminGroups, hasMore: adminHasMore } = useStoreValue(
+		adminStorePredicate
+	);
 
 	const hasCommunities = communities?.items?.length > 0;
 	const hasCourses = hasItems(enrolledGroups);
@@ -128,6 +132,7 @@ function Home(props) {
 								(hasSearchTerm && hasCourses)) && (
 								<Courses
 									items={enrolledGroups?.[0]?.Items} // from web.course collection store
+									hasMore={enrolledHasMore}
 									sortOptions={store.getSortOptions(
 										KEYS.courses
 									)}
@@ -145,6 +150,7 @@ function Home(props) {
 							{hasAdminCourses && (
 								<Courses
 									admin
+									hasMore={adminHasMore}
 									items={adminGroups?.[0]?.Items} // from web.course collection store
 									sortOptions={store.getSortOptions(
 										KEYS.administeredCourses
