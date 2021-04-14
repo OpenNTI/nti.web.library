@@ -42,20 +42,32 @@ const Routes = Responsive.isMobileContext()
 			Route({ path: '/', component: Home, name: 'library-home' }),
 	  ]);
 
+const Wrapper = styled('section')`
+	&.dark {
+		--text-color-primary: white;
+		--text-color-nav-link: var(--text-color-primary);
+	}
+`;
+
 export default React.forwardRef(function LibraryView(props, ref) {
 	const theme = Theme.useTheme();
 	const libraryTheme = theme.scope('library');
 	const background = libraryTheme.background;
-	const className =
-		background === 'light'
-			? 'library-light-background'
-			: 'library-dark-background';
+	const isDark = background !== 'light';
+
+	const className = isDark
+		? 'library-dark-background'
+		: 'library-light-background';
 
 	return (
 		<Theme.Scope scope="library">
-			<section ref={ref} className={cx('library-view', className)}>
+			<Wrapper
+				dark={isDark}
+				ref={ref}
+				className={cx('library-view', className)}
+			>
 				<Routes {...props} />
-			</section>
+			</Wrapper>
 		</Theme.Scope>
 	);
 });

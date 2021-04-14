@@ -9,9 +9,45 @@ import { Collection } from '@nti/web-course';
 
 import { getSectionTitle } from './utils/get-section-title.js';
 import AddButton from './AddButton';
-import './SectionHeading.scss';
 
 const { Responsive } = Layouts;
+
+const Wrapper = styled('div')`
+	display: flex;
+	align-items: baseline;
+	grid-column: full;
+
+	/* safari 13 bug doesn't know where "full" starts */
+	grid-column-start: 1;
+`;
+
+const CourseSectionHeading = styled('div')`
+	width: 100%;
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-left: 0.8em;
+`;
+
+const SeeAllLink = styled(LinkTo.Path)`
+	color: var(--text-color-nav-link, white);
+	cursor: pointer;
+	font: normal 300 0.875em/2em var(--body-font-family);
+	font-size: 14px;
+	line-height: 28px;
+	text-decoration: none;
+
+	:global(.library-view.library-light-background) & {
+		color: var(--secondary-grey);
+	}
+`;
+
+const HeadingDate = styled('div')`
+	color: rgba(255, 255, 255, 0.3);
+	margin-left: 0.5em;
+	font-size: 18px;
+	line-height: 18px;
+`;
 
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -67,7 +103,7 @@ class SectionHeading extends React.Component {
 		}
 
 		return (
-			<div className="library-section-heading">
+			<Wrapper>
 				<Menu
 					getText={Collection.getSortOptionText}
 					value={data.sortOn}
@@ -76,7 +112,7 @@ class SectionHeading extends React.Component {
 					onChange={onSortChange}
 				/>
 				{(section === 'courses' || section === 'admin') && (
-					<div className="course-section-heading">
+					<CourseSectionHeading>
 						{section === 'courses' ? (
 							<AddButton section={section} />
 						) : (
@@ -84,23 +120,22 @@ class SectionHeading extends React.Component {
 						)}
 
 						{!empty && this.showSeeAll() && (
-							<LinkTo.Path
+							<SeeAllLink
 								to={
 									section === 'admin'
 										? base + 'library/admin-courses'
 										: base + 'library/courses'
 								}
-								className="see-all"
 							>
 								See All
-							</LinkTo.Path>
+							</SeeAllLink>
 						)}
-					</div>
+					</CourseSectionHeading>
 				)}
 				{section === 'archivedcourses' && (
-					<div className="course-section-heading-date">{date}</div>
+					<HeadingDate>{date}</HeadingDate>
 				)}
-			</div>
+			</Wrapper>
 		);
 	}
 }
