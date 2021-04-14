@@ -1,16 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { scoped } from '@nti/lib-locale';
-
-const t = scoped('library.components.SectionTitle', {
-	admin: 'Administered Courses',
-	courses: 'Courses',
-	upcomingcourses: 'Upcoming Courses',
-	currentcourses: 'Current Courses',
-	archivedcourses: 'Archived Courses',
-	communities: 'Communities',
-	books: 'Books',
-});
+import { getSectionTitle as t } from './utils/get-section-title.js';
 
 const TitleMap = {
 	upcoming: 'upcomingcourses',

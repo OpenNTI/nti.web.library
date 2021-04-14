@@ -7,19 +7,11 @@ import { Connectors } from '@nti/lib-store';
 import { Layouts, Menu } from '@nti/web-commons';
 import { Collection } from '@nti/web-course';
 
-import SectionTitle from './SectionTitle';
+import { getSectionTitle } from './utils';
 import AddButton from './AddButton';
 import './SectionHeading.scss';
 
 const { Responsive } = Layouts;
-
-const getSectionTitle = (section, sortedOn) => {
-	const sectionName = SectionTitle.getTitle(section);
-	const sortName = sortedOn
-		? ' ' + Collection.getSortOptionText(sortedOn)
-		: '';
-	return `${sectionName}${sortName}`;
-};
 
 class SectionHeading extends React.Component {
 	static propTypes = {
