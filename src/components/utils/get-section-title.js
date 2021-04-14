@@ -18,3 +18,5 @@ export const getSectionTitle = (section, sortedOn) => {
 		: '';
 	return `${sectionName}${sortName}`;
 };
+
+getSectionTitle.isMissing = (...args) => t.isMissing(...args);
