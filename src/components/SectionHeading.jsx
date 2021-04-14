@@ -80,11 +80,6 @@ class SectionHeading extends React.Component {
 	showSeeAll() {
 		const { hasSearchTerm, hasMore } = this.props;
 		return !hasSearchTerm && hasMore;
-		// const { section, hasSearchTerm } = this.props;
-
-		// const { items: { length } = [], total = 0 } = this.props[section] ?? {}; // get data for 'courses' or 'admin', e.g. { items: [course, course], total: 99, etc. }
-
-		// return !hasSearchTerm && length < total;
 	}
 
 	render() {
