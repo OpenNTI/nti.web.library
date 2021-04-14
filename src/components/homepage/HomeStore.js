@@ -36,7 +36,9 @@ class HomePageStore extends BaseCourseStore {
 	#dataSources = {};
 
 	getSortOptions = collectionName =>
-		this.#dataSources[collectionName]?.sortOptions || [];
+		(this.#dataSources[collectionName]?.sortOptions || []).filter(
+			o => o !== 'availability'
+		);
 
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {
