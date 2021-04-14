@@ -7,7 +7,7 @@ import { Connectors } from '@nti/lib-store';
 import { Layouts, Menu } from '@nti/web-commons';
 import { Collection } from '@nti/web-course';
 
-import { getSectionTitle } from './utils';
+import { getSectionTitle } from './utils/get-section-title.js';
 import AddButton from './AddButton';
 import './SectionHeading.scss';
 
