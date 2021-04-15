@@ -1,4 +1,4 @@
-import './View.scss';
+import './Home.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -44,7 +44,7 @@ const CollectionDataPropType = PropTypes.shape({
 	sortDirection: PropTypes.string,
 });
 
-Home.propTypes = {
+HomeCmp.propTypes = {
 	loading: PropTypes.bool,
 	store: PropTypes.object,
 	EnrolledCourses: CollectionDataPropType,
@@ -59,7 +59,7 @@ Home.propTypes = {
 	searchTerm: PropTypes.string,
 };
 
-function Home(props) {
+function HomeCmp(props) {
 	const onModificationCourse = React.useCallback(
 		() => props.store.reload(KEYS.courses),
 		[props.store]
@@ -210,10 +210,10 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 			},
 		});
 	},
-	Home
+	HomeCmp
 );
 
-const Connected = decorate(WithCourses, [
+export const Home = decorate(WithCourses, [
 	searchable(),
 	contextual(t('home')),
 	HomePageStore.connect({
@@ -229,5 +229,3 @@ const Connected = decorate(WithCourses, [
 		onSortChange: 'onSortChange',
 	}),
 ]);
-
-export default Connected;
