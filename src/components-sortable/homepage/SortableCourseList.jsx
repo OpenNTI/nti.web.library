@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { CollectionSortable as Collection } from '@nti/web-course';
 import { Menu } from '@nti/web-commons';
 
-// import CoursesContainer from '../containers/CoursesContainer';
 import SectionTitle from '../SectionTitle';
 
 const { CourseList } = Collection;
@@ -42,7 +41,7 @@ export function SortableCourseList({ collection, searchTerm }) {
 				getSectionTitle={getSectionTitle}
 			>
 				<div slot="heading" className="library-section-heading">
-					<Menu
+					<Menu.Select
 						getText={Collection.getSortOptionText}
 						value={sortOn}
 						title={getSectionTitle(collection, sortOn)}

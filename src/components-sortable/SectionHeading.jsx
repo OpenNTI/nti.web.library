@@ -99,7 +99,7 @@ class SectionHeading extends React.Component {
 
 		return (
 			<Wrapper>
-				<Menu
+				<Menu.Select
 					getText={Collection.getSortOptionText}
 					value={data.sortOn}
 					title={getSectionTitle(section, data.sortOn)}

@@ -64,7 +64,7 @@ function EnrolledCourses({ basePath }) {
 				sortOn={sortOn}
 				getSectionTitle={SectionTitle.getTitle}
 			>
-				<Menu
+				<Menu.Select
 					slot="controls"
 					options={sortOptions}
 					value={sortOn}

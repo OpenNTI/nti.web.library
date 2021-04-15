@@ -53,7 +53,7 @@ export default function AdminCourses() {
 				sortOn={sortOn}
 				getSectionTitle={SectionTitle.getTitle}
 			>
-				<Menu
+				<Menu.Select
 					getText={CourseCollection.getSortOptionText}
 					slot="controls"
 					options={sortOptions}
