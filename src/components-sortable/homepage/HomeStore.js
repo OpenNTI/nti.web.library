@@ -63,7 +63,7 @@ export class Store extends BaseCourseStore {
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
-		[KEYS.enrolledCourses]: ({
+		[KEYS.courses]: ({
 			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
 		}) => ({ sortOn, sortDirection, batchSize }),
 
