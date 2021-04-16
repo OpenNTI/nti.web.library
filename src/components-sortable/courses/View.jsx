@@ -38,9 +38,10 @@ function EnrolledCourses({ basePath }) {
 	const prefs = usePreferences([prefsSortKey]);
 	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
 
-	const onChange = React.useCallback(sort => prefs?.set(prefsSortKey, sort), [
-		prefs,
-	]);
+	const onChange = React.useCallback(
+		sort => prefs?.set(prefsSortKey, { sortOn: sort }),
+		[prefs]
+	);
 
 	return (
 		<Container>
@@ -66,6 +67,7 @@ function EnrolledCourses({ basePath }) {
 			>
 				<Menu.Select
 					slot="controls"
+					getText={CourseCollection.getSortOptionText}
 					options={sortOptions}
 					value={sortOn}
 					onChange={onChange}
