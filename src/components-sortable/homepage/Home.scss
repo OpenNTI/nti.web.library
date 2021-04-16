@@ -1,0 +1,36 @@
+@import '~@nti/style-common';
+
+.library-view {
+	--webapp-library-top-gap: 52px;
+
+	min-height: calc(
+		100vh - var(--nt-app-top-offset, 70px) - var(--webapp-library-top-gap)
+	);
+	height: auto !important;
+	width: 100vw !important; // ext be damned
+	left: auto !important; // ext be damned
+	right: auto !important; // ext be damned
+	max-width: 100%;
+	margin: 0;
+	top: 32px;
+	font: normal 300 1.25em/2em var(--body-font-family);
+	font-size: 20px;
+
+	.no-results {
+		text-align: center;
+		color: var(--tertiary-grey);
+		font-size: 3rem;
+		margin-top: 40px;
+	}
+}
+
+@include respond-to(handhelds) {
+	.library-view {
+		max-width: calc(100vw - 1rem);
+		margin: 0 auto;
+
+		.no-results {
+			font-size: 2rem;
+		}
+	}
+}

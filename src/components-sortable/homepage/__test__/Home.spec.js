@@ -1,0 +1,114 @@
+/* eslint-env jest */
+jest.mock('../HomeStore', () => ({
+	Store: {
+		connect: () => () => {},
+	},
+	KEYS: {
+		administeredCourses: 'AdministeredCourses',
+		courses: 'EnrolledCourses',
+		books: 'books',
+		communities: 'communities',
+	},
+}));
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import { render } from '@testing-library/react';
+
+import { Home as HomePage } from '../Home';
+
+import data from './library-data';
+const { communities, books } = data;
+
+const mockStore = {
+	getSortOptions: collection => [],
+};
+
+function useMockServer(mockService) {
+	global.$AppConfig = {
+		...global.$AppConfig,
+		nodeService: mockService,
+		nodeInterface: {
+			async getServiceDocument() {
+				return mockService;
+			},
+		},
+	};
+}
+
+const onBefore = () =>
+	useMockServer({
+		getCollection: (title, workspace) => {
+			return {
+				href: title,
+				getLink: () => title,
+			};
+		},
+		getBatch: async (href, params) => {
+			return data[href];
+		},
+	});
+
+class Context extends React.Component {
+	static childContextTypes = {
+		router: PropTypes.object,
+	};
+
+	getChildContext() {
+		return {
+			router: {
+				baseroute: '/',
+				history: {
+					createHref: location => {},
+					push: (path, state) => {},
+					replace: (path, state) => {},
+				},
+			},
+		};
+	}
+
+	render() {
+		return this.props.children;
+	}
+}
+
+describe('Home page test', () => {
+	beforeEach(onBefore);
+
+	test('Non-admin home page test', async () => {
+		const { container, findByTestId, unmount } = render(
+			<Context>
+				<HomePage
+					communities={communities}
+					EnrolledCourses={{
+						collection: 'EnrolledCourses',
+						sortOn: 'title',
+					}}
+					AdministeredCourses={{
+						collection: 'AdministeredCourses',
+						sortOn: 'title',
+					}}
+					books={books}
+					loading={false}
+					store={mockStore}
+				/>
+			</Context>
+		);
+
+		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();
+
+		const qsa = (...args) => container.querySelectorAll(...args);
+
+		expect(qsa('.library-collection').length).toBe(4);
+		expect(qsa('.library-collection.communities').length).toBe(1);
+		expect(qsa('.library-collection.courses').length).toBe(1);
+		expect(qsa('.library-collection.books').length).toBe(1);
+		expect(qsa('a.nti-link-to-path.library-add').length).toBe(1);
+		expect(qsa('.nti-course-card-container').length).toBe(12);
+		expect(qsa('.book-card').length).toBe(5);
+		expect(qsa('.community-card').length).toBe(1);
+		expect(qsa('.library-object').length).toBe(18);
+
+		await unmount();
+	});
+});

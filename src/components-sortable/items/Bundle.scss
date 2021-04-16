@@ -1,0 +1,94 @@
+@import '~@nti/style-common';
+
+.book-card {
+	background: white;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+	position: relative;
+	height: 290px;
+	padding: 5px;
+	cursor: pointer;
+
+	.bundle-card-image {
+		width: 100%;
+		height: 170px;
+		overflow: hidden;
+	}
+
+	.bundle-card-image-background {
+		display: block;
+		width: auto;
+		height: 100%;
+		transform: scale(1);
+		transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out,
+			-webkit-transform 0.3s ease-in-out;
+	}
+
+	.bundle-card-image-background::before {
+		content: ' ';
+		display: block;
+		padding-top: 73.2758621%;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-image: url(../../resources/images/default-card-image.png);
+	}
+
+	.no-touch &:hover {
+		.bundle-card-image-background {
+			opacity: 0.7;
+			transform: scale(1.05, 1.05);
+		}
+	}
+
+	.book-title {
+		font: normal 700 1rem/1.3 var(--header-font-family);
+		color: var(--primary-grey);
+		text-transform: uppercase;
+		max-height: 2.6em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin: 25px 0 0;
+		padding: 0 5px;
+	}
+
+	.book-author {
+		margin-top: 10px;
+		font: normal 700 0.6rem/1.4 var(--body-font-family);
+		color: var(--primary-blue);
+		text-transform: uppercase;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding: 0 5px;
+
+		@include limit-lines($lines: 2, $line-height: 1.4);
+	}
+
+	@include respond-to(handhelds) {
+		height: 250px;
+		padding: 0;
+
+		.book-title {
+			padding: 0 15px;
+			margin-top: 0.2rem;
+			font-weight: 300;
+			white-space: normal;
+			display: block;
+		}
+
+		.book-author {
+			padding: 0 15px;
+			margin-top: 5px;
+			font-weight: 400;
+			white-space: normal;
+			display: block;
+		}
+
+		.bundle-card-image {
+			height: 150px;
+		}
+
+		.bundle-card-image-background::before {
+			height: 150px;
+		}
+	}
+}
