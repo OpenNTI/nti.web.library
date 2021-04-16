@@ -18,7 +18,7 @@ export const KEYS = {
 	communities: 'communities',
 };
 
-class HomePageStore extends BaseCourseStore {
+export class Store extends BaseCourseStore {
 	constructor() {
 		super({ batchSize: 8 });
 
@@ -80,5 +80,3 @@ class HomePageStore extends BaseCourseStore {
 			!!(await getService()).getCollection('Courses', 'Catalog'),
 	};
 }
-
-export default HomePageStore;

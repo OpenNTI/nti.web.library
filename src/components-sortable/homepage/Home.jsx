@@ -14,7 +14,7 @@ import Communities from '../containers/Communities';
 import Courses from '../containers/CoursesContainer';
 import Books from '../containers/BooksContainer';
 
-import { default as HomePageStore, KEYS } from './HomeStore';
+import { Store as HomePageStore, KEYS } from './HomeStore';
 
 const { Responsive } = Layouts;
 const { Grid } = Collection;
@@ -89,7 +89,7 @@ function HomeCmp(props) {
 		adminStorePredicate
 	);
 
-	const hasCommunities = communities?.items?.length > 0;
+	const hasCommunities = communities?.length > 0;
 	const hasCourses = hasItems(enrolledGroups);
 	const hasAdminCourses = hasItems(adminGroups);
 	const hasBooks = books?.items?.length > 0;
@@ -133,7 +133,7 @@ function HomeCmp(props) {
 								<Courses
 									items={enrolledGroups?.[0]?.Items} // from web.course collection store
 									hasMore={enrolledHasMore}
-									sortOptions={store.getSortOptions(
+									sortOptions={store?.getSortOptions(
 										KEYS.courses
 									)}
 									onSortChange={(sortOn, sortDirection) =>
@@ -152,7 +152,7 @@ function HomeCmp(props) {
 									admin
 									hasMore={adminHasMore}
 									items={adminGroups?.[0]?.Items} // from web.course collection store
-									sortOptions={store.getSortOptions(
+									sortOptions={store?.getSortOptions(
 										KEYS.administeredCourses
 									)}
 									onSortChange={(sortOn, sortDirection) =>
@@ -165,25 +165,6 @@ function HomeCmp(props) {
 									onModification={onModificationAdmin}
 								/>
 							)}
-
-							{/* {((!hasSearchTerm && canShowCoursesSection) ||
-								(hasSearchTerm && hasCourses)) && (
-								<Courses
-									items={courses?.items}
-									sortOptions={store.getSortOptions(
-										KEYS.courses
-									)}
-									onSortChange={(sortOn, sortDirection) =>
-										onSortChange(
-											KEYS.courses,
-											sortOn,
-											sortDirection
-										)
-									}
-									onModification={onModificationCourse}
-								/>
-							)}
-							*/}
 
 							{hasBooks && <Books items={books?.items} />}
 						</>
