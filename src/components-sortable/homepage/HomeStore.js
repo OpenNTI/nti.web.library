@@ -42,7 +42,7 @@ export class Store extends BaseCourseStore {
 		] || [
 			...new Set([
 				'favorites',
-				...this.#dataSources[collectionName]?.sortOptions,
+				...(this.#dataSources[collectionName]?.sortOptions || []),
 			]),
 		]).filter(o => o !== 'availability');
 
