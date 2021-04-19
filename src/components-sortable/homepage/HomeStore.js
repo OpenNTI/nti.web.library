@@ -43,7 +43,7 @@ export class Store extends BaseCourseStore {
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {
 			const term = searchTerm?.toLowerCase();
-			const filterFn = term
+			const filterFn = !term
 				? x => x
 				: ({ alias, realname }) =>
 						[alias, realname].some(n =>
