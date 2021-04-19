@@ -244,8 +244,6 @@ class BaseCourseStore extends Stores.BoundStore {
 
 	/**
 	 * Flush the staged queue (without applying the data)
-	 *
-	 * @returns {null}      No return value
 	 */
 	clearStaged() {
 		this.staged = {};
@@ -255,7 +253,6 @@ class BaseCourseStore extends Stores.BoundStore {
 	 * Add items to be set on the store (instead of setting them immediately, which triggers an event emit)
 	 *
 	 * @param {Object} obj Object containing key-value pairs to eventually be set on the store
-	 * @returns {null}      No return value
 	 */
 	stageChanges(obj) {
 		if (!this.staged) {
@@ -269,8 +266,6 @@ class BaseCourseStore extends Stores.BoundStore {
 
 	/**
 	 * Flush the staged queue and set the data on the store, triggering an event emit
-	 *
-	 * @returns {null}      No return value
 	 */
 	commitStaged() {
 		this.set(this.staged);
