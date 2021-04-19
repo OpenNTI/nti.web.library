@@ -34,11 +34,17 @@ export class Store extends BaseCourseStore {
 	}
 
 	#dataSources = {};
+	#sortOptions = {};
 
 	getSortOptions = collectionName =>
-		(this.#dataSources[collectionName]?.sortOptions || []).filter(
-			o => o !== 'availability'
-		);
+		(this.#sortOptions[collectionName] = this.#sortOptions[
+			collectionName
+		] || [
+			...new Set([
+				'favorites',
+				...this.#dataSources[collectionName]?.sortOptions,
+			]),
+		]).filter(o => o !== 'availability');
 
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {
@@ -58,13 +64,21 @@ export class Store extends BaseCourseStore {
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.administeredCourses]: ({
-			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+			currentValue: {
+				sortOn = 'favorites',
+				sortDirection,
+				batchSize = 8,
+			} = {},
 		}) => ({ sortOn, sortDirection, batchSize }),
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.courses]: ({
-			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+			currentValue: {
+				sortOn = 'favorites',
+				sortDirection,
+				batchSize = 8,
+			} = {},
 		}) => ({ sortOn, sortDirection, batchSize }),
 
 		[KEYS.books]: async ({
