@@ -67,14 +67,25 @@ export class Store extends BaseCourseStore {
 			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
 		}) => ({ sortOn, sortDirection, batchSize }),
 
-		[KEYS.books]: ({ currentValue }) =>
-			this.loadCollection(
+		[KEYS.books]: async ({
+			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+		}) => {
+			const service = await getService();
+			const { href } = service.getCollection(
 				'VisibleContentBundles',
-				'ContentBundles',
-				currentValue, // pass current state to provide sortOn, sortDirection, etc.
-				(batch, service) =>
-					Promise.all(batch.titles.map(x => service.getObject(x))) // preprocess batch items
-			),
+				'ContentBundles'
+			);
+			const batch = await service.get(href, {
+				sortOn,
+				sortDirection,
+				batchSize,
+			});
+
+			const items = await Promise.all(
+				batch.titles.map(x => service.getObject(x))
+			);
+			return { items };
+		},
 		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
 		hasCatalog: async () =>
 			!!(await getService()).getCollection('Courses', 'Catalog'),
