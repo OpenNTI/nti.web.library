@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 
 import Container from './Container';
 
-export default class Books extends React.Component {
-	static propTypes = {
-		items: PropTypes.array,
-	};
+const Books = props => <Container section="books" {...props} />;
 
-	render() {
-		const {
-			props: { items },
-		} = this;
+Books.propTypes = {
+	items: PropTypes.array,
+	sortOn: PropTypes.any,
+	sortOptions: PropTypes.array,
+	onSortChange: PropTypes.func,
+};
 
-		return <Container section="books" items={items} />;
-	}
-}
+export default Books;
