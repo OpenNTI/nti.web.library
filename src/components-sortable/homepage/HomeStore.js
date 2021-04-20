@@ -5,7 +5,11 @@ import { COLLECTION_NAMES } from '../store/constants';
 import BaseCourseStore from '../store/BaseCourseStore';
 
 const {
-	library: { AdministeredCoursesDataSource, EnrolledCoursesDataSource },
+	library: {
+		AdministeredCoursesDataSource,
+		BooksDataSource,
+		EnrolledCoursesDataSource,
+	},
 } = Models;
 
 // collections in the 'Courses' workspace are titled
@@ -30,6 +34,7 @@ export class Store extends BaseCourseStore {
 			this.#dataSources[KEYS.courses] = new EnrolledCoursesDataSource(
 				service
 			);
+			this.#dataSources[KEYS.books] = new BooksDataSource(service);
 		})();
 	}
 
@@ -38,15 +43,20 @@ export class Store extends BaseCourseStore {
 	#dataSources = {};
 	#sortOptions = {};
 
-	getSortOptions = collectionName =>
-		(this.#sortOptions[collectionName] = this.#sortOptions[
+	getSortOptions = collectionName => {
+		return (this.#sortOptions[collectionName] = this.#sortOptions[
 			collectionName
 		] || [
 			...new Set([
-				'favorites',
+				...([KEYS.courses, KEYS.administeredCourses].includes(
+					collectionName
+				)
+					? ['favorites']
+					: []),
 				...(this.#dataSources[collectionName]?.sortOptions || []),
 			]),
 		]).filter(o => o !== 'availability');
+	};
 
 	loaders = {
 		[KEYS.communities]: async ({ searchTerm }) => {
@@ -84,23 +94,19 @@ export class Store extends BaseCourseStore {
 		}) => ({ sortOn, sortDirection, batchSize }),
 
 		[KEYS.books]: async ({
-			currentValue: { sortOn, sortDirection, batchSize = 8 } = {},
+			currentValue: { sortOn, sortDirection } = {},
 		}) => {
-			const service = await getService();
-			const { href } = service.getCollection(
-				'VisibleContentBundles',
-				'ContentBundles'
-			);
-			const batch = await service.get(href, {
+			const batch = await this.#dataSources[KEYS.books].request({
 				sortOn,
 				sortDirection,
-				batchSize,
 			});
+
+			const service = await getService();
 
 			const items = await Promise.all(
 				batch.titles.map(x => service.getObject(x))
 			);
-			return { items };
+			return { items, sortOn, sortDirection };
 		},
 		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
 		hasCatalog: async () =>

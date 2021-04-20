@@ -166,7 +166,21 @@ function HomeCmp(props) {
 								/>
 							)}
 
-							{hasBooks && <Books items={books?.items} />}
+							{hasBooks && (
+								<Books
+									items={books?.items}
+									sortOptions={store?.getSortOptions(
+										KEYS.books
+									)}
+									onSortChange={(sortOn, sortDirection) =>
+										onSortChange(
+											KEYS.books,
+											sortOn,
+											sortDirection
+										)
+									}
+								/>
+							)}
 						</>
 					)}
 				</>
