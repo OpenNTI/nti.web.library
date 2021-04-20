@@ -107,8 +107,6 @@ class BaseCourseStore extends Stores.BoundStore {
 			total,
 			sortOn,
 			sortDirection,
-			nextBatch: batch.getLink('batch-next'),
-			hasMore: total > items.length,
 		};
 	}
 
@@ -132,26 +130,6 @@ class BaseCourseStore extends Stores.BoundStore {
 			}),
 			{}
 		);
-	};
-
-	loadMore = async collectionName => {
-		const current = this.get(collectionName);
-
-		if (current?.nextBatch) {
-			const service = await getService();
-			const batch = await service.getBatch(current.nextBatch);
-			const { Items = [], Total: total } = batch;
-
-			const items = [...current.items, ...Items];
-
-			this.set(collectionName, {
-				...current,
-				items,
-				total,
-				nextBatch: batch.getLink('batch-next'),
-				hasMore: total > items.length,
-			});
-		}
 	};
 
 	handleDispatch = event => {
@@ -182,7 +160,6 @@ class BaseCourseStore extends Stores.BoundStore {
 			sortOn,
 			sortDirection,
 			batchStart: 0,
-			nextBatch: undefined,
 		};
 		// console.log(collectionName, sortOn, sortDirection);
 		this.reload(collectionName);
