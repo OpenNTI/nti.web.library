@@ -14,7 +14,7 @@ import Communities from '../containers/Communities';
 import Courses from '../containers/CoursesContainer';
 import Books from '../containers/BooksContainer';
 
-import { Store as HomePageStore, KEYS } from './HomeStore';
+import { Store as HomePageStore, KEYS } from './Store';
 
 const { Responsive } = Layouts;
 const { Grid } = Collection;

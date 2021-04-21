@@ -2,12 +2,18 @@ import { getService, getUserPreferences } from '@nti/web-client';
 import { Stores, Mixins } from '@nti/lib-store';
 import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
+import { Models } from '@nti/lib-interfaces';
 import AppDispatcher from '@nti/lib-dispatcher';
 
 import { COLLECTION_NAMES } from './constants';
 
-export const getPrefsSortKey = collectionName =>
-	`sort:library:${collectionName}`;
+const {
+	library: {
+		AdministeredCoursesDataSource,
+		BooksDataSource,
+		EnrolledCoursesDataSource,
+	},
+} = Models;
 
 // collections in the 'Courses' workspace are titled
 // 'AllCourses', 'EnrolledCourses', 'AdministeredCourses';
@@ -18,6 +24,9 @@ export const KEYS = {
 	books: 'books',
 	communities: 'communities',
 };
+
+export const getPrefsSortKey = collectionName =>
+	`sort:library:${collectionName}`;
 
 const initialValues = {
 	loading: true,
@@ -30,7 +39,7 @@ const initialValues = {
 	),
 };
 
-class BaseCourseStore extends Stores.BoundStore {
+class StoreClass extends Stores.BoundStore {
 	constructor(options = {}) {
 		super();
 
@@ -60,10 +69,93 @@ class BaseCourseStore extends Stores.BoundStore {
 					});
 				}
 			});
+
+			// instantiate data sources
+			const service = await getService();
+			this.#dataSources[
+				KEYS.administeredCourses
+			] = new AdministeredCoursesDataSource(service);
+			this.#dataSources[KEYS.courses] = new EnrolledCoursesDataSource(
+				service
+			);
+			this.#dataSources[KEYS.books] = new BooksDataSource(service);
 		})();
 	}
 
-	loaders = {};
+	KEYS = KEYS;
+
+	#dataSources = {};
+	#sortOptions = {};
+
+	getSortOptions = collectionName => {
+		return (this.#sortOptions[collectionName] = this.#sortOptions[
+			collectionName
+		] || [
+			...new Set([
+				...([KEYS.courses, KEYS.administeredCourses].includes(
+					collectionName
+				)
+					? ['favorites']
+					: []),
+				...(this.#dataSources[collectionName]?.sortOptions || []),
+			]),
+		]).filter(o => o !== 'availability');
+	};
+
+	loaders = {
+		[KEYS.communities]: async ({ searchTerm }) => {
+			const term = searchTerm?.toLowerCase();
+			const filterFn = !term
+				? x => x
+				: ({ alias, realname }) =>
+						[alias, realname].some(n =>
+							n?.toLowerCase().includes(term)
+						);
+			return getService()
+				.then(service => service.getCommunities())
+				.then(communities => communities.load(true))
+				.then(items => items.filter(filterFn));
+		},
+
+		// originally used to fetch the courses; now it just passes the sort info through.
+		// we should rework this for better clarity
+		[KEYS.administeredCourses]: ({
+			currentValue: {
+				sortOn = 'favorites',
+				sortDirection,
+				batchSize = 8,
+			} = {},
+		}) => ({ sortOn, sortDirection, batchSize }),
+
+		// originally used to fetch the courses; now it just passes the sort info through.
+		// we should rework this for better clarity
+		[KEYS.courses]: ({
+			currentValue: {
+				sortOn = 'favorites',
+				sortDirection,
+				batchSize = 8,
+			} = {},
+		}) => ({ sortOn, sortDirection, batchSize }),
+
+		[KEYS.books]: async ({
+			currentValue: { sortOn, sortDirection } = {},
+		}) => {
+			const batch = await this.#dataSources[KEYS.books].request({
+				sortOn,
+				sortDirection,
+			});
+
+			const service = await getService();
+
+			const items = await Promise.all(
+				batch.titles.map(x => service.getObject(x))
+			);
+			return { items, sortOn, sortDirection };
+		},
+		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
+		hasCatalog: async () =>
+			!!(await getService()).getCollection('Courses', 'Catalog'),
+	};
 
 	async loadCollection(
 		title,
@@ -251,4 +343,4 @@ class BaseCourseStore extends Stores.BoundStore {
 	}
 }
 
-export default decorate(BaseCourseStore, [mixin(Mixins.Searchable)]);
+export const Store = decorate(StoreClass, [mixin(Mixins.Searchable)]);

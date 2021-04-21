@@ -1,5 +1,5 @@
 /* eslint-env jest */
-jest.mock('../HomeStore', () => ({
+jest.mock('../Store', () => ({
 	Store: {
 		connect: () => () => {},
 	},

@@ -8,7 +8,7 @@ import { CollectionSortable as CourseCollection } from '@nti/web-course';
 import { Router } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
-import { getPrefsSortKey } from '../store/BaseCourseStore';
+import { getPrefsSortKey } from '../homepage/Store';
 
 import {
 	Container,

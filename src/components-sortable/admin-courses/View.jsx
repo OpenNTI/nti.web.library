@@ -14,7 +14,7 @@ import {
 	HomeCrumb,
 	CurrentSectionTitleCrumb,
 } from '../courses/parts';
-import { getPrefsSortKey } from '../store/BaseCourseStore';
+import { getPrefsSortKey } from '../homepage/Store';
 const prefsSortKey = getPrefsSortKey('AdministeredCourses');
 
 const { sortOptions } = Models.library.AdministeredCoursesDataSource;
