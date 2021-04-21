@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Models } from '@nti/lib-interfaces';
-import { User, Menu } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
+import { User, Menu } from '@nti/web-commons';
 import { CollectionSortable as CourseCollection } from '@nti/web-course';
 import { Router } from '@nti/web-routing';
 
@@ -18,6 +18,7 @@ import {
 	CurrentSectionTitleCrumb,
 	AddCourseLink,
 } from './parts';
+
 const prefsSortKey = getPrefsSortKey('EnrolledCourses');
 const { sortOptions } = Models.library.EnrolledCoursesDataSource;
 
@@ -32,11 +33,15 @@ const t = scoped('library.components.Courses', {
 EnrolledCourses.propTypes = {
 	basePath: PropTypes.string,
 };
+
 function EnrolledCourses({ basePath }) {
 	const router = Router.useRouter();
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
 	const prefs = usePreferences([prefsSortKey]);
-	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
+	const sortPref = prefs?.get(prefsSortKey)?.sortOn;
+	const sortOn = sortOptions.includes(sortPref)
+		? sortPref
+		: sortOptions?.[0] || '';
 
 	const onChange = React.useCallback(
 		sort => prefs?.set(prefsSortKey, { sortOn: sort }),

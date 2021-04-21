@@ -1,12 +1,12 @@
 import React from 'react';
 
-// import PropTypes from 'prop-types';
 import { Models } from '@nti/lib-interfaces';
 import { scoped } from '@nti/lib-locale';
 import { User, Menu } from '@nti/web-commons';
 import { CollectionSortable as CourseCollection } from '@nti/web-course';
 
 import SectionTitle from '../SectionTitle';
+import { getPrefsSortKey } from '../homepage/Store';
 import {
 	Container,
 	Toolbar,
@@ -14,9 +14,8 @@ import {
 	HomeCrumb,
 	CurrentSectionTitleCrumb,
 } from '../courses/parts';
-import { getPrefsSortKey } from '../homepage/Store';
-const prefsSortKey = getPrefsSortKey('AdministeredCourses');
 
+const prefsSortKey = getPrefsSortKey('AdministeredCourses');
 const { sortOptions } = Models.library.AdministeredCoursesDataSource;
 
 const { Grid } = CourseCollection;
@@ -29,7 +28,10 @@ const t = scoped('library.components.AdminCourses', {
 
 export default function AdminCourses() {
 	const prefs = usePreferences([prefsSortKey]);
-	const sortOn = prefs?.get(prefsSortKey)?.sortOn || sortOptions?.[0] || '';
+	const sortPref = prefs?.get(prefsSortKey)?.sortOn;
+	const sortOn = sortOptions.includes(sortPref)
+		? sortPref
+		: sortOptions?.[0] || '';
 
 	const onChange = React.useCallback(
 		sort => prefs?.set(prefsSortKey, { sortOn: sort }),

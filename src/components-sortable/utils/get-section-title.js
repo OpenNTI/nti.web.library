@@ -13,9 +13,10 @@ const t = scoped('library.components.SectionTitle', {
 
 export const getSectionTitle = (section, sortedOn) => {
 	const sectionName = t(section);
-	const sortName = sortedOn
-		? ' ' + Collection.getSortOptionText(sortedOn)
-		: '';
+	const sortName =
+		sortedOn && sortedOn !== 'favorites'
+			? ' ' + Collection.getSortOptionText(sortedOn)
+			: '';
 	return `${sectionName}${sortName}`;
 };
 
