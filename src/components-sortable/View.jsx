@@ -4,11 +4,17 @@ import cx from 'classnames';
 import { Router, Route } from '@nti/web-routing';
 import { Layouts, Theme } from '@nti/web-commons';
 
+import { COLLECTION_NAMES as COLLECTIONS } from './constants';
 import { Home } from './homepage';
-import { Courses as EnrolledCourses } from './courses';
-import { AdminCourses } from './admin-courses';
+import { CourseList } from './courses/CourseList';
 
 const { Responsive } = Layouts;
+const EnrolledCourses = props => (
+	<CourseList collection={COLLECTIONS.enrolledCourses} {...props} />
+);
+const AdminCourses = props => (
+	<CourseList collection={COLLECTIONS.administeredCourses} {...props} />
+);
 
 const Routes = Responsive.isMobileContext()
 	? Router.for([

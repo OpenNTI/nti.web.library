@@ -5,7 +5,8 @@ import { mixin } from '@nti/lib-decorators';
 import { Models } from '@nti/lib-interfaces';
 import AppDispatcher from '@nti/lib-dispatcher';
 
-import { COLLECTION_NAMES } from './constants';
+import { COLLECTION_NAMES } from '../constants';
+import { getSortOptions } from '../utils/get-sort-options';
 
 const {
 	library: {
@@ -85,21 +86,18 @@ class StoreClass extends Stores.BoundStore {
 	KEYS = KEYS;
 
 	#dataSources = {};
-	#sortOptions = {};
 
 	getSortOptions = collectionName => {
-		return (this.#sortOptions[collectionName] = this.#sortOptions[
-			collectionName
-		] || [
+		return [
 			...new Set([
 				...([KEYS.courses, KEYS.administeredCourses].includes(
 					collectionName
 				)
 					? ['favorites']
 					: []),
-				...(this.#dataSources[collectionName]?.sortOptions || []),
+				...getSortOptions(collectionName),
 			]),
-		]).filter(o => o !== 'availability');
+		].filter(o => o !== 'availability');
 	};
 
 	loaders = {
