@@ -26,8 +26,7 @@ export const KEYS = {
 	communities: 'communities',
 };
 
-export const getPrefsSortKey = collectionName =>
-	`sort:library:${collectionName}`;
+export const getPrefsSortKey = collectionName => `Sort.${collectionName}`;
 
 const initialValues = {
 	loading: true,
