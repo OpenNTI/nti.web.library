@@ -26,6 +26,7 @@ export default function Container({
 	hasMore,
 	date,
 	onModification,
+	onDelete,
 	sortOptions,
 	onSortChange,
 }) {
@@ -41,6 +42,7 @@ export default function Container({
 			className={section}
 			list={items}
 			onModification={onModification}
+			onDelete={onDelete}
 		>
 			<Heading
 				section={section}
@@ -59,6 +61,7 @@ Container.propTypes = {
 	hasMore: PropTypes.bool,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
+	onDelete: PropTypes.func,
 	sortOptions: PropTypes.arrayOf(PropTypes.string),
 	onSortChange: PropTypes.func,
 };

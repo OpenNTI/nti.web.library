@@ -53,6 +53,7 @@ export default function LibraryCollection({
 	title,
 	subtitle,
 	onModification,
+	onDelete
 }) {
 	return (
 		<Container className={cx('library-collection', className)}>
@@ -83,6 +84,7 @@ export default function LibraryCollection({
 										}
 										item={item}
 										onModification={onModification}
+										onDelete={onDelete}
 									/>
 								</ListItem>
 							)
@@ -100,5 +102,6 @@ LibraryCollection.propTypes = {
 	title: PropTypes.string,
 	subtitle: PropTypes.string,
 	onModification: PropTypes.func,
+	onDelete: PropTypes.func,
 	children: PropTypes.any,
 };

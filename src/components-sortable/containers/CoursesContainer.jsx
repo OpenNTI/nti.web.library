@@ -10,6 +10,7 @@ export default class Courses extends React.Component {
 		items: PropTypes.array,
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
+		onDelete: PropTypes.func,
 		sortOptions: PropTypes.arrayOf(PropTypes.string),
 		onSortChange: PropTypes.func,
 	};
@@ -45,6 +46,7 @@ export default class Courses extends React.Component {
 				items,
 				itemsType = '',
 				onModification,
+				onDelete,
 				sortOptions,
 				onSortChange,
 			},
@@ -59,6 +61,7 @@ export default class Courses extends React.Component {
 				sortOptions={sortOptions}
 				onSortChange={onSortChange}
 				onModification={onModification}
+				onDelete={onDelete}
 			/>
 		) : (
 			this.splitItemsBySemester(section)

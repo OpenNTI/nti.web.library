@@ -89,6 +89,7 @@ function HomeCmp(props) {
 		groups: adminGroups,
 		hasMore: adminHasMore,
 		loading: loadingAdmin,
+		onCourseDelete: onAdminCourseDelete
 	} = useStoreValue(adminStorePredicate);
 
 	const loading = storeLoading || loadingEnrolled || loadingAdmin;
@@ -167,6 +168,7 @@ function HomeCmp(props) {
 										)
 									}
 									onModification={onModificationAdmin}
+									onDelete={onAdminCourseDelete}
 								/>
 							)}
 
