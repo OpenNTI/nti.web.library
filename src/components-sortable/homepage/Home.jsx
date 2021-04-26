@@ -72,22 +72,26 @@ function HomeCmp(props) {
 	let {
 		admin,
 		hasCatalog,
-		// EnrolledCourses: courses,
-		// AdministeredCourses: administeredCourses,
 		books,
 		communities,
 		hasSearchTerm,
-		loading,
+		loading: storeLoading,
 		store,
 		onSortChange,
 	} = props;
 
-	const { groups: enrolledGroups, hasMore: enrolledHasMore } = useStoreValue(
-		enrolledStorePredicate
-	);
-	const { groups: adminGroups, hasMore: adminHasMore } = useStoreValue(
-		adminStorePredicate
-	);
+	const {
+		groups: enrolledGroups,
+		hasMore: enrolledHasMore,
+		loading: loadingEnrolled,
+	} = useStoreValue(enrolledStorePredicate);
+	const {
+		groups: adminGroups,
+		hasMore: adminHasMore,
+		loading: loadingAdmin,
+	} = useStoreValue(adminStorePredicate);
+
+	const loading = storeLoading || loadingEnrolled || loadingAdmin;
 
 	const hasCommunities = communities?.length > 0;
 	const hasCourses = hasItems(enrolledGroups);
@@ -198,9 +202,9 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 			deriveBindingFromProps: ({ [collection]: data }) => {
 				return {
 					collection,
-					sortOn: data?.sortOn,
-					sortDirection: data?.sortDirection,
-					batchSize: data?.batchSize,
+					sortOn: data?.sortOn ?? 'favorites',
+					sortDirection: data?.sortDirection ?? 'ascending',
+					batchSize: data?.batchSize ?? 8,
 				};
 			},
 		});
