@@ -138,6 +138,7 @@ class StoreClass extends Stores.BoundStore {
 			currentValue: { sortOn, sortDirection } = {},
 		}) => {
 			const batch = await this.#dataSources[KEYS.books].request({
+				filter: this.searchTerm,
 				sortOn,
 				sortDirection,
 			});
