@@ -7,7 +7,7 @@ import { Connectors } from '@nti/lib-store';
 import { Layouts, Menu } from '@nti/web-commons';
 import { CollectionSortable as Collection } from '@nti/web-course';
 
-import { getSectionTitle } from './utils/get-section-title.js';
+import { getSectionTitleStrings } from './utils/get-section-title.js';
 import AddButton from './AddButton';
 
 const { Responsive } = Layouts;
@@ -48,6 +48,21 @@ const HeadingDate = styled('div')`
 	font-size: 18px;
 	line-height: 18px;
 `;
+
+const SubTitleText = styled('span')`
+	@media (--respond-to-handhelds) {
+		line-height: 1;
+		font-size: 0.75em;
+		display: block;
+	}
+`;
+
+const Title = ({ name, sort }) => (
+	<span>
+		<span>{name}</span>
+		{sort && <SubTitleText>{sort}</SubTitleText>}
+	</span>
+);
 
 class SectionHeading extends React.Component {
 	static propTypes = {
@@ -102,7 +117,11 @@ class SectionHeading extends React.Component {
 				<Menu.Select
 					getText={Collection.getSortOptionText}
 					value={data.sortOn}
-					title={getSectionTitle(section, data.sortOn)}
+					title={
+						<Title
+							{...getSectionTitleStrings(section, data.sortOn)}
+						/>
+					}
 					options={sortOptions}
 					onChange={onSortChange}
 				/>

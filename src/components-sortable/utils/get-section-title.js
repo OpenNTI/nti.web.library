@@ -11,13 +11,17 @@ const t = scoped('library.components.SectionTitle', {
 	books: 'Books',
 });
 
-export const getSectionTitle = (section, sortedOn) => {
-	const sectionName = t(section);
-	const sortName =
+export const getSectionTitleStrings = (section, sortedOn) => {
+	const name = t(section);
+	const sort =
 		sortedOn && sortedOn !== 'favorites'
 			? ' ' + Collection.getSortOptionText(sortedOn)
 			: '';
-	return `${sectionName}${sortName}`;
+	return { name, sort };
+};
+
+export const getSectionTitle = (section, sortedOn) => {
+	return Object.values(getSectionTitleStrings(section, sortedOn)).join(' ');
 };
 
 getSectionTitle.isMissing = (...args) => t.isMissing(...args);
