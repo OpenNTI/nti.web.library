@@ -28,6 +28,9 @@ export const KEYS = {
 
 export const getPrefsSortKey = collectionName => `Sort.${collectionName}`;
 
+const defaultSortDirection = (collection, sortOn) =>
+	sortOn === 'lastSeenTime' ? 'descending' : 'ascending';
+
 const initialValues = {
 	loading: true,
 	error: null,
@@ -233,7 +236,7 @@ class StoreClass extends Stores.BoundStore {
 	onSortChange = async (
 		collectionName,
 		sortOn,
-		sortDirection = 'ascending'
+		sortDirection = defaultSortDirection(collectionName, sortOn)
 	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?
