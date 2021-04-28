@@ -20,7 +20,7 @@ const TitleMap = {
 
 const SectionTitle = styled('h1').attrs(({ section, ...props }) => ({
 	...props,
-	children: t(section),
+	children: (section && t(section)) || null,
 }))`
 	font: normal 300 1.25em/2em var(--body-font-family);
 	color: white;
