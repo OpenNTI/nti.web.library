@@ -63,7 +63,7 @@ export function CourseListCmp({
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
 	const sortOptions = getSortOptions(collection);
 	const prefsSortKey = getPrefsSortKey(collection);
-	const [prefs] = usePreference(prefsSortKey);
+	const [prefs, setPref] = usePreference(prefsSortKey);
 	const sortPref = prefs?.sortOn;
 	const sortOn = sortOptions.includes(sortPref)
 		? sortPref
@@ -71,10 +71,9 @@ export function CourseListCmp({
 
 	const canAdd = collection === COLLECTIONS.enrolledCourses;
 
-	const onChange = React.useCallback(
-		sort => prefs?.set(prefsSortKey, { sortOn: sort }),
-		[prefs]
-	);
+	const onChange = React.useCallback(sort => setPref({ sortOn: sort }), [
+		prefs,
+	]);
 
 	return (
 		<Container>
