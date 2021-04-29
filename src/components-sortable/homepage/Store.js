@@ -26,7 +26,13 @@ export const KEYS = {
 	communities: 'communities',
 };
 
-export const getPrefsSortKey = collectionName => `Sort.${collectionName}`;
+const PREF_KEY_MAP = {
+	[COLLECTION_NAMES.administeredCourses]: 'courses.administered',
+	[COLLECTION_NAMES.enrolledCourses]: 'courses',
+};
+
+export const getPrefsSortKey = collectionName =>
+	`Sort.${PREF_KEY_MAP[collectionName] ?? collectionName}`;
 
 const defaultSortDirection = (collection, sortOn) =>
 	sortOn === 'lastSeenTime' ? 'descending' : 'ascending';
