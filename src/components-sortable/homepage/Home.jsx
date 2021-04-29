@@ -84,12 +84,14 @@ function HomeCmp(props) {
 		groups: enrolledGroups,
 		hasMore: enrolledHasMore,
 		loading: loadingEnrolled,
+		onBeforeDrop,
+		onAfterDrop,
 	} = useStoreValue(enrolledStorePredicate);
 	const {
 		groups: adminGroups,
 		hasMore: adminHasMore,
 		loading: loadingAdmin,
-		onCourseDelete: onAdminCourseDelete
+		onCourseDelete: onAdminCourseDelete,
 	} = useStoreValue(adminStorePredicate);
 
 	const loading = storeLoading || loadingEnrolled || loadingAdmin;
@@ -148,6 +150,8 @@ function HomeCmp(props) {
 											sortDirection
 										)
 									}
+									onBeforeDrop={onBeforeDrop}
+									onAfterDrop={onAfterDrop}
 									onModification={onModificationCourse}
 								/>
 							)}

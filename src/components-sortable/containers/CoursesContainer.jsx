@@ -11,26 +11,24 @@ export default class Courses extends React.Component {
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
 		onDelete: PropTypes.func,
+		onBeforeDrop: PropTypes.func,
+		onAfterDrop: PropTypes.func,
 		sortOptions: PropTypes.arrayOf(PropTypes.string),
 		onSortChange: PropTypes.func,
 	};
 
 	splitItemsBySemester(section) {
-		const {
-			props: { items, onModification, hasMore },
-		} = this;
+		const { items } = this.props;
 
 		return (
 			<>
 				{items.map(item => {
 					return (
 						<Container
+							{...this.commonContainerProps()}
 							section={section}
 							key={item.semester}
 							date={item.semester}
-							items={item.courses}
-							hasMore={hasMore}
-							onModification={onModification}
 						/>
 					);
 				})}
@@ -38,33 +36,46 @@ export default class Courses extends React.Component {
 		);
 	}
 
-	render() {
+	commonContainerProps = () => {
 		const {
-			props: {
-				admin,
-				hasMore,
-				items,
-				itemsType = '',
-				onModification,
-				onDelete,
-				sortOptions,
-				onSortChange,
-			},
-		} = this;
+			admin,
+			hasMore,
+			items,
+			itemsType = '',
+			onModification,
+			onBeforeDrop,
+			onAfterDrop,
+			onDelete,
+			sortOptions,
+			onSortChange,
+		} = this.props;
+
 		const section = itemsType + (admin ? 'admin' : 'courses');
 
+		return {
+			section,
+			items,
+			hasMore,
+			sortOptions,
+			onSortChange,
+			onModification,
+			onBeforeDrop,
+			onAfterDrop,
+			onDelete,
+		};
+	};
+
+	render() {
+		const {
+			props: { itemsType = '' },
+		} = this;
+
+		const containerProps = this.commonContainerProps();
+
 		return itemsType !== 'archived' ? (
-			<Container
-				section={section}
-				items={items}
-				hasMore={hasMore}
-				sortOptions={sortOptions}
-				onSortChange={onSortChange}
-				onModification={onModification}
-				onDelete={onDelete}
-			/>
+			<Container {...containerProps} />
 		) : (
-			this.splitItemsBySemester(section)
+			this.splitItemsBySemester(containerProps.section)
 		);
 	}
 }

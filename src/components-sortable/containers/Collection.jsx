@@ -53,7 +53,9 @@ export default function LibraryCollection({
 	title,
 	subtitle,
 	onModification,
-	onDelete
+	onBeforeDrop,
+	onAfterDrop,
+	onDelete,
 }) {
 	return (
 		<Container className={cx('library-collection', className)}>
@@ -84,6 +86,8 @@ export default function LibraryCollection({
 										}
 										item={item}
 										onModification={onModification}
+										onBeforeDrop={onBeforeDrop}
+										onAfterDrop={onAfterDrop}
 										onDelete={onDelete}
 									/>
 								</ListItem>
@@ -103,5 +107,7 @@ LibraryCollection.propTypes = {
 	subtitle: PropTypes.string,
 	onModification: PropTypes.func,
 	onDelete: PropTypes.func,
+	onBeforeDrop: PropTypes.func,
+	onAfterDrop: PropTypes.func,
 	children: PropTypes.any,
 };

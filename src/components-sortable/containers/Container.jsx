@@ -26,6 +26,8 @@ export default function Container({
 	hasMore,
 	date,
 	onModification,
+	onBeforeDrop,
+	onAfterDrop,
 	onDelete,
 	sortOptions,
 	onSortChange,
@@ -42,6 +44,8 @@ export default function Container({
 			className={section}
 			list={items}
 			onModification={onModification}
+			onBeforeDrop={onBeforeDrop}
+			onAfterDrop={onAfterDrop}
 			onDelete={onDelete}
 		>
 			<Heading
@@ -61,6 +65,8 @@ Container.propTypes = {
 	hasMore: PropTypes.bool,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
+	onBeforeDrop: PropTypes.func,
+	onAfterDrop: PropTypes.func,
 	onDelete: PropTypes.func,
 	sortOptions: PropTypes.arrayOf(PropTypes.string),
 	onSortChange: PropTypes.func,
