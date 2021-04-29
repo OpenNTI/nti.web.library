@@ -24,7 +24,7 @@ import {
 } from './parts';
 
 const { Grid } = CourseCollection;
-const { usePreferences } = User;
+const { usePreference } = User;
 
 const tx = scoped(`library.components`, {
 	[COLLECTION_NAMES.enrolledCourses]: {
@@ -63,8 +63,8 @@ export function CourseListCmp({
 	const baseroute = basePath ?? router.baseroute.replace('library', '');
 	const sortOptions = getSortOptions(collection);
 	const prefsSortKey = getPrefsSortKey(collection);
-	const prefs = usePreferences([prefsSortKey]);
-	const sortPref = prefs?.get(prefsSortKey)?.sortOn;
+	const [prefs] = usePreference(prefsSortKey);
+	const sortPref = prefs?.sortOn;
 	const sortOn = sortOptions.includes(sortPref)
 		? sortPref
 		: sortOptions?.[0] || '';
