@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense, forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Router, Route } from '@nti/web-routing';
@@ -55,7 +55,7 @@ const Wrapper = styled('section')`
 	}
 `;
 
-export default React.forwardRef(function LibraryView(props, ref) {
+export default forwardRef(function LibraryView(props, ref) {
 	const theme = Theme.useTheme();
 	const libraryTheme = theme.scope('library');
 	const background = libraryTheme.background;
@@ -66,14 +66,16 @@ export default React.forwardRef(function LibraryView(props, ref) {
 		: 'library-light-background';
 
 	return (
-		<Theme.Scope scope="library">
-			<Wrapper
-				dark={isDark}
-				ref={ref}
-				className={cx('library-view', className)}
-			>
-				<Routes {...props} />
-			</Wrapper>
-		</Theme.Scope>
+		<Suspense fallback={<div />}>
+			<Theme.Scope scope="library">
+				<Wrapper
+					dark={isDark}
+					ref={ref}
+					className={cx('library-view', className)}
+				>
+					<Routes {...props} />
+				</Wrapper>
+			</Theme.Scope>
+		</Suspense>
 	);
 });
