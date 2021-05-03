@@ -71,22 +71,16 @@ describe('Home page test', () => {
 
 	test('Non-admin home page test', async () => {
 		const { container, findByTestId, unmount } = render(
-			<Context>
-				<HomePage
-					communities={communities}
-					EnrolledCourses={{
-						collection: 'EnrolledCourses',
-						sortOn: 'title',
-					}}
-					AdministeredCourses={{
-						collection: 'AdministeredCourses',
-						sortOn: 'title',
-					}}
-					books={books}
-					loading={false}
-					store={mockStore}
-				/>
-			</Context>
+			<React.Suspense fallback={<div />}>
+				<Context>
+					<HomePage
+						communities={communities}
+						books={books}
+						loading={false}
+						store={mockStore}
+					/>
+				</Context>
+			</React.Suspense>
 		);
 
 		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();

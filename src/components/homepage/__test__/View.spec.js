@@ -9,6 +9,23 @@ import { render } from '@testing-library/react';
 
 import { setupTestClient } from '@nti/web-client/test-utils';
 
+const mockCourse = ({ NTIID, ...props }) => ({
+	title: 'Test Course',
+	isCourse: true,
+	NTIID,
+	MimeType: 'application/vnd.nextthought.courseware.courseinstanceenrollment',
+	getStartDate: () => {},
+	getEndDate: () => {},
+	CatalogEntry: {
+		CourseNTIID: NTIID,
+		getStartDate: () => {},
+		getEndDate: () => {},
+		getAuthorLine: () => {},
+		getDefaultAssetRoot: () => {},
+	},
+	...props,
+});
+
 import HomePage from '../View';
 const onBefore = () =>
 	setupTestClient({
@@ -59,101 +76,34 @@ describe('Home page test', () => {
 		const courses = [
 			{
 				title: 'Test Course 1',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P7',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P7',
 			},
 			{
 				title: 'Test Course 2',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P8',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P8',
 			},
 			{
 				title: 'Test Course 3',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P9',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P9',
 			},
 			{
 				title: 'Test Course 4',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P6',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P6',
 			},
 			{
 				title: 'Test Course 5',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P5',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P5',
 			},
 			{
 				title: 'Test Course 6',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P4',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P4',
 			},
-		];
+		].map(x =>
+			mockCourse({
+				...x,
+				NTIID: `tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:${x.NTIID}`,
+			})
+		);
 
 		const books = [
 			{
@@ -214,14 +164,16 @@ describe('Home page test', () => {
 		];
 
 		const { container, findByTestId, unmount } = render(
-			<Context>
-				<HomePage
-					communities={communities}
-					courses={courses}
-					books={books}
-					loading={false}
-				/>
-			</Context>
+			<React.Suspense fallback={<div />}>
+				<Context>
+					<HomePage
+						communities={communities}
+						courses={courses}
+						books={books}
+						loading={false}
+					/>
+				</Context>
+			</React.Suspense>
 		);
 
 		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();
@@ -268,101 +220,34 @@ describe('Home page test', () => {
 		const administeredCourses = [
 			{
 				title: 'Test Course 1',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P7',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P7',
 			},
 			{
 				title: 'Test Course 2',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P8',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P8',
 			},
 			{
 				title: 'Test Course 3',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P9',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P9',
 			},
 			{
 				title: 'Test Course 4',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P6',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P6',
 			},
 			{
 				title: 'Test Course 5',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P5',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P5',
 			},
 			{
 				title: 'Test Course 6',
-				isCourse: true,
-				NTIID:
-					'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P4',
-				MimeType:
-					'application/vnd.nextthought.courseware.courseinstanceenrollment',
-				getStartDate: () => {},
-				getEndDate: () => {},
-				CatalogEntry: {
-					getStartDate: () => {},
-					getEndDate: () => {},
-					getAuthorLine: () => {},
-					getDefaultAssetRoot: () => {},
-				},
+				NTIID: 'bWj9Mk6A5P4',
 			},
-		];
+		].map(x =>
+			mockCourse({
+				...x,
+				NTIID: `tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:${x.NTIID}`,
+			})
+		);
 
 		const books = [
 			{
@@ -423,16 +308,18 @@ describe('Home page test', () => {
 		];
 
 		const { container, findByTestId, unmount } = render(
-			<Context>
-				<HomePage
-					communities={communities}
-					courses={courses}
-					administeredCourses={administeredCourses}
-					admin
-					books={books}
-					loading={false}
-				/>
-			</Context>
+			<React.Suspense fallback={<div />}>
+				<Context>
+					<HomePage
+						communities={communities}
+						courses={courses}
+						administeredCourses={administeredCourses}
+						admin
+						books={books}
+						loading={false}
+					/>
+				</Context>
+			</React.Suspense>
 		);
 
 		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();

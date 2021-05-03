@@ -22,6 +22,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P7',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -38,6 +40,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P8',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -54,6 +58,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P9',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -70,6 +76,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P6',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -86,6 +94,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P5',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -102,6 +112,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P4',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -123,6 +135,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P7',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -139,6 +153,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P8',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -155,6 +171,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P9',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -171,6 +189,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P6',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -187,6 +207,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P5',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
@@ -203,6 +225,8 @@ export default {
 				getStartDate: () => {},
 				getEndDate: () => {},
 				CatalogEntry: {
+					CourseNTIID:
+						'tag:nextthought.com,2011-10:landon.sherwood-OID-0x1488cb:5573657273:bWj9Mk6A5P4',
 					getStartDate: () => {},
 					getEndDate: () => {},
 					getAuthorLine: () => {},
