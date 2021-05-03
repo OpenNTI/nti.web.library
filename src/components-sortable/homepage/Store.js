@@ -4,6 +4,7 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import { Models } from '@nti/lib-interfaces';
 import AppDispatcher from '@nti/lib-dispatcher';
+import { CollectionSortable } from '@nti/web-course';
 
 import { COLLECTION_NAMES } from '../constants';
 import { getSortOptions } from '../utils/get-sort-options';
@@ -33,9 +34,6 @@ const PREF_KEY_MAP = {
 
 export const getPrefsSortKey = collectionName =>
 	`Sort.${PREF_KEY_MAP[collectionName] ?? collectionName}`;
-
-const defaultSortDirection = (collection, sortOn) =>
-	sortOn === 'lastSeenTime' ? 'descending' : 'ascending';
 
 const initialValues = {
 	loading: true,
@@ -242,7 +240,10 @@ class StoreClass extends Stores.BoundStore {
 	onSortChange = async (
 		collectionName,
 		sortOn,
-		sortDirection = defaultSortDirection(collectionName, sortOn)
+		sortDirection = CollectionSortable.Store.defaultSortDirection(
+			collectionName,
+			sortOn
+		)
 	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?
