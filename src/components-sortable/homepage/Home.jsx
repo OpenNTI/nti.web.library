@@ -6,7 +6,10 @@ import { decorate } from '@nti/lib-commons';
 import { Loading, Layouts } from '@nti/web-commons';
 import { searchable, contextual } from '@nti/web-search';
 import { scoped } from '@nti/lib-locale';
-import { CollectionSortable as Collection } from '@nti/web-course';
+import {
+	CollectionSortable as Collection,
+	CollectionSortable,
+} from '@nti/web-course';
 import { useStoreValue } from '@nti/lib-store';
 
 import AdminToolbar from '../AdminToolbar';
@@ -89,7 +92,7 @@ function HomeCmp(props) {
 		groups: adminGroups,
 		hasMore: adminHasMore,
 		loading: loadingAdmin,
-		onCourseDelete: onAdminCourseDelete
+		onCourseDelete: onAdminCourseDelete,
 	} = useStoreValue(adminStorePredicate);
 
 	const loading = storeLoading || loadingEnrolled || loadingAdmin;
@@ -202,10 +205,15 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 	(Cmp, collection) => {
 		return Collection.Store.compose(Cmp, {
 			deriveBindingFromProps: ({ [collection]: data }) => {
+				const sortOn = data?.sortOn ?? 'favorites';
+				const sortDirection =
+					data?.sortDirection ??
+					CollectionSortable.Store.defaultSortDirection(sortOn);
+
 				return {
 					collection,
-					sortOn: data?.sortOn ?? 'favorites',
-					sortDirection: data?.sortDirection ?? 'ascending',
+					sortOn,
+					sortDirection,
 					batchSize: data?.batchSize ?? 8,
 				};
 			},
