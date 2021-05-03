@@ -3,7 +3,7 @@ jest.mock('../HomeStore', () => ({
 	connect: () => () => {},
 }));
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 
@@ -54,7 +54,7 @@ class Context extends React.Component {
 	}
 
 	render() {
-		return this.props.children;
+		return <Suspense fallback={<div />}>{this.props.children}</Suspense>;
 	}
 }
 
@@ -164,16 +164,14 @@ describe('Home page test', () => {
 		];
 
 		const { container, findByTestId, unmount } = render(
-			<React.Suspense fallback={<div />}>
-				<Context>
-					<HomePage
-						communities={communities}
-						courses={courses}
-						books={books}
-						loading={false}
-					/>
-				</Context>
-			</React.Suspense>
+			<Context>
+				<HomePage
+					communities={communities}
+					courses={courses}
+					books={books}
+					loading={false}
+				/>
+			</Context>
 		);
 
 		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();
@@ -308,18 +306,16 @@ describe('Home page test', () => {
 		];
 
 		const { container, findByTestId, unmount } = render(
-			<React.Suspense fallback={<div />}>
-				<Context>
-					<HomePage
-						communities={communities}
-						courses={courses}
-						administeredCourses={administeredCourses}
-						admin
-						books={books}
-						loading={false}
-					/>
-				</Context>
-			</React.Suspense>
+			<Context>
+				<HomePage
+					communities={communities}
+					courses={courses}
+					administeredCourses={administeredCourses}
+					admin
+					books={books}
+					loading={false}
+				/>
+			</Context>
 		);
 
 		expect(await findByTestId(communities[0].NTIID)).toBeTruthy();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import cx from 'classnames';
 
 import { Router, Route } from '@nti/web-routing';
@@ -52,10 +52,12 @@ export default React.forwardRef(function LibraryView(props, ref) {
 			: 'library-dark-background';
 
 	return (
-		<Theme.Scope scope="library">
-			<section ref={ref} className={cx('library-view', className)}>
-				<Routes {...props} />
-			</section>
-		</Theme.Scope>
+		<Suspense fallback={<div />}>
+			<Theme.Scope scope="library">
+				<section ref={ref} className={cx('library-view', className)}>
+					<Routes {...props} />
+				</section>
+			</Theme.Scope>
+		</Suspense>
 	);
 });
