@@ -15,6 +15,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 
+import { setupTestClient } from '@nti/web-client/test-utils';
+
 import { Home as HomePage } from '../Home';
 
 import data from './library-data';
@@ -24,20 +26,12 @@ const mockStore = {
 	getSortOptions: collection => [],
 };
 
-function useMockServer(mockService) {
-	global.$AppConfig = {
-		...global.$AppConfig,
-		nodeService: mockService,
-		nodeInterface: {
-			async getServiceDocument() {
-				return mockService;
-			},
-		},
-	};
-}
-
 const onBefore = () =>
-	useMockServer({
+	setupTestClient({
+		getEnrollment: () => ({
+			addListener: jest.fn(),
+			removeListener: jest.fn(),
+		}),
 		getCollection: (title, workspace) => {
 			return {
 				href: title,

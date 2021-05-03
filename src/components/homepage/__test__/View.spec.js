@@ -7,13 +7,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 
-import HomePage from '../View';
+import { setupTestClient } from '@nti/web-client/test-utils';
 
-const onBefore = () => {
-	global.$AppConfig = {
-		...(global.$AppConfig || {}),
-	};
-};
+import HomePage from '../View';
+const onBefore = () =>
+	setupTestClient({
+		getEnrollment: () => ({
+			addListener: jest.fn(),
+			removeListener: jest.fn(),
+		}),
+	});
 
 class Context extends React.Component {
 	static childContextTypes = {
