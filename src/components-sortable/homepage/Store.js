@@ -240,10 +240,7 @@ class StoreClass extends Stores.BoundStore {
 	onSortChange = async (
 		collectionName,
 		sortOn,
-		sortDirection = CollectionSortable.Store.defaultSortDirection(
-			collectionName,
-			sortOn
-		)
+		sortDirection = CollectionSortable.Store.defaultSortDirection(sortOn)
 	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?
