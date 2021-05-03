@@ -171,7 +171,7 @@ class StoreClass extends Stores.BoundStore {
 		const service = await getService();
 		const collection = service.getCollection(title, workspace);
 
-		const { sortOn = 'favorites', sortDirection } =
+		const { sortOn, sortDirection } =
 			(await getUserPreferences())?.get(getPrefsSortKey(title)) || {};
 
 		const useFavorites =
