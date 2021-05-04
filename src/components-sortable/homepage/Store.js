@@ -40,8 +40,8 @@ const initialValues = {
 	error: null,
 	hasSearchTerm: false,
 	...Object.keys(KEYS).reduce(
-		// set all collection keys to null
-		(acc, key) => ({ ...acc, [key]: null }),
+		// set all collection keys to undefined
+		(acc, key) => ({ ...acc, [key]: undefined }),
 		{}
 	),
 };
@@ -62,20 +62,29 @@ class StoreClass extends Stores.BoundStore {
 			...initialValues,
 		});
 
-		(async () => {
+		this.initialization = (async () => {
 			// set default sorts according to user preferences
 			const prefs = await getUserPreferences();
-			Object.entries(KEYS).forEach(([key, collectionName]) => {
-				const sort = prefs.get(getPrefsSortKey(collectionName));
-				if (sort) {
-					this.stageChanges({
-						[key]: {
-							...sort,
-							...this[key],
-						},
-					});
-				}
-			});
+			this.initialSorts = Object.values(KEYS).reduce(
+				(acc, collectionName) => {
+					const { sortOn, sortOrder } =
+						prefs.get(getPrefsSortKey(collectionName)) || {};
+
+					return !sortOn
+						? acc
+						: {
+								...acc,
+								[collectionName]: {
+									...this[collectionName],
+									sortOn,
+									sortOrder,
+								},
+						  };
+				},
+				{}
+			);
+
+			this.stageChanges(this.initialSorts);
 
 			// instantiate data sources
 			const service = await getService();
@@ -86,6 +95,8 @@ class StoreClass extends Stores.BoundStore {
 				service
 			);
 			this.#dataSources[KEYS.books] = new BooksDataSource(service);
+			this.commitStaged();
+			delete this.initialization;
 		})();
 	}
 
@@ -160,7 +171,7 @@ class StoreClass extends Stores.BoundStore {
 			keys.map(k =>
 				this.loaders[k]({
 					searchTerm: this.searchTerm,
-					currentValue: this[k],
+					currentValue: { ...this.get(k) },
 				})
 			)
 		);
@@ -199,13 +210,15 @@ class StoreClass extends Stores.BoundStore {
 			sortOrder,
 		});
 
-		this[collectionName] = {
-			...this[collectionName],
-			sortOn,
+		this.set({
+			[collectionName]: {
+				...this[collectionName],
+				sortOn,
 				sortOrder,
-			batchStart: 0,
-		};
-		// console.log(collectionName, sortOn, sortDirection);
+				batchStart: 0,
+			},
+		});
+
 		this.reload(collectionName);
 	};
 
@@ -217,9 +230,16 @@ class StoreClass extends Stores.BoundStore {
 
 		const term = (this.lastSearchTerm = this.searchTerm);
 
+		if (this.initialization) {
+			await this.initialization;
+		}
+
 		// on each load, clear the staged queue
 		this.clearStaged();
-		this.set({ ...initialValues });
+		this.set({
+			// ...initialValues,
+			// ...this.initialSorts,
+		});
 
 		try {
 			const data = await this.runLoaders();
@@ -242,12 +262,12 @@ class StoreClass extends Stores.BoundStore {
 
 	async reload(key) {
 		const loader = this.loaders[key];
-		const currentValue = this[key];
+		const currentValue = this.get(key);
 		if (loader) {
 			this.set({
 				loading: true,
 				error: null,
-				[key]: null,
+				[key]: undefined,
 			});
 
 			try {
