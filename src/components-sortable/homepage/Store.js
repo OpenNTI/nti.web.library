@@ -154,51 +154,6 @@ class StoreClass extends Stores.BoundStore {
 			!!(await getService()).getCollection('Courses', 'Catalog'),
 	};
 
-	async loadCollection(
-		title,
-		workspace,
-		{ batchSize = this.options.batchSize, batchStart = 0 } = {},
-		preprocessor
-	) {
-		const service = await getService();
-		const collection = service.getCollection(title, workspace);
-
-		const { sortOn, sortDirection } =
-			(await getUserPreferences())?.get(getPrefsSortKey(title)) || {};
-
-		const useFavorites =
-			!this.searchTerm &&
-			sortOn === 'favorites' &&
-			collection.hasLink('Favorites');
-
-		const link = useFavorites
-			? collection.getLink('Favorites')
-			: collection.href;
-
-		const batch = await service.getBatch(
-			link,
-			useFavorites
-				? null
-				: {
-						filter: this.searchTerm,
-						sortOn,
-						sortDirection,
-						batchStart: 0,
-						batchSize,
-				  }
-		);
-
-		const { Items: items = [], Total: total } =
-			(await preprocessor?.(batch, service)) || batch || {};
-
-		return {
-			items,
-			total,
-			sortOn,
-			sortDirection,
-		};
-	}
-
 	runLoaders = async () => {
 		const keys = Object.keys(this.loaders);
 		const results = await Promise.all(
