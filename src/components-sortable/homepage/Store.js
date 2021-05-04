@@ -38,7 +38,6 @@ export const getPrefsSortKey = collectionName =>
 const initialValues = {
 	loading: true,
 	error: null,
-	hasSearchTerm: false,
 	...Object.keys(KEYS).reduce(
 		// set all collection keys to undefined
 		(acc, key) => ({ ...acc, [key]: undefined }),
@@ -103,6 +102,10 @@ class StoreClass extends Stores.BoundStore {
 	KEYS = KEYS;
 
 	#dataSources = {};
+
+	get hasSearchTerm() {
+		return !!this.get('searchTerm');
+	}
 
 	getSortOptions = collectionName => {
 		return [
