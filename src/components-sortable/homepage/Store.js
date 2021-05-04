@@ -124,30 +124,22 @@ class StoreClass extends Stores.BoundStore {
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.administeredCourses]: ({
-			currentValue: {
-				sortOn = 'favorites',
-				sortDirection,
-				batchSize = 8,
-			} = {},
-		}) => ({ sortOn, sortDirection, batchSize }),
+			currentValue: { sortOn, sortOrder, batchSize = 8 } = {},
+		}) => ({ sortOn, sortOrder, batchSize }),
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.courses]: ({
-			currentValue: {
-				sortOn = 'favorites',
-				sortDirection,
-				batchSize = 8,
-			} = {},
-		}) => ({ sortOn, sortDirection, batchSize }),
+			currentValue: { sortOn, sortOrder, batchSize = 8 } = {},
+		}) => ({ sortOn, sortOrder, batchSize }),
 
 		[KEYS.books]: async ({
-			currentValue: { sortOn, sortDirection } = {},
-		}) => {
+			currentValue: { sortOn, sortOrder } = {},
+		} = {}) => {
 			const batch = await this.#dataSources[KEYS.books].request({
 				filter: this.searchTerm,
 				sortOn,
-				sortDirection,
+				sortOrder,
 			});
 
 			const service = await getService();
@@ -155,7 +147,7 @@ class StoreClass extends Stores.BoundStore {
 			const items = await Promise.all(
 				batch.titles.map(x => service.getObject(x))
 			);
-			return { items, sortOn, sortDirection };
+			return { items, sortOn, sortOrder };
 		},
 		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
 		hasCatalog: async () =>
@@ -240,7 +232,7 @@ class StoreClass extends Stores.BoundStore {
 	onSortChange = async (
 		collectionName,
 		sortOn,
-		sortDirection = CollectionSortable.Store.defaultSortDirection(sortOn)
+		sortOrder = CollectionSortable.Store.defaultSortOrder(sortOn)
 	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?
@@ -249,13 +241,13 @@ class StoreClass extends Stores.BoundStore {
 
 		(await getUserPreferences()).set(getPrefsSortKey(collectionName), {
 			sortOn,
-			sortDirection,
+			sortOrder,
 		});
 
 		this[collectionName] = {
 			...this[collectionName],
 			sortOn,
-			sortDirection,
+				sortOrder,
 			batchStart: 0,
 		};
 		// console.log(collectionName, sortOn, sortDirection);
