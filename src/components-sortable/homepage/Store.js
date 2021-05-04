@@ -69,7 +69,8 @@ class StoreClass extends Stores.BoundStore {
 					const { sortOn, sortOrder } =
 						prefs.get(getPrefsSortKey(collectionName)) || {};
 
-					return !sortOn
+					return !sortOn ||
+						!this.#isValidSortOn(collectionName, sortOn)
 						? acc
 						: {
 								...acc,
@@ -106,6 +107,9 @@ class StoreClass extends Stores.BoundStore {
 	get hasSearchTerm() {
 		return !!this.get('searchTerm');
 	}
+
+	#isValidSortOn = (collectionName, sortOn) =>
+		this.getSortOptions(collectionName).includes(sortOn);
 
 	getSortOptions = collectionName => {
 		return [
