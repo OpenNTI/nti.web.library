@@ -41,7 +41,7 @@ const CollectionDataPropType = PropTypes.shape({
 	items: PropTypes.array,
 	total: PropTypes.number,
 	sortOn: PropTypes.string,
-	sortDirection: PropTypes.string,
+	sortOrder: PropTypes.string,
 });
 
 HomeCmp.propTypes = {
@@ -141,11 +141,11 @@ function HomeCmp(props) {
 									sortOptions={store?.getSortOptions(
 										KEYS.courses
 									)}
-									onSortChange={(sortOn, sortDirection) =>
+									onSortChange={(sortOn, sortOrder) =>
 										onSortChange(
 											KEYS.courses,
 											sortOn,
-											sortDirection
+											sortOrder
 										)
 									}
 									onModification={onModificationCourse}
@@ -160,11 +160,11 @@ function HomeCmp(props) {
 									sortOptions={store?.getSortOptions(
 										KEYS.administeredCourses
 									)}
-									onSortChange={(sortOn, sortDirection) =>
+									onSortChange={(sortOn, sortOrder) =>
 										onSortChange(
 											KEYS.administeredCourses,
 											sortOn,
-											sortDirection
+											sortOrder
 										)
 									}
 									onModification={onModificationAdmin}
@@ -178,11 +178,11 @@ function HomeCmp(props) {
 									sortOptions={store?.getSortOptions(
 										KEYS.books
 									)}
-									onSortChange={(sortOn, sortDirection) =>
+									onSortChange={(sortOn, sortOrder) =>
 										onSortChange(
 											KEYS.books,
 											sortOn,
-											sortDirection
+											sortOrder
 										)
 									}
 								/>
@@ -201,16 +201,16 @@ function HomeCmp(props) {
 const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 	(Cmp, collection) => {
 		return Collection.Store.compose(Cmp, {
-			deriveBindingFromProps: ({ [collection]: data }) => {
+			deriveBindingFromProps: ({ [collection]: data, ...others }) => {
 				const sortOn = data?.sortOn ?? 'favorites';
-				const sortDirection =
-					data?.sortDirection ??
-					Collection.Store.defaultSortDirection(sortOn);
+				const sortOrder =
+					data?.sortOrder ??
+					Collection.Store.defaultSortOrder(sortOn);
 
 				return {
 					collection,
 					sortOn,
-					sortDirection,
+					sortOrder,
 					batchSize: data?.batchSize ?? 8,
 				};
 			},
