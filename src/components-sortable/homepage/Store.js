@@ -142,14 +142,24 @@ class StoreClass extends Stores.BoundStore {
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.administeredCourses]: ({
-			currentValue: { sortOn, sortOrder, batchSize = 8 } = {},
-		}) => ({ sortOn, sortOrder, batchSize }),
+			currentValue: {
+				sortOn,
+				sortOrder,
+				batchSize = 8,
+				course_filter = 'incomplete', // eslint-disable-line camelcase
+			} = {},
+		}) => ({ sortOn, sortOrder, batchSize, course_filter }),
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.courses]: ({
-			currentValue: { sortOn, sortOrder, batchSize = 8 } = {},
-		}) => ({ sortOn, sortOrder, batchSize }),
+			currentValue: {
+				sortOn,
+				sortOrder,
+				batchSize = 8,
+				course_filter = 'incomplete', // eslint-disable-line camelcase
+			} = {},
+		}) => ({ sortOn, sortOrder, batchSize, course_filter }),
 
 		[KEYS.books]: async ({
 			currentValue: { sortOn, sortOrder } = {},
