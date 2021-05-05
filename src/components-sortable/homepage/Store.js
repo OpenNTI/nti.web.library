@@ -49,10 +49,6 @@ class StoreClass extends Stores.BoundStore {
 	constructor(options = {}) {
 		super();
 
-		this.options = {
-			batchSize: 8,
-			...options,
-		};
 		this.dispatcherID = AppDispatcher.register(this.handleDispatch);
 		this.loaded = false;
 		this.prevSearch = false;
@@ -142,24 +138,32 @@ class StoreClass extends Stores.BoundStore {
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.administeredCourses]: ({
+			searchTerm,
 			currentValue: {
 				sortOn,
 				sortOrder,
-				batchSize = 8,
 				course_filter = 'incomplete', // eslint-disable-line camelcase
 			} = {},
-		}) => ({ sortOn, sortOrder, batchSize, course_filter }),
+		}) => ({
+			sortOn,
+			sortOrder,
+			course_filter,
+		}),
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.courses]: ({
+			searchTerm,
 			currentValue: {
 				sortOn,
 				sortOrder,
-				batchSize = 8,
 				course_filter = 'incomplete', // eslint-disable-line camelcase
 			} = {},
-		}) => ({ sortOn, sortOrder, batchSize, course_filter }),
+		}) => ({
+			sortOn,
+			sortOrder,
+			course_filter,
+		}),
 
 		[KEYS.books]: async ({
 			currentValue: { sortOn, sortOrder } = {},

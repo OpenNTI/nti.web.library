@@ -211,7 +211,7 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 					collection,
 					sortOn,
 					sortOrder,
-					batchSize: data?.batchSize ?? 8,
+					batchSize: others.searchTerm ? 80 : 8, // bump batch size when filtering
 					course_filter: data?.course_filter ?? 'incomplete',
 				};
 			},
