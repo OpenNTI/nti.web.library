@@ -13,7 +13,7 @@ jest.mock('../Store', () => ({
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import { setupTestClient } from '@nti/web-client/test-utils';
 
@@ -69,13 +69,21 @@ class Context extends React.Component {
 describe('Home page test', () => {
 	beforeEach(onBefore);
 
-	xtest('Non-admin home page test', async () => {
+	test('Non-admin home page test', async () => {
 		const { container, findByTestId, unmount } = render(
 			<React.Suspense fallback={<div />}>
 				<Context>
 					<HomePage
 						communities={communities}
 						books={books}
+						EnrolledCourses={{
+							collection: 'EnrolledCourses',
+							sortOn: 'title',
+						}}
+						AdministeredCourses={{
+							collection: 'AdministeredCourses',
+							sortOn: 'title',
+						}}
 						loading={false}
 						store={mockStore}
 					/>
@@ -87,7 +95,8 @@ describe('Home page test', () => {
 
 		const qsa = (...args) => container.querySelectorAll(...args);
 
-		expect(qsa('.library-collection').length).toBe(4);
+		await waitFor(() => expect(qsa('.library-collection').length).toBe(4));
+
 		expect(qsa('.library-collection.communities').length).toBe(1);
 		expect(qsa('.library-collection.courses').length).toBe(1);
 		expect(qsa('.library-collection.books').length).toBe(1);
