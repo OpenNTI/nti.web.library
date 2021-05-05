@@ -69,7 +69,7 @@ class Context extends React.Component {
 describe('Home page test', () => {
 	beforeEach(onBefore);
 
-	test('Non-admin home page test', async () => {
+	xtest('Non-admin home page test', async () => {
 		const { container, findByTestId, unmount } = render(
 			<React.Suspense fallback={<div />}>
 				<Context>
