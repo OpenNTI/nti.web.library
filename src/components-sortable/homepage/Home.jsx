@@ -195,24 +195,47 @@ function HomeCmp(props) {
 	);
 }
 
+// We switch off of the 'favorites' link when
+// filtering and use these params
+const defaultFilteredSorts = {
+	[KEYS.administeredCourses]: {
+		sortOn: 'provideruniqueid',
+		sortOrder: 'ascending',
+		batchSize: 80,
+	},
+	[KEYS.courses]: {
+		sortOn: 'createdTime',
+		sortOrder: 'descending',
+		batchSize: 80,
+	},
+};
+
 // Connect to the nti/web.course Store to load enrolled and administered courses.
 // This comes before the HomePageStore connection (below) because it uses props
 // provided by the HomePageStore for sort and search.
 const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 	(Cmp, collection) => {
 		return Collection.Store.compose(Cmp, {
-			deriveBindingFromProps: ({ [collection]: data, ...others }) => {
-				const sortOn = data?.sortOn ?? 'favorites';
+			deriveBindingFromProps: ({ [collection]: data, searchTerm }) => {
+				const sortOn = data?.sortOn || 'favorites';
 				const sortOrder =
-					data?.sortOrder ??
+					data?.sortOrder ||
 					Collection.Store.defaultSortOrder(sortOn);
 
+				const isFilteredFavorites =
+					searchTerm && sortOn === 'favorites';
+
+				const params = isFilteredFavorites
+					? defaultFilteredSorts[collection]
+					: {
+							sortOn,
+							sortOrder,
+							batchSize: 28,
+							course_filter: data?.course_filter || 'incomplete',
+					  };
 				return {
 					collection,
-					sortOn,
-					sortOrder,
-					batchSize: others.searchTerm ? 80 : 8, // bump batch size when filtering
-					course_filter: data?.course_filter ?? 'incomplete',
+					...params,
 				};
 			},
 		});
