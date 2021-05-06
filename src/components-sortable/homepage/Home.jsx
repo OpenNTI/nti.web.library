@@ -231,7 +231,12 @@ const WithCourses = [KEYS.administeredCourses, KEYS.courses].reduce(
 							sortOn,
 							sortOrder,
 							batchSize: 28,
-							course_filter: data?.course_filter || 'incomplete',
+							...(!searchTerm // omit course_filter when searching
+								? {
+										course_filter:
+											data?.course_filter || 'incomplete',
+								  }
+								: {}),
 					  };
 				return {
 					collection,
