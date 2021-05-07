@@ -321,9 +321,7 @@ class StoreClass extends Stores.BoundStore {
 			this.staged = {};
 		}
 
-		for (let key of Object.keys(obj)) {
-			this.staged[key] = obj[key];
-		}
+		Object.assign(this.staged, obj);
 	}
 
 	/**
