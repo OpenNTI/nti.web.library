@@ -132,7 +132,7 @@ class StoreClass extends Stores.BoundStore {
 			return getService()
 				.then(service => service.getCommunities())
 				.then(communities => communities.load(true))
-				.then(items => items.filter(filterFn));
+				.then(items => (items || []).filter(filterFn));
 		},
 
 		// originally used to fetch the courses; now it just passes the sort info through.
