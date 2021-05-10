@@ -58,9 +58,11 @@ const SubTitleText = styled('span')`
 `;
 
 const Title = ({ name, sort }) => (
-	<span>
-		<span>{name}</span>
-		{sort && <SubTitleText>{sort}</SubTitleText>}
+	<span data-testid="section-title">
+		<span data-testid="section-name">{name}</span>
+		{sort && (
+			<SubTitleText data-testid="section-subtitle">{sort}</SubTitleText>
+		)}
 	</span>
 );
 
