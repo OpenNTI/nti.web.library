@@ -20,7 +20,16 @@ const Empty = styled(EmptyList)`
 	grid-column-start: 1;
 `;
 
-export default function Container({ section, items, date, onModification }) {
+export default function Container({
+	section,
+	items,
+	hasMore,
+	date,
+	onModification,
+	onDelete,
+	sortOptions,
+	onSortChange,
+}) {
 	return !items?.length ? (
 		<Grid className="library-collection">
 			<Grid.Header>
@@ -33,8 +42,15 @@ export default function Container({ section, items, date, onModification }) {
 			className={section}
 			list={items}
 			onModification={onModification}
+			onDelete={onDelete}
 		>
-			<Heading section={section} date={date} />
+			<Heading
+				section={section}
+				hasMore={hasMore}
+				date={date}
+				sortOptions={sortOptions}
+				onSortChange={onSortChange}
+			/>
 		</Collection>
 	);
 }
@@ -42,6 +58,10 @@ export default function Container({ section, items, date, onModification }) {
 Container.propTypes = {
 	section: PropTypes.string,
 	items: PropTypes.array,
+	hasMore: PropTypes.bool,
 	date: PropTypes.string,
 	onModification: PropTypes.func,
+	onDelete: PropTypes.func,
+	sortOptions: PropTypes.arrayOf(PropTypes.string),
+	onSortChange: PropTypes.func,
 };

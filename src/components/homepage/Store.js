@@ -4,7 +4,7 @@ import { decorate } from '@nti/lib-commons';
 import { mixin } from '@nti/lib-decorators';
 import { Models } from '@nti/lib-interfaces';
 import AppDispatcher from '@nti/lib-dispatcher';
-import { CollectionSortable } from '@nti/web-course';
+import { Collection } from '@nti/web-course';
 
 import { COLLECTION_NAMES } from '../constants';
 import { getSortOptions } from '../utils/get-sort-options';
@@ -219,7 +219,7 @@ class StoreClass extends Stores.BoundStore {
 	onSortChange = async (
 		collectionName,
 		sortOn,
-		sortOrder = CollectionSortable.Store.defaultSortOrder(sortOn)
+		sortOrder = Collection.Store.defaultSortOrder(sortOn)
 	) => {
 		if (!Object.values(KEYS).includes(collectionName)) {
 			// throw? log a warning?

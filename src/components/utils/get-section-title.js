@@ -1,5 +1,5 @@
 import { scoped } from '@nti/lib-locale';
-import { CollectionSortable as Collection } from '@nti/web-course';
+import { Collection } from '@nti/web-course';
 
 const t = scoped('library.components.SectionTitle', {
 	admin: 'Administered Courses',

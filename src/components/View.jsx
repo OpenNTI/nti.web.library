@@ -1,20 +1,26 @@
-import React, { Suspense } from 'react';
+import { Suspense, forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Router, Route } from '@nti/web-routing';
 import { Layouts, Theme } from '@nti/web-commons';
 
+import { COLLECTION_NAMES as COLLECTIONS } from './constants';
 import { Home } from './homepage';
-import { Courses } from './courses';
-import { AdminCourses } from './admin-courses';
+import { CourseList } from './courses/CourseList';
 
 const { Responsive } = Layouts;
+const EnrolledCourses = props => (
+	<CourseList collection={COLLECTIONS.enrolledCourses} {...props} />
+);
+const AdminCourses = props => (
+	<CourseList collection={COLLECTIONS.administeredCourses} {...props} />
+);
 
 const Routes = Responsive.isMobileContext()
 	? Router.for([
 			Route({
 				path: '/mobile/library/courses',
-				component: Courses,
+				component: EnrolledCourses,
 				name: 'library-courses',
 			}),
 			Route({
@@ -31,7 +37,7 @@ const Routes = Responsive.isMobileContext()
 	: Router.for([
 			Route({
 				path: '/courses',
-				component: Courses,
+				component: EnrolledCourses,
 				name: 'library-courses',
 			}),
 			Route({
@@ -42,21 +48,33 @@ const Routes = Responsive.isMobileContext()
 			Route({ path: '/', component: Home, name: 'library-home' }),
 	  ]);
 
-export default React.forwardRef(function LibraryView(props, ref) {
+const Wrapper = styled('section')`
+	&.dark {
+		--text-color-primary: white;
+		--text-color-nav-link: var(--text-color-primary);
+	}
+`;
+
+export default forwardRef(function LibraryView(props, ref) {
 	const theme = Theme.useTheme();
 	const libraryTheme = theme.scope('library');
 	const background = libraryTheme.background;
-	const className =
-		background === 'light'
-			? 'library-light-background'
-			: 'library-dark-background';
+	const isDark = background !== 'light';
+
+	const className = isDark
+		? 'library-dark-background'
+		: 'library-light-background';
 
 	return (
 		<Suspense fallback={<div />}>
 			<Theme.Scope scope="library">
-				<section ref={ref} className={cx('library-view', className)}>
+				<Wrapper
+					dark={isDark}
+					ref={ref}
+					className={cx('library-view', className)}
+				>
 					<Routes {...props} />
-				</section>
+				</Wrapper>
 			</Theme.Scope>
 		</Suspense>
 	);
