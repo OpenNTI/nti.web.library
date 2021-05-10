@@ -6,7 +6,7 @@ import { decorate } from '@nti/lib-commons';
 import { Loading, Layouts } from '@nti/web-commons';
 import { searchable, contextual } from '@nti/web-search';
 import { scoped } from '@nti/lib-locale';
-import { CollectionSortable as Collection } from '@nti/web-course';
+import { Collection } from '@nti/web-course';
 import { useStoreValue } from '@nti/lib-store';
 
 import AdminToolbar from '../AdminToolbar';

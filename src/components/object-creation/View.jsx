@@ -86,8 +86,12 @@ export default class CreateCourse extends Component {
 
 	onCommunityCreated = community => {
 		const { router } = this.context;
+		const {
+			store,
+			store: { KEYS },
+		} = this.props;
 
-		this.props.store.reloadCommunities();
+		store.reload(KEYS.communities);
 		this.setState({
 			creatingCommunity: false,
 		});

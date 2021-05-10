@@ -6,14 +6,18 @@ import Container from './Container';
 export default class Courses extends React.Component {
 	static propTypes = {
 		admin: PropTypes.bool,
+		hasMore: PropTypes.bool,
 		items: PropTypes.array,
 		itemsType: PropTypes.string,
 		onModification: PropTypes.func,
+		onDelete: PropTypes.func,
+		sortOptions: PropTypes.arrayOf(PropTypes.string),
+		onSortChange: PropTypes.func,
 	};
 
 	splitItemsBySemester(section) {
 		const {
-			props: { items, onModification },
+			props: { items, onModification, hasMore },
 		} = this;
 
 		return (
@@ -25,6 +29,7 @@ export default class Courses extends React.Component {
 							key={item.semester}
 							date={item.semester}
 							items={item.courses}
+							hasMore={hasMore}
 							onModification={onModification}
 						/>
 					);
@@ -35,16 +40,28 @@ export default class Courses extends React.Component {
 
 	render() {
 		const {
-			props: { admin, items, itemsType, onModification },
+			props: {
+				admin,
+				hasMore,
+				items,
+				itemsType = '',
+				onModification,
+				onDelete,
+				sortOptions,
+				onSortChange,
+			},
 		} = this;
-		let section = admin ? 'admin' : 'courses';
-		section = itemsType ? itemsType + section : section;
+		const section = itemsType + (admin ? 'admin' : 'courses');
 
 		return itemsType !== 'archived' ? (
 			<Container
 				section={section}
 				items={items}
+				hasMore={hasMore}
+				sortOptions={sortOptions}
+				onSortChange={onSortChange}
 				onModification={onModification}
+				onDelete={onDelete}
 			/>
 		) : (
 			this.splitItemsBySemester(section)

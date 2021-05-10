@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
 import { User, Menu } from '@nti/web-commons';
-import { CollectionSortable as CourseCollection } from '@nti/web-course';
+import { Collection as CourseCollection } from '@nti/web-course';
 import { Router } from '@nti/web-routing';
 
 import SectionTitle from '../SectionTitle';
@@ -73,6 +73,7 @@ export function CourseListCmp({
 
 	const onChange = React.useCallback(sort => setPref({ sortOn: sort }), [
 		prefs,
+		setPref,
 	]);
 
 	return (
