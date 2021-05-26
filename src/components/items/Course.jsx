@@ -1,4 +1,3 @@
-import './Course.scss';
 import React from 'react';
 
 import { Card } from '@nti/web-course';
