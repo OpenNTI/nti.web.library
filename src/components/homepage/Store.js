@@ -84,9 +84,8 @@ class StoreClass extends Stores.BoundStore {
 
 			// instantiate data sources
 			const service = await getService();
-			this.#dataSources[
-				KEYS.administeredCourses
-			] = new AdministeredCoursesDataSource(service);
+			this.#dataSources[KEYS.administeredCourses] =
+				new AdministeredCoursesDataSource(service);
 			this.#dataSources[KEYS.courses] = new EnrolledCoursesDataSource(
 				service
 			);
@@ -139,30 +138,20 @@ class StoreClass extends Stores.BoundStore {
 		// we should rework this for better clarity
 		[KEYS.administeredCourses]: ({
 			searchTerm,
-			currentValue: {
-				sortOn,
-				sortOrder,
-				course_filter = 'incomplete', // eslint-disable-line camelcase
-			} = {},
+			currentValue: { sortOn, sortOrder } = {},
 		}) => ({
 			sortOn,
 			sortOrder,
-			course_filter,
 		}),
 
 		// originally used to fetch the courses; now it just passes the sort info through.
 		// we should rework this for better clarity
 		[KEYS.courses]: ({
 			searchTerm,
-			currentValue: {
-				sortOn,
-				sortOrder,
-				course_filter = 'incomplete', // eslint-disable-line camelcase
-			} = {},
+			currentValue: { sortOn, sortOrder } = {},
 		}) => ({
 			sortOn,
 			sortOrder,
-			course_filter,
 		}),
 
 		[KEYS.books]: async ({
