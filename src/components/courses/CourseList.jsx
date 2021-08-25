@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
@@ -71,10 +71,10 @@ export function CourseListCmp({
 
 	const canAdd = collection === COLLECTIONS.enrolledCourses;
 
-	const onChange = React.useCallback(sort => setPref({ sortOn: sort }), [
-		prefs,
-		setPref,
-	]);
+	const onChange = React.useCallback(
+		sort => setPref({ sortOn: sort }),
+		[prefs, setPref]
+	);
 
 	return (
 		<Container>
@@ -112,7 +112,12 @@ export class CourseList extends React.Component {
 
 	render() {
 		return (
-			<CourseListCmp basePath={this.context.basePath} {...this.props} />
+			<Suspense fallback={<div />}>
+				<CourseListCmp
+					basePath={this.context.basePath}
+					{...this.props}
+				/>
+			</Suspense>
 		);
 	}
 }
