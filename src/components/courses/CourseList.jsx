@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
@@ -71,7 +71,7 @@ export function CourseListCmp({
 
 	const canAdd = collection === COLLECTIONS.enrolledCourses;
 
-	const onChange = React.useCallback(
+	const onChange = useCallback(
 		sort => setPref({ sortOn: sort }),
 		[prefs, setPref]
 	);

@@ -1,5 +1,5 @@
 import './Home.scss';
-import React from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { decorate } from '@nti/lib-commons';
@@ -60,11 +60,11 @@ HomeCmp.propTypes = {
 };
 
 function HomeCmp(props) {
-	const onModificationCourse = React.useCallback(
+	const onModificationCourse = useCallback(
 		() => props.store.reload(KEYS.courses),
 		[props.store]
 	);
-	const onModificationAdmin = React.useCallback(
+	const onModificationAdmin = useCallback(
 		() => props.store.reload(KEYS.administeredCourses),
 		[props.store]
 	);
