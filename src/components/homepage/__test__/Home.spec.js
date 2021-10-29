@@ -36,6 +36,9 @@ const onBefore = () =>
 			return {
 				href: title,
 				getLink: () => title,
+				async fetchLink(...args) {
+					return data[title];
+				},
 			};
 		},
 		getBatch: async (href, params) => {
