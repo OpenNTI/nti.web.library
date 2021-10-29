@@ -157,18 +157,23 @@ class StoreClass extends Stores.BoundStore {
 		[KEYS.books]: async ({
 			currentValue: { sortOn, sortOrder } = {},
 		} = {}) => {
-			const batch = await this.#dataSources[KEYS.books].request({
-				filter: this.searchTerm,
-				sortOn,
-				sortOrder,
-			});
+			try {
+				const batch = await this.#dataSources[KEYS.books].request({
+					filter: this.searchTerm,
+					sortOn,
+					sortOrder,
+				});
 
-			const service = await getService();
+				const items = await Promise.all(
+					batch.titles.map(async x =>
+						(await getService()).getObject(x)
+					)
+				);
 
-			const items = await Promise.all(
-				batch.titles.map(x => service.getObject(x))
-			);
-			return { items, sortOn, sortOrder };
+				return { items, sortOn, sortOrder };
+			} catch (e) {
+				return { items: [], sortOn, sortOrder, error: e };
+			}
 		},
 		admin: async () => !!(await getService()).getWorkspace('SiteAdmin'),
 		hasCatalog: async () =>
